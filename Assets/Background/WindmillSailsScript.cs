@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class WindmillSailsScript : MonoBehaviour {
+	public WindScript wind;
 	private RectTransform _rt;
 	// Use this for initialization
 	void Start () {
@@ -9,6 +10,6 @@ public class WindmillSailsScript : MonoBehaviour {
 	}
 
 	void Update () {
-		_rt.Rotate (0, 0, 1f);
+		_rt.Rotate (0, 0, -wind.Strength * Time.deltaTime * 10);
 	}
 }
