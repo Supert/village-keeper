@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 34d40b6cb4208c64faa8ee58b7d3958b
-timeCreated: 1442863623
+guid: 9a900fd96d6dcd640a34b5dafa6084d7
+timeCreated: 1442863595
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: archer_unloaded_0
+    21300000: archer_ready_aiming_straight_0
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -42,20 +42,20 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 6
-  spritePivot: {x: .0193877053, y: .00939736236}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePivot: {x: .0185687505, y: .00791155733}
+  spriteBorder: {x: 3, y: 2, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: archer_unloaded_0
+    - name: archer_ready_aiming_straight_0
       rect:
         serializedVersion: 2
         x: 3
         y: 2
-        width: 140
+        width: 160
         height: 241
       alignment: 6
       pivot: {x: 0, y: 0}

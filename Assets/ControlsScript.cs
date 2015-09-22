@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ControlsScript : MonoBehaviour {
@@ -10,6 +10,5 @@ public class ControlsScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }

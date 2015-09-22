@@ -14,13 +14,13 @@ public class ScalerScript : MonoBehaviour {
 		shootingAreaRT.offsetMin = new Vector2 (0, 0);
 		shootingAreaRT.offsetMax = new Vector2 (0, - _rectTransform.rect.height * 0.65f);
 
-		archerRT.anchoredPosition = new Vector2 (cliffAreaRT.rect.width * 0.8f, 0);
+		archerRT.anchoredPosition = new Vector2 (cliffAreaRT.rect.width * 0.6f, 0);
 		//archerRT.offsetMin = new Vector2 (cliffAreaRT.rect.width, cliffAreaRT.rect.width);
 		//archerRT.offsetMax = archerRT.offsetMin + new Vector2 (archerRT.rect.width, archerRT.rect.height);
 
 
-		monsterAreaRT.offsetMin = new Vector2 (cliffAreaRT.rect.width + 20f, 20f);
-		monsterAreaRT.offsetMax = new Vector2 (-20f, - _rectTransform.rect.height * 0.65f - 20f);
+		monsterAreaRT.offsetMin = new Vector2 (cliffAreaRT.rect.width, 0);
+		monsterAreaRT.offsetMax = new Vector2 (0, - _rectTransform.rect.height * 0.65f);
 		//monsterAreaRT.offsetMax = new Vector2 (20, 20);
 	}
 	
