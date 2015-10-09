@@ -24,12 +24,11 @@ public class MonsterScript : MonoBehaviour {
 	private int _currentSpriteIndex = 0;
 	public RectTransform areaRT;
 	private RectTransform rt;
-	private RectTransform parentRT;
 	private Vector2 _targetPosition;
 	public float monsterSpeed;
 	public float minDelayBeforePickingNewPosition;
 	public float maxDelayBeforePickingNewPosition;
-
+	private Image _shadow;
 	
 	private DelayerScript _delayer;
 	private Image _image;
@@ -46,7 +45,7 @@ public class MonsterScript : MonoBehaviour {
 		private set {
 			this._position = value;
 			//debug
-			this.rt.anchoredPosition = new Vector2 (value.x + areaRT.offsetMin.x + rt.rect.width/2, 0);
+			this.rt.anchoredPosition = new Vector2 (value.x + areaRT.offsetMin.x + rt.rect.width/2, value.y);
 			//this.rt.offsetMin = new Vector2 (MaxPosition.x + areaRT.offsetMin.x + this.rt.rect.width, value.y);
 			//this.rt.offsetMax = new Vector2 (MaxPosition.x + areaRT.offsetMin.x + this.rt.rect.width, value.y);
 			//this.rt.offsetMin = new Vector2 (0, value.y);
@@ -65,15 +64,15 @@ public class MonsterScript : MonoBehaviour {
 	void Start () {
 		this.rt = GetComponent <RectTransform> () as RectTransform;
 		this._delayer = GetComponent<DelayerScript> () as DelayerScript;
+		//workaround, thanks to unity 5.1.3
+		this._shadow = this.transform.GetChild (this.transform.childCount - 1).GetComponent<Image> () as Image;
 		this._image = GetComponent<Image> () as Image;
-		this.parentRT = transform.parent.GetComponent<RectTransform> () as RectTransform;
 		StartCoroutine (InitCoroutine ());
 	}
 	IEnumerator InitCoroutine () {
 		yield return null;
 		this.rt.localPosition = Vector2.zero;
 		this.Position = new Vector2 (MaxPosition.x, 0);
-		CoreScript.Instance.Monster = this;
 	}
 	// Update is called once per frame
 	void Update () {
@@ -96,5 +95,7 @@ public class MonsterScript : MonoBehaviour {
 		} else
 			scale.x = -1;
 		this.transform.localScale = scale;
+		//workaround, thanks to unity 5.1.3
+		_shadow.preserveAspect = !_shadow.preserveAspect;
 	}
 }

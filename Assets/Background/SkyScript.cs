@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class SkyScript : MonoBehaviour {
 	public GameObject Clouds;
 	private List<RectTransform> _cloudsList = new List<RectTransform> ();
-	public WindScript wind;
 	// Use this for initialization
 	void Start () {
 		_cloudsList.Add (Clouds.GetComponent<RectTransform> ());
@@ -24,7 +23,7 @@ public class SkyScript : MonoBehaviour {
 	void Update () {
 		foreach (var c in _cloudsList) {
 			var ap = c.anchoredPosition;
-			ap.x += wind.Strength * Time.deltaTime;
+			ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
 			if (ap.x < -c.rect.width)
 				ap.x += c.rect.width * 2;
 			if (ap.x > c.rect.width) {

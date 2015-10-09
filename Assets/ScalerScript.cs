@@ -5,16 +5,12 @@ public class ScalerScript : MonoBehaviour {
 	
 	public RectTransform cliffAreaRT;
 	public RectTransform monsterAreaRT;
-	public RectTransform shootingAreaRT;
 	public RectTransform archerRT;
 	private RectTransform _rectTransform;
 	// Use this for initialization
 	void Start () {
 		this._rectTransform = GetComponent<RectTransform> ();
-		shootingAreaRT.offsetMin = new Vector2 (0, 0);
-		shootingAreaRT.offsetMax = new Vector2 (0, - _rectTransform.rect.height * 0.65f);
-
-		archerRT.anchoredPosition = new Vector2 (cliffAreaRT.rect.width * 0.6f, 0);
+		archerRT.anchoredPosition = new Vector2 (cliffAreaRT.rect.width * 0.8f, 0);
 		//archerRT.offsetMin = new Vector2 (cliffAreaRT.rect.width, cliffAreaRT.rect.width);
 		//archerRT.offsetMax = archerRT.offsetMin + new Vector2 (archerRT.rect.width, archerRT.rect.height);
 
