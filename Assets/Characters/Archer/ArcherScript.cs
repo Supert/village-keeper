@@ -5,11 +5,14 @@ using UnityEngine.UI;
 [RequireComponent (typeof(Image))]
 public class ArcherScript : MonoBehaviour
 {
-	private Canvas _canvas;
 	private RectTransform _rect;
+	private bool _isLoaded;
 	public bool IsLoaded {
-		get;
-		private set;
+		get {
+			if (CoreScript.Instance.UI.ArrowLoadBar.RelativeCurrentValue >= 0.25f)
+				return true;
+			else return false;
+		}
 	}
 	public enum ArcherAimingValues
 	{
@@ -49,8 +52,6 @@ public class ArcherScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		this._canvas = this.transform.parent.GetComponent<Canvas> () as Canvas;
-		this.IsLoaded = true;
 		this.image = GetComponent<Image> () as Image;
 		this._rect = GetComponent<RectTransform> () as RectTransform;
 	}
@@ -81,12 +82,15 @@ public class ArcherScript : MonoBehaviour
 		}
 		return 0f;
 	}
-	public void Shoot (Vector2 targetPosition) {
+	public void Shoot (Vector2 targetPosition, bool isPowerShot) {
 		if (IsLoaded) {
+			var _targetPosition = targetPosition;
+			if (isPowerShot) {
+				_targetPosition.x *= 1.5f;
+			}
 			var arrow = new GameObject ("arrow", typeof(ArrowScript)).GetComponent <ArrowScript> ();
-			var initialPosition = (Vector2) this.transform.position + (Vector2) _rect.TransformVector (new Vector2 (0, this._rect.rect.height * 0.6f));
-			arrow.Init (initialPosition, targetPosition);
-			//IsLoaded = false;
+			var initialPosition = (Vector2) this.transform.position + (Vector2) _rect.TransformVector (new Vector2 (this._rect.rect.width / 2, this._rect.rect.height * 0.6f));
+			arrow.Init (initialPosition, _targetPosition);
 		}
 	}
 }
