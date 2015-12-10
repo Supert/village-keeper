@@ -5,9 +5,8 @@ syntax: glob
 *.csproj
 *.pidb
 *.unitypackage
-
+Assets/ThirdPartyCode/*
 syntax: regexp
 ^Build/.*
 ^Library/.*
 ^Temp/.*
-^Assets/ThirdPartyCode/.*
