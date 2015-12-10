@@ -6,9 +6,11 @@ public class CoreScript : MonoBehaviour {
 	public enum GameStates
 	{
 		InMenu,
-		InGame,
+		InShop,
+		InBattle,
 		Paused,
 		RoundFinished,
+		InBuildMode,
 	}
 	private GameStates _gameState;
 	public GameStates GameState {
@@ -19,24 +21,29 @@ public class CoreScript : MonoBehaviour {
 			switch (value) {
 			case GameStates.InMenu:
 				break;
-			case GameStates.InGame:
+			case GameStates.InBattle:
 				break;
 			case GameStates.Paused:
 				break;
 			case GameStates.RoundFinished:
 				break;
+			case GameStates.InShop:
+				break;
 			}
+			var previousState = _gameState;
 			this._gameState = value;
 			if (GameStateChanged != null)
-				GameStateChanged (this, new GameStateChangedEventArgs (value));
+				GameStateChanged (this, new GameStateChangedEventArgs (value, previousState));
 		}
 	}
 	public class GameStateChangedEventArgs : EventArgs
 	{
-		public GameStateChangedEventArgs (GameStates state) {
-			this.NewState = state;
+		public GameStateChangedEventArgs (GameStates newState, GameStates previousState) {
+			this.NewState = newState;
+			this.PreviousState = previousState;
 		}
 		public GameStates NewState;
+		public GameStates PreviousState;
 	}
 	public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
 	private MonsterScript _monster;
@@ -75,26 +82,51 @@ public class CoreScript : MonoBehaviour {
 	public UiScript UI {
 		get {
 			if (_ui == null)
-				_ui = GetComponent<UiScript>() as UiScript;
+				_ui = FindObjectOfType<UiScript>() as UiScript;
 			return _ui;
+		}
+	}
+	private MainMenuScript _mainMenu;
+	public MainMenuScript MainMenu {
+		get {
+			if (_mainMenu = null) {
+				_mainMenu = FindObjectOfType (typeof (MainMenuScript)) as MainMenuScript;
+			}
+			return _mainMenu;
+		}
+	}
+	private StatisticsScript _statistics;
+	public StatisticsScript Statistics {
+		get {
+			if (_statistics == null) {
+				_statistics = GetComponent<StatisticsScript> () as StatisticsScript;
+			}
+			return _statistics;
+		}
+	}
+	private BuildingsAreaScript _buildingsArea;
+	public BuildingsAreaScript BuildingsArea {
+		get {
+			if (_buildingsArea == null) {
+				_buildingsArea = FindObjectOfType <BuildingsAreaScript> ();
+			}
+			return _buildingsArea;
 		}
 	}
 	public static CoreScript Instance {
 		get;
 		private set;
 	}
+	void Awake () {
+		Instance = this;
+	}
 	// Use this for initialization
 	void Start () {
-		Instance = this;
 		StartCoroutine (InitCoroutine());
 	}
 	IEnumerator InitCoroutine () {
 		yield return null;
-		this._gameState = GameStates.InGame;
-		Monster.MonsterStateChanged += (object sender, MonsterScript.MonsterStateChangedEventArgs e) => {
-			if (e.NewState == MonsterScript.MonsterStates.Killed)
-				this.GameState = GameStates.RoundFinished;
-		};
+		this._gameState = GameStates.InMenu;
 	}
 	
 	// Update is called once per frame

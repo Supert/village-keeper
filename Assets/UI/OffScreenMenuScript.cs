@@ -2,11 +2,20 @@
 using System.Collections;
 
 public class OffScreenMenuScript : MonoBehaviour {
+	public float animationTime;
 	public RectTransform.Edge Edge;
-	public Vector2 TargetPosition;
+	private Vector2 _targetPosition;
+	public bool isShownAtStart;
+	private bool _isShown;
 	public bool IsShown {
-		get;
-		private set;
+		get {
+			return _isShown;
+		}
+		private set {
+			if (value)
+				this.gameObject.SetActive (true);
+			_isShown = value;
+		}
 	}
 	public void Show () {
 		this.IsShown = true;
@@ -21,16 +30,16 @@ public class OffScreenMenuScript : MonoBehaviour {
 			var result = new Vector2 ();
 			switch (Edge) {
 			case RectTransform.Edge.Bottom:
-				result = new Vector2 (TargetPosition.x, -rightTopPosition.y);
+				result = new Vector2 (_targetPosition.x, -rightTopPosition.y);
 				break;
 			case RectTransform.Edge.Left:
-				result = new Vector2 (-rightTopPosition.x, TargetPosition.y);
+				result = new Vector2 (-rightTopPosition.x, _targetPosition.y);
 				break;
 			case RectTransform.Edge.Right:
-				result = new Vector2 (rightTopPosition.x, TargetPosition.y);
+				result = new Vector2 (rightTopPosition.x, _targetPosition.y);
 				break;
 			case RectTransform.Edge.Top:
-				result = new Vector2 (TargetPosition.x, rightTopPosition.y);
+				result = new Vector2 (_targetPosition.x, rightTopPosition.y);
 				break;
 			}
 			return result;
@@ -39,17 +48,29 @@ public class OffScreenMenuScript : MonoBehaviour {
 	// Use this for initialization
 	protected virtual void Start () {
 		this._rect = GetComponent<RectTransform> () as RectTransform;
+		this._targetPosition = _rect.localPosition;
 		StartCoroutine (InitCoroutine ());
 	}
 	IEnumerator InitCoroutine () {
 		yield return null;
-		this._rect.localPosition = HiddenPositon;
+		IsShown = isShownAtStart;
+		if (isShownAtStart)
+			this._rect.localPosition = _targetPosition;
+		else
+			this._rect.localPosition = HiddenPositon;
+		
 	}
 	// Update is called once per frame
 	protected virtual void Update () {
+		float distance = Vector2.Distance (_targetPosition, HiddenPositon);
+		float speed = animationTime == 0 ? distance : distance * Time.deltaTime / animationTime; 
 		if (IsShown)
-			this._rect.localPosition = Vector2.MoveTowards (this._rect.localPosition, this.TargetPosition, Screen.width * Time.deltaTime / 2);
-		else 
-			this._rect.localPosition = Vector2.MoveTowards (this._rect.localPosition, this.HiddenPositon, Screen.width  * Time.deltaTime / 2);
+			this._rect.localPosition = Vector2.MoveTowards (this._rect.localPosition, this._targetPosition, speed);
+		else {
+			if ((Vector2) this._rect.localPosition == HiddenPositon)
+				this.gameObject.SetActive (false);
+			else
+				this._rect.localPosition = Vector2.MoveTowards (this._rect.localPosition, this.HiddenPositon, speed);
+		}
 	}
 }

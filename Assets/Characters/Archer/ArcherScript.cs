@@ -85,9 +85,6 @@ public class ArcherScript : MonoBehaviour
 	public void Shoot (Vector2 targetPosition, bool isPowerShot) {
 		if (IsLoaded) {
 			var _targetPosition = targetPosition;
-			if (isPowerShot) {
-				_targetPosition.x *= 1.5f;
-			}
 			var arrow = new GameObject ("arrow", typeof(ArrowScript)).GetComponent <ArrowScript> ();
 			var initialPosition = (Vector2) this.transform.position + (Vector2) _rect.TransformVector (new Vector2 (this._rect.rect.width / 2, this._rect.rect.height * 0.6f));
 			arrow.Init (initialPosition, _targetPosition);

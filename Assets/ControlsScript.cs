@@ -24,7 +24,7 @@ public class ControlsScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		switch (CoreScript.Instance.GameState) {
-		case (CoreScript.GameStates.InGame):
+		case (CoreScript.GameStates.InBattle):
 			if (RectTransformUtility.RectangleContainsScreenPoint (MonsterArea, Input.mousePosition, Camera.main)) {
 				if (Input.GetMouseButtonDown (0)) {
 					CoreScript.Instance.Archer.Shoot (Camera.main.ScreenToWorldPoint ( Input.mousePosition), CoreScript.Instance.UI.ArrowLoadBar.RelativeCurrentValue == 1f);
@@ -37,6 +37,24 @@ public class ControlsScript : MonoBehaviour {
 				else if (Input.GetMouseButton (0))
 					_touchCurrentPosition = Input.mousePosition;
 			}
+			if (Input.GetKeyDown (KeyCode.Escape))
+				CoreScript.Instance.GameState = CoreScript.GameStates.Paused;
+			break;
+		case (CoreScript.GameStates.Paused):
+			if (Input.GetKeyDown (KeyCode.Escape))
+				CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
+			break;
+		case (CoreScript.GameStates.RoundFinished):
+			if (Input.GetKeyDown (KeyCode.Escape))
+				CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
+			break;
+		case (CoreScript.GameStates.InShop):
+			if (Input.GetKeyDown (KeyCode.Escape))
+				CoreScript.Instance.GameState = CoreScript.GameStates.Paused;
+			break;
+		case (CoreScript.GameStates.InMenu):
+			if (Input.GetKeyDown (KeyCode.Escape))
+				Application.Quit ();
 			break;
 		default:
 			break;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,15 +21,17 @@ public class SkyScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		foreach (var c in _cloudsList) {
-			var ap = c.anchoredPosition;
-			ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
-			if (ap.x < -c.rect.width)
-				ap.x += c.rect.width * 2;
-			if (ap.x > c.rect.width) {
-				ap.x -= c.rect.width * 2;
+		if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle || CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode) {
+			foreach (var c in _cloudsList) {
+				var ap = c.anchoredPosition;
+				ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
+				if (ap.x < -c.rect.width)
+					ap.x += c.rect.width * 2;
+				if (ap.x > c.rect.width) {
+					ap.x -= c.rect.width * 2;
+				}
+				c.anchoredPosition = ap;
 			}
-			c.anchoredPosition = ap;
 		}
 	}
 }
