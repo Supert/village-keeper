@@ -34,7 +34,7 @@ public class DataScript : MonoBehaviour {
 		get {
 			if (PlayerPrefs.HasKey ("Gold"))
 				return PlayerPrefs.GetInt ("Gold");
-			else return 0;
+			else return 100;
 		}
 		set {
 			PlayerPrefs.SetInt ("Gold", value);

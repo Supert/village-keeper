@@ -68,5 +68,13 @@ public class InfoAndUpgradesWindowScript : MonoBehaviour {
 		_offscreen = GetComponent<OffScreenMenuScript> () as OffScreenMenuScript;
 		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
 		CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged (e);
+		CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged (e);
+		upgradeButton.onClick.AddListener (() => {
+			if (CoreScript.Instance.Data.Gold >= CoreScript.Instance.Data.GetCastleUpgradeCost ()) {
+				CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost ();
+				CoreScript.Instance.Data.VillageLevel++;
+			}
+
+		});
 	}
 }
