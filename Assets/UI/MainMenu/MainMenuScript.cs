@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 public class MainMenuScript : MonoBehaviour {
@@ -12,7 +12,7 @@ public class MainMenuScript : MonoBehaviour {
 		}
 	}
 	void SetScores () {
-		var monstersDefeated = CoreScript.Instance.Statistics.MonstersDefeated;
+		var monstersDefeated = CoreScript.Instance.Data.MonstersDefeated;
 		if (monstersDefeated == 0)
 			this.monstersDefeatedText.text = "No monsters defeated yet";
 		else {

@@ -8,13 +8,12 @@ public class MonsterHealthBarScript : BarScript {
 		_offscreenMenu = GetComponent<OffScreenMenuScript> () as OffScreenMenuScript;
 	}
 	void Start () {
-		this.maxValue = CoreScript.Instance.Monster.maxHealth;
 		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
 	}
 	void OnGameStateChanged (CoreScript.GameStateChangedEventArgs e) {
 		if (e.NewState == CoreScript.GameStates.InBattle) {
 			this._offscreenMenu.Show ();
-			this.maxValue = CoreScript.Instance.Monster.maxHealth;
+			this.MaxValue = CoreScript.Instance.Monster.maxHealth;
 			this.minValue = 0;
 		} else {
 			this._offscreenMenu.Hide ();
@@ -22,6 +21,7 @@ public class MonsterHealthBarScript : BarScript {
 	}
 	// Update is called once per frame
 	void Update () {
+		this.MaxValue = CoreScript.Instance.Monster.maxHealth;
 		this.CurrentValue = CoreScript.Instance.Monster.Health;
 	}
 }

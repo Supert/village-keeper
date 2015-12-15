@@ -9,7 +9,7 @@ public class ArcherScript : MonoBehaviour
 	private bool _isLoaded;
 	public bool IsLoaded {
 		get {
-			if (CoreScript.Instance.UI.ArrowLoadBar.RelativeCurrentValue >= 0.25f)
+			if (CoreScript.Instance.UI.ArrowLoadBar.RelativeCurrentValue == 1)
 				return true;
 			else return false;
 		}
@@ -82,12 +82,12 @@ public class ArcherScript : MonoBehaviour
 		}
 		return 0f;
 	}
-	public void Shoot (Vector2 targetPosition, bool isPowerShot) {
+	public void Shoot (Vector2 targetPosition) {
 		if (IsLoaded) {
 			var _targetPosition = targetPosition;
 			var arrow = new GameObject ("arrow", typeof(ArrowScript)).GetComponent <ArrowScript> ();
 			var initialPosition = (Vector2) this.transform.position + (Vector2) _rect.TransformVector (new Vector2 (this._rect.rect.width / 2, this._rect.rect.height * 0.6f));
-			arrow.Init (initialPosition, _targetPosition);
+			arrow.Init (initialPosition, _targetPosition, GetAimingAngleInRads ());
 		}
 	}
 }

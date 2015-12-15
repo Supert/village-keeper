@@ -17,6 +17,7 @@ public class BuildingsAreaScript : MonoBehaviour {
 	}
 	void Start () {
 		var buildingTilesHolder = new GameObject ("Building Tiles Holder");
+		buildingTilesHolder.transform.localPosition = new Vector3 (0, 0, 1f);
 		for (int i = 0; i < numberOfColumns; i++) {
 			for (int j = 0; j < numberOfRows; j++) {
 				_buildingsGrid [i, j] = Instantiate (Resources.Load<BuildingTileScript> ("Buildings/BuildingTile")) as BuildingTileScript;
@@ -50,12 +51,15 @@ public class BuildingsAreaScript : MonoBehaviour {
 			return new Vector2 (this._rect.rect.width / numberOfColumns, this._rect.rect.height / numberOfRows);
 		}
 	}
-
-	public Vector2 GetClosestGridPositionByWorldPosition (Vector2 worldPosition) {
+	public Vector2 GetClosestGridPositionIgnoringGridLimits (Vector2 worldPosition) {
 		var point = (Vector2) worldPosition - GetWorldPositionByGridPosition (0, 0);
 		var result = new Vector2 (point.x / CellWorldSize.x, point.y / CellWorldSize.y);
 		result.x = Mathf.RoundToInt (result.x);
 		result.y = Mathf.RoundToInt (result.y);
+		return result;
+	}
+	public Vector2 GetClosestGridPosition (Vector2 worldPosition) {
+		var result = GetClosestGridPositionIgnoringGridLimits (worldPosition);
 		if (result.x < 0)
 			result.x = 0;
 		if (result.x >= numberOfColumns)
@@ -99,7 +103,7 @@ public class BuildingsAreaScript : MonoBehaviour {
 		PlaceBuilding (building, new Vector2 (x, y));
 	}
 	public void PlaceBuilding (BuildingScript building, Vector2 gridPosition) {
-		if (IsCellFree (gridPosition) && CoreScript.Instance.Statistics.Gold >= building.GoldCost) {
+		if (IsCellFree (gridPosition)) {
 			building.Tile = _buildingsGrid [(int)gridPosition.x, (int)gridPosition.y];
 			building.Tile.Building = building;
 			building.transform.parent = building.Tile.transform;
@@ -109,8 +113,8 @@ public class BuildingsAreaScript : MonoBehaviour {
 		}
 	}
 	public void BuyBuilding (BuildingScript building, Vector2 gridPosition) {
-		if (IsCellFree (gridPosition) && CoreScript.Instance.Statistics.Gold >= building.GoldCost) {
-			CoreScript.Instance.Statistics.Gold -= building.GoldCost;
+		if (IsCellFree (gridPosition) && CoreScript.Instance.Data.Gold >= building.GoldCost) {
+			CoreScript.Instance.Data.Gold -= building.GoldCost;
 			PlaceBuilding (building, gridPosition);
 			SaveBuildings ();
 		}
@@ -128,10 +132,10 @@ public class BuildingsAreaScript : MonoBehaviour {
 			var y = (int) b.Tile.gridY;
 			list.list.Add (new SerializableBuilding (b.Type, x, y));
 		}
-		CoreScript.Instance.Statistics.Buildings = list;
+		CoreScript.Instance.Data.Buildings = list;
 	}
 	public void LoadBuildings () {
-		var list = CoreScript.Instance.Statistics.Buildings;
+		var list = CoreScript.Instance.Data.Buildings;
 		foreach (var b in list.list) {
 			if (_buildingsGrid[b.X, b.Y].Building == null) {
 				var bs = BuildingScript.GetNewBuildingOfType (b.Type);

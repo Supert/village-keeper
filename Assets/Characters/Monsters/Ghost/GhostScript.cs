@@ -7,6 +7,8 @@ public class GhostScript : MonoBehaviour {
 	void Start () {
 		this._sprite = GetComponent<SpriteRenderer> () as SpriteRenderer;
 		this._sprite.color = new Vector4 (1, 1, 1, 0);
+		this._sprite.sortingLayerName = "Characters";
+		this._sprite.sortingOrder = 1;
 	}
 	private bool _isGoingToFade = false;
 	// Update is called once per frame

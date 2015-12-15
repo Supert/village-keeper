@@ -24,17 +24,17 @@ public class MonsterScript : MonoBehaviour
 	private SpriteRenderer _shadow;
 	private Collider2D _collider;
 
-	public float maxHealth;
-	private float? _health = null;
-	public float Health {
+	public int maxHealth;
+	private int? _health = null;
+	public int Health {
 		get {
 			if (_health == null) {
-				_health = (float?) maxHealth;
+				_health = (int?) maxHealth;
 			}
-			return (float) _health;
+			return (int) _health;
 		}
 		private set {
-			_health = (float?) value;
+			_health = (int?) value;
 			if (_health == 0) {
 				Kill ();
 			}
@@ -91,7 +91,7 @@ public class MonsterScript : MonoBehaviour
 	public Vector2 GridPosition {
 		get {
 			var buildingsArea = CoreScript.Instance.BuildingsArea;
-			var result = buildingsArea.GetClosestGridPositionByWorldPosition (new Vector2 (transform.localPosition.x - buildingsArea.CellWorldSize.x / 2, transform.localPosition.y) - GridToWorldOffset);
+			var result = buildingsArea.GetClosestGridPositionIgnoringGridLimits (new Vector2 (transform.localPosition.x, transform.localPosition.y) - GridToWorldOffset);
 			return result;
 		}
 	}
@@ -115,18 +115,24 @@ public class MonsterScript : MonoBehaviour
 		for (int i = 0; i < buildingsArea.numberOfColumns; i++)
 			for (int j = 0; j < buildingsArea.numberOfRows; j++) {
 				if (buildingsArea.IsCellFree (new Vector2 (i, j)) && 
-					(j == (buildingsArea.numberOfRows - 1) ? true : buildingsArea.IsCellFree (new Vector2 (i, j + 1)))) {
+					(i == (buildingsArea.numberOfColumns - 1) ? true : buildingsArea.IsCellFree (new Vector2 (i + 1, j)))) {
 					pathGrid [i, j] = PathFinderHelper.EMPTY_TILE;
 				} else
 					pathGrid [i, j] = PathFinderHelper.BLOCKED_TILE;
 			}
+		for (int j = 0; j < buildingsArea.numberOfRows; j++) {
+			string s = "";
+			for (int i = 0; i < buildingsArea.numberOfColumns; i++) {
+				s+= pathGrid[i,j] == PathFinderHelper.EMPTY_TILE ? "O" : "X";
+			}
+		}
 		for (int i = buildingsArea.numberOfColumns; i < 16; i++)
 			for (int j = 0; j < buildingsArea.numberOfRows; j++)
 				pathGrid [i, j] = PathFinderHelper.EMPTY_TILE;
-		for (int i = 1; i < buildingsArea.numberOfColumns; i++) {
-			for (int j = 0; j < buildingsArea.numberOfRows + 1; j++) {
+		for (int i = 1; i < buildingsArea.numberOfColumns + 1; i++) {
+			for (int j = 0; j < buildingsArea.numberOfRows; j++) {
 				if (isAgressive) {
-					if ((int)pathGrid [i - 1, j] == PathFinderHelper.BLOCKED_TILE)
+					if (buildingsArea.GetCell (i - 1, j) != null && buildingsArea.GetCell(i-1, j).Building != null)
 						possibleTargets.Add (new Point (i, j));
 				} else
 					possibleTargets.Add (new Point (i, j));
@@ -136,6 +142,11 @@ public class MonsterScript : MonoBehaviour
 		pathFinder.Diagonals = false;
 		
 		var monsterPoint = new Point ((int) GridPosition.x, (int) GridPosition.y);
+		/*/DEBUG!!
+		var list = new List<PathFinderNode> ();
+		list.Add (new PathFinderNode ());
+		return list;
+		//end debug;*/
 		var paths = new List<List<PathFinderNode>> ();
 		foreach (var t in possibleTargets) {
 			var path = pathFinder.FindPath (monsterPoint, t);
@@ -183,30 +194,60 @@ public class MonsterScript : MonoBehaviour
 	}
 	private void Attack (Vector2 buildingCell) {
 		this._animator.SetTrigger ("Attack");
+		var scale = this.transform.localScale;
+		scale.x = Mathf.Abs (scale.x);
+		this.transform.localScale = scale;
 		CoreScript.Instance.BuildingsArea.DamageCell (buildingCell);
 		ChooseNewBehaviour ();
 	}
+	private float _agressiveness;
 	private void ChooseNewBehaviour () {
-		IsAgressive = true;//UnityEngine.Random.Range (0, 2) == 0;
+		IsAgressive = UnityEngine.Random.value < _agressiveness;
 	}
 	private void SetWaypoints (List<PathFinderNode> waypoints) {
 		this._waypointsInGrid = waypoints;
 		TargetPosition = CoreScript.Instance.BuildingsArea.GetWorldPositionByGridPosition (waypoints.Last ().X, waypoints.Last ().Y) + GridToWorldOffset;
+		var scale = this.transform.localScale;
+		if (((Vector2) transform.localPosition - TargetPosition).x >= 0) {
+			scale.x = Mathf.Abs (scale.x);
+		} else
+			if (((Vector2) transform.localPosition - TargetPosition).x < 0)
+				scale.x = - Mathf.Abs (scale.x);
+		this.transform.localScale = scale;
 	}
 	private void Move () {
 		if (Waypoint != null && Waypoint.HasValue) {
 			transform.localPosition = Vector2.MoveTowards (transform.localPosition, Waypoint.Value, monsterSpeed * Time.deltaTime);
-			var scale = this.transform.localScale;
-			if (((Vector2) transform.localPosition - Waypoint.GetValueOrDefault ()).x > 0) {
-				scale.x = Mathf.Abs (scale.x);
-			} else
-				if (((Vector2) transform.localPosition - Waypoint.GetValueOrDefault ()).x < 0)
-					scale.x = - Mathf.Abs (scale.x);
-			this.transform.localScale = scale;
-		}
-		if ((Vector2) transform.localPosition == TargetPosition)
-			ChooseNewBehaviour ();
 
+		}
+		if ((Vector2)transform.localPosition == TargetPosition) {
+			ChooseNewBehaviour ();
+		}
+
+	}
+	private void SetMaxHealthAndAgressiveness () {
+		float buildingsHealth = 0;
+		float buildingsCost = 0;
+		foreach (var b in CoreScript.Instance.BuildingsArea.buildings) {
+			buildingsHealth += b.MaxHealth;
+			buildingsCost += b.GoldCost;
+		}
+		float pointsPool = buildingsHealth / 2 * (1 + CoreScript.Instance.Data.VillageLevel * 0.25f);
+		float minHealthPossible = 10 * (3 * buildingsCost / 800 + 1);
+		float maxHealthPossible = 100;
+		if (pointsPool < minHealthPossible) {
+			this.maxHealth = (int)minHealthPossible;
+			this._agressiveness = pointsPool / minHealthPossible;
+		} else {
+			if (pointsPool > maxHealthPossible) {
+				maxHealth = (int) maxHealthPossible;
+				_agressiveness = 1f;
+			} else {
+				this._agressiveness = UnityEngine.Random.Range (pointsPool / maxHealthPossible, 1);
+				this.maxHealth = (int) (pointsPool / _agressiveness);
+			}
+		}
+	
 	}
 	void Awake () {
 		this._sprite = GetComponent<SpriteRenderer> () as SpriteRenderer;
@@ -219,7 +260,6 @@ public class MonsterScript : MonoBehaviour
 		var ls = this.transform.localScale;
 		ls *= (CoreScript.Instance.BuildingsArea.CellWorldSize.y * 2) / (this._sprite.bounds.size.y);
 		this.transform.localScale = ls;
-		this.transform.localPosition = TargetPosition = HiddenPosition;
 		CoreScript.Instance.GameStateChanged += (sender, e) => {
 			if (e.NewState == CoreScript.GameStates.InBuildMode) {
 				this.transform.localPosition = HiddenPosition;
@@ -230,8 +270,13 @@ public class MonsterScript : MonoBehaviour
 				if (e.PreviousState != CoreScript.GameStates.Paused) {
 					this._shadow.color = Color.white;
 					this._sprite.color = Color.white;
-					this.Health = maxHealth;
-					this.transform.localPosition = HiddenPosition;
+
+					SetMaxHealthAndAgressiveness ();
+					Health = maxHealth;
+
+					this._waypointsInGrid.Clear ();
+					this.transform.localPosition = TargetPosition = HiddenPosition;
+
 					this.gameObject.SetActive (true);
 				}
 			}

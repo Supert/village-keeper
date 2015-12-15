@@ -32,9 +32,9 @@ public abstract class BuildingScript : MonoBehaviour {
 			case BuildingTypes.WallWooden:
 				return 3;
 			case BuildingTypes.WatchtowerStone:
-				return 5;
+				return 6;
 			case BuildingTypes.WatchtowerWooden:
-				return 3;
+				return 4;
 			case BuildingTypes.Windmill:
 				return 6;
 			default:
@@ -50,7 +50,7 @@ public abstract class BuildingScript : MonoBehaviour {
 			case BuildingTypes.WallStone:
 				return 25;
 			case BuildingTypes.WallWooden:
-				return 3;
+				return 2;
 			case BuildingTypes.WatchtowerStone:
 				return 50;
 			case BuildingTypes.WatchtowerWooden:
@@ -125,30 +125,37 @@ public abstract class BuildingScript : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 	// Use this for initialization
+	void OnGameStateChanged (CoreScript.GameStateChangedEventArgs e) {
+		switch (e.NewState) {
+		case CoreScript.GameStates.InBattle:
+			this.Health = MaxHealth;
+			break;
+		}
+	}
 	void Start () {
-	
+		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 		if (this.Tile == null) {
 			if (Input.GetMouseButton (0)) {
-				transform.localPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				var lp = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				lp.z = -9f;
+				transform.localPosition = lp;
 			}
 			if (Input.GetMouseButtonUp (0)) {
 				var buildingsArea = CoreScript.Instance.BuildingsArea;
-				var closestCell = buildingsArea.GetClosestGridPositionByWorldPosition (transform.localPosition);
+				var closestCell = buildingsArea.GetClosestGridPosition (transform.localPosition);
 				var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition (closestCell);
 				var distance = (Vector2)transform.localPosition - closestCellPosition;
-				if (Mathf.Abs (distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs (distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.Statistics.Gold >= this.GoldCost) {
+				if (Mathf.Abs (distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs (distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.Data.Gold >= this.GoldCost) {
 					buildingsArea.BuyBuilding (this, closestCell);
-				} else {
-					this.gameObject.SetActive (false);
 				}
+				if (this.Tile == null)
+					this.gameObject.SetActive (false);
+
 			}
 		}
-		var lp = transform.localPosition;
-		lp.z = lp.y;
-		transform.localPosition = lp;
 	}
 }

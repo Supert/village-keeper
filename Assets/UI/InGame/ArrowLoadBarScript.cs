@@ -11,22 +11,19 @@ public class ArrowLoadBarScript : BarScript
 	// Use this for initialization
 	void Start () {
 		this._fillerImage = barFillerRT.GetComponent<Image> () as Image;
-		StartCoroutine (InitCoroutine ());
-	}
-	IEnumerator InitCoroutine () {
-		yield return null;
+		
 		this._rect = this.GetComponent<RectTransform> () as RectTransform;
-		this.maxValue = _rect.rect.width / _rect.localScale.x;
+		this.MaxValue = _rect.rect.width / _rect.localScale.x;
 		this.minValue = 0;
 	}
 	// Update is called once per frame
 	void Update ()
 	{
 		if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle) { 
-			if (!Input.GetMouseButton (0) && RelativeCurrentValue < 0.25f)
-				RelativeCurrentValue -= Time.deltaTime;
+			if (!Input.GetMouseButton (0) && RelativeCurrentValue < 1)
+				RelativeCurrentValue -= Time.deltaTime * 3;
 			else
-				CurrentValue = -CoreScript.Instance.Controls.TouchDeltaPosition.x * 1.5f;
+				CurrentValue = -CoreScript.Instance.Controls.TouchDeltaPosition.x * 3f;
 			if (RelativeCurrentValue == 1f) { 
 				if (_fillerImage.sprite != fullyLoadedBarFillerSprite)
 					this._fillerImage.sprite = fullyLoadedBarFillerSprite;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -84,7 +84,7 @@ public class BuildingPickerScript : MonoBehaviour {
 	void Update () {
 
 		if (Input.GetMouseButtonDown (0)) {
-			if (RectTransformUtility.RectangleContainsScreenPoint (this.iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Statistics.Gold >= CurrentPreparedBuilding.GoldCost) {
+			if (RectTransformUtility.RectangleContainsScreenPoint (this.iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost) {
 				CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				CurrentPreparedBuilding.gameObject.SetActive (true);
 			}
