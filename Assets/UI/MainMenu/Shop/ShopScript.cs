@@ -1,8 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-
+using Soomla.Store;
+using AssemblyCSharp;
 public class ShopScript : MonoBehaviour {
 	OffScreenMenuScript _offScreenMenu;
+	public Button thounsandButton;
+	public Button tenThousandButton;
 	// Use this for initialization
 	void Start () {
 		_offScreenMenu = GetComponent <OffScreenMenuScript> () as OffScreenMenuScript;
@@ -10,6 +14,12 @@ public class ShopScript : MonoBehaviour {
 	}
 	IEnumerator InitCoroutine () {
 		yield return null;
+		thounsandButton.onClick.AddListener (() => {
+			SoomlaStore.BuyMarketItem (EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
+		});
+		tenThousandButton.onClick.AddListener (() => {
+			SoomlaStore.BuyMarketItem (EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
+		});
 		CoreScript.Instance.GameStateChanged += (object sender, CoreScript.GameStateChangedEventArgs e) => {
 			switch (e.NewState) {
 			case CoreScript.GameStates.InBattle:

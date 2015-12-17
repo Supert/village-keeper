@@ -7,46 +7,29 @@ namespace AssemblyCSharp {
 			return 0;
 		}
 		public VirtualCurrency[] GetCurrencies () {
-			return new VirtualCurrency[]{COIN_CURRENCY};
+			return new VirtualCurrency[]{};
 		}
 		public VirtualCurrencyPack[] GetCurrencyPacks () {
-			return new VirtualCurrencyPack[]{THOUSAND_COIN_PACK, TEN_THOUSAND_COIN_PACK};
+			return new VirtualCurrencyPack[]{};
 		}
 		public VirtualGood[] GetGoods () {
-			return new VirtualGood[] {};
+			return new VirtualGood[] {THOUSAND_COINS, TEN_THOUSAND_COINS};
 		}
 		public VirtualCategory[] GetCategories () {
 			return new VirtualCategory[] {};
 		}
-		public static VirtualCurrency COIN_CURRENCY = new VirtualCurrency(
-			"coin",                               // Name
-			"coin currency",                      // Description
-			"coin_currency_ID"                    // Item ID
-			);
 		
-		/** Virtual Currency Packs **/
-		
-		public static VirtualCurrencyPack THOUSAND_COIN_PACK = new VirtualCurrencyPack(
-			"1000 Сoins",                          // Name
-			"1000 coin currency units",            // Description
-			"coins_1000_ID",                       // Item ID
-			1000,                                  // Number of currencies in the pack
-			"coin_currency_ID" ,                   // ID of the currency associated with this pack
-			new PurchaseWithMarket(               // Purchase type (with real money $)
-		    	"coins_1000_PROD_ID",                   // Product ID
-		        1                                  // Price (in real money $)
-		    )
+		public static VirtualGood THOUSAND_COINS = new SingleUseVG(
+			"Thousand coins",
+			"Thousand coins",
+			"thousand_coins",
+			new PurchaseWithMarket ("thousand_coins", 1)
 		);
-		public static VirtualCurrencyPack TEN_THOUSAND_COIN_PACK = new VirtualCurrencyPack(
-			"10000 Coins",
-			"10000 coin currency units",
-			"coins_10000_ID",
-			10000,
-			"coin_currency_ID",
-			new PurchaseWithMarket(
-				"coins_10000_PROD_ID",
-				5
-			)
+		public static VirtualGood TEN_THOUSAND_COINS = new SingleUseVG(
+			"Ten thousand coins",
+			"Ten thousand coins",
+			"ten_thousand_coins",
+			new PurchaseWithMarket("ten_thousand_coins", 5)
 		);
 	}
 }

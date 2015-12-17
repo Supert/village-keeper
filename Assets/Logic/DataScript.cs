@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Linq;
 using System;
+using Soomla.Store;
+using System.Collections.Generic;
 public class DataScript : MonoBehaviour {
 	public bool HasPremium {
 		get {
@@ -171,7 +173,14 @@ public class DataScript : MonoBehaviour {
 			return 6000;
 		return 0;
 	}
+	public void onMarketPurchase(PurchasableVirtualItem pvi, string payload, Dictionary<string, string> extra) {
+		if (pvi.ItemId == EconomyAssets.THOUSAND_COINS.ItemId)
+			this.Gold += 1000;
+		if (pvi.ItemId == EconomyAssets.TEN_THOUSAND_COINS.ItemId)
+			this.Gold += 10000;
+	}
 	void Start () {
+		StoreEvents.OnMarketPurchase += onMarketPurchase;
 		CoreScript.Instance.GameStateChanged += (sender, e) => {
 			switch (e.NewState) {
 			case CoreScript.GameStates.RoundFinished:
@@ -180,9 +189,5 @@ public class DataScript : MonoBehaviour {
 				break;
 			}
 		};
-	}
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
