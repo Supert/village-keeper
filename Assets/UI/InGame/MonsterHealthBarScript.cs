@@ -11,12 +11,18 @@ public class MonsterHealthBarScript : BarScript {
 		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
 	}
 	void OnGameStateChanged (CoreScript.GameStateChangedEventArgs e) {
-		if (e.NewState == CoreScript.GameStates.InBattle) {
+		switch (e.NewState) {
+		case CoreScript.GameStates.InBattle:
 			this._offscreenMenu.Show ();
 			this.MaxValue = CoreScript.Instance.Monster.maxHealth;
 			this.minValue = 0;
-		} else {
+			break;
+		case CoreScript.GameStates.Paused:
+		case CoreScript.GameStates.InHelp:
+			break;
+		default:
 			this._offscreenMenu.Hide ();
+			break;
 		}
 	}
 	// Update is called once per frame

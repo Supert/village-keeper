@@ -12,6 +12,8 @@ public class CliffScript : MonoBehaviour {
 			case CoreScript.GameStates.Paused:
 				offscreen.Show ();
 				break;
+			case CoreScript.GameStates.InHelp:
+				break;
 			default:
 				offscreen.Hide ();
 				break;

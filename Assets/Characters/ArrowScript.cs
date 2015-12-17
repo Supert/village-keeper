@@ -63,7 +63,7 @@ public class ArrowScript : MonoBehaviour {
 		_shadow.transform.position = new Vector3 (this.transform.position.x - _shadow.bounds.extents.x, _targetPosition.y, 1f);
 
 
-		if (this.transform.localPosition.y < this._targetPosition.y) {
+		if (((Vector2)this.transform.localPosition - (Vector2) this._targetPosition).magnitude < _shadow.bounds.extents.y) {
 			Destroy ();
 		}
 		if (CoreScript.Instance.Monster.CheckHitByPosition (this.transform.position)) {

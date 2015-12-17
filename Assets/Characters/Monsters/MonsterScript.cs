@@ -142,11 +142,6 @@ public class MonsterScript : MonoBehaviour
 		pathFinder.Diagonals = false;
 		
 		var monsterPoint = new Point ((int) GridPosition.x, (int) GridPosition.y);
-		/*/DEBUG!!
-		var list = new List<PathFinderNode> ();
-		list.Add (new PathFinderNode ());
-		return list;
-		//end debug;*/
 		var paths = new List<List<PathFinderNode>> ();
 		foreach (var t in possibleTargets) {
 			var path = pathFinder.FindPath (monsterPoint, t);
@@ -170,6 +165,7 @@ public class MonsterScript : MonoBehaviour
 	public void TakeDamage () {
 		this.Health--;
 		this._sprite.color = new Color (1f, 0.5f, 0.5f , 1f);
+		CoreScript.Instance.Audio.PlayMonsterHit ();
 	}
 	public void Kill () {
 		this._sprite.color = new Color (1f, 0.5f, 0.5f, 1f);
@@ -247,7 +243,6 @@ public class MonsterScript : MonoBehaviour
 				this.maxHealth = (int) (pointsPool / _agressiveness);
 			}
 		}
-	
 	}
 	void Awake () {
 		this._sprite = GetComponent<SpriteRenderer> () as SpriteRenderer;
@@ -267,7 +262,7 @@ public class MonsterScript : MonoBehaviour
 			}
 			if (e.NewState == CoreScript.GameStates.InBattle) {
 				_animator.speed = 1f;
-				if (e.PreviousState != CoreScript.GameStates.Paused) {
+				if (! (e.PreviousState == CoreScript.GameStates.Paused || e.PreviousState == CoreScript.GameStates.InHelp)) {
 					this._shadow.color = Color.white;
 					this._sprite.color = Color.white;
 
@@ -280,7 +275,7 @@ public class MonsterScript : MonoBehaviour
 					this.gameObject.SetActive (true);
 				}
 			}
-			if (e.NewState == CoreScript.GameStates.RoundFinished || e.NewState == CoreScript.GameStates.Paused) {
+			if (e.NewState == CoreScript.GameStates.RoundFinished || e.NewState == CoreScript.GameStates.Paused || e.NewState == CoreScript.GameStates.InHelp) {
 				_animator.speed = 0f;
 			}
 		};

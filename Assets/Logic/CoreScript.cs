@@ -1,6 +1,8 @@
 using UnityEngine;
+using AssemblyCSharp;
 using System.Collections;
 using System;
+using Soomla.Store;
 [RequireComponent (typeof (WindScript))]
 public class CoreScript : MonoBehaviour {
 	public enum GameStates
@@ -11,6 +13,7 @@ public class CoreScript : MonoBehaviour {
 		Paused,
 		RoundFinished,
 		InBuildMode,
+		InHelp,
 	}
 	private GameStates _gameState;
 	public GameStates GameState {
@@ -18,18 +21,6 @@ public class CoreScript : MonoBehaviour {
 			return _gameState;
 		}
 		set {
-			switch (value) {
-			case GameStates.InMenu:
-				break;
-			case GameStates.InBattle:
-				break;
-			case GameStates.Paused:
-				break;
-			case GameStates.RoundFinished:
-				break;
-			case GameStates.InShop:
-				break;
-			}
 			var previousState = _gameState;
 			this._gameState = value;
 			if (GameStateChanged != null)
@@ -78,14 +69,7 @@ public class CoreScript : MonoBehaviour {
 			return _controls;
 		}
 	}
-	private UiScript _ui;
-	public UiScript UI {
-		get {
-			if (_ui == null)
-				_ui = FindObjectOfType<UiScript>() as UiScript;
-			return _ui;
-		}
-	}
+
 	private MainMenuScript _mainMenu;
 	public MainMenuScript MainMenu {
 		get {
@@ -109,8 +93,18 @@ public class CoreScript : MonoBehaviour {
 		get {
 			if (_buildingsArea == null) {
 				_buildingsArea = FindObjectOfType <BuildingsAreaScript> ();
+
 			}
 			return _buildingsArea;
+		}
+	}
+	private AudioScript _audio;
+	public AudioScript Audio {
+		get {
+			if (_audio == null) {
+				_audio = GetComponent<AudioScript> ();
+			}
+			return _audio;
 		}
 	}
 	public static CoreScript Instance {
@@ -125,6 +119,9 @@ public class CoreScript : MonoBehaviour {
 		StartCoroutine (InitCoroutine());
 	}
 	IEnumerator InitCoroutine () {
+		SoomlaStore.Initialize (new EconomyAssets ());
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+		yield return null;
 		yield return null;
 		this._gameState = GameStates.InMenu;
 	}

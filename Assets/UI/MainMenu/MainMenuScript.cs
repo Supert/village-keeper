@@ -5,6 +5,9 @@ public class MainMenuScript : MonoBehaviour {
 	public Text monstersDefeatedText;
 	public ScreenShadowScript shopShadow;
 	OffScreenMenuScript _offScreenMenu;
+	public Image roomFurniture;
+	public Sprite freeFurniture;
+	public Sprite premiumFurniture;	
 	private OffScreenMenuScript _shop;
 	public OffScreenMenuScript Shop {
 		get {
@@ -22,14 +25,20 @@ public class MainMenuScript : MonoBehaviour {
 				this.monstersDefeatedText.text = monstersDefeated + " monsters defeated";
 		}
 	}
+	private void SetFurniture () {
+		if (CoreScript.Instance.Data.HasPremium) {
+			if (this.roomFurniture.sprite != premiumFurniture)
+				this.roomFurniture.sprite = premiumFurniture;
+		} else {
+			if (this.roomFurniture.sprite != freeFurniture)
+				this.roomFurniture.sprite = freeFurniture;
+		}
+	}
 	// Use this for initialization
 	void Start () {
 		_offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-		StartCoroutine (InitCoroutine ());
 		SetScores ();
-	}
-	IEnumerator InitCoroutine () {
-		yield return null;
+		SetFurniture ();
 		shopShadow.ShadowButton.onClick.AddListener (() => {
 			CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
 		});
@@ -43,6 +52,7 @@ public class MainMenuScript : MonoBehaviour {
 				shopShadow.Hide ();
 				break;
 			case CoreScript.GameStates.InMenu:
+				SetFurniture ();
 				SetScores ();
 				_offScreenMenu.Show ();
 				shopShadow.Hide ();
@@ -53,9 +63,14 @@ public class MainMenuScript : MonoBehaviour {
 				break;
 			}
 		};
-	}
-	// Update is called once per frame
-	void Update () {
-	
+		CoreScript.Instance.Data.DataFieldChanged += (sender, e) => {
+			switch (e.FieldChanged) {
+			case DataScript.DataFields.HasPremium:
+				SetFurniture ();
+				break;
+			default:
+				break;
+			}
+		};
 	}
 }

@@ -5,11 +5,12 @@ using UnityEngine.UI;
 [RequireComponent (typeof(Image))]
 public class ArcherScript : MonoBehaviour
 {
+	public ArrowLoadBarScript arrowBar;
 	private RectTransform _rect;
 	private bool _isLoaded;
 	public bool IsLoaded {
 		get {
-			if (CoreScript.Instance.UI.ArrowLoadBar.RelativeCurrentValue == 1)
+			if (arrowBar.RelativeCurrentValue == 1)
 				return true;
 			else return false;
 		}
@@ -88,6 +89,7 @@ public class ArcherScript : MonoBehaviour
 			var arrow = new GameObject ("arrow", typeof(ArrowScript)).GetComponent <ArrowScript> ();
 			var initialPosition = (Vector2) this.transform.position + (Vector2) _rect.TransformVector (new Vector2 (this._rect.rect.width / 2, this._rect.rect.height * 0.6f));
 			arrow.Init (initialPosition, _targetPosition, GetAimingAngleInRads ());
+			CoreScript.Instance.Audio.PlayArrowShot ();
 		}
 	}
 }

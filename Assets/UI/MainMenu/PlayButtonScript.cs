@@ -9,6 +9,7 @@ public class PlayButtonScript : MonoBehaviour {
 		var button = GetComponent<Button> () as Button;
 		button.onClick.AddListener (() => {
 			CoreScript.Instance.GameState = CoreScript.GameStates.InBuildMode;
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 	}
 	

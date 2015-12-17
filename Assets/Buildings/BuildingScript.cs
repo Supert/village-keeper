@@ -28,13 +28,13 @@ public abstract class BuildingScript : MonoBehaviour {
 			case BuildingTypes.Farm:
 				return 2;
 			case BuildingTypes.WallStone:
-				return 8;
+				return 6;
 			case BuildingTypes.WallWooden:
 				return 3;
 			case BuildingTypes.WatchtowerStone:
-				return 6;
-			case BuildingTypes.WatchtowerWooden:
 				return 4;
+			case BuildingTypes.WatchtowerWooden:
+				return 3;
 			case BuildingTypes.Windmill:
 				return 6;
 			default:
@@ -86,7 +86,7 @@ public abstract class BuildingScript : MonoBehaviour {
 		get {
 			switch (this.Type) {
 			case BuildingTypes.Farm:
-				return "Provides one [f] at end of the round.";
+				return "Provides one point of food. Food converts to gold each round.";
 			case BuildingTypes.WallStone:
 				return "Steady stone wall.";
 			case BuildingTypes.WallWooden:
@@ -96,7 +96,7 @@ public abstract class BuildingScript : MonoBehaviour {
 			case BuildingTypes.WatchtowerWooden:
 				return "Shoots at monster if it came close.";
 			case BuildingTypes.Windmill:
-				return "Provides extra [f] for each adjacent Farm at end of the round";
+				return "Provides extra food for each adjacent Farm at end of the round";
 			default:
 				return "";
 			}
@@ -119,6 +119,7 @@ public abstract class BuildingScript : MonoBehaviour {
 	}
 	public void Damage () {
 		this.Health--;
+		CoreScript.Instance.Audio.PlayBuildingHit ();
 	}
 	protected virtual void DestroySelf () {
 		CoreScript.Instance.BuildingsArea.RemoveBuilding (this);

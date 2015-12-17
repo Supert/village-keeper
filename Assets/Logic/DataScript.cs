@@ -18,6 +18,30 @@ public class DataScript : MonoBehaviour {
 			FireDataFieldChanged (DataFields.HasPremium);
 		}
 	}
+	public bool WasInBuildTipShown {
+		get {
+			if (PlayerPrefs.HasKey ("WasInBuildTipShown"))
+				return PlayerPrefs.GetInt ("WasInBuildTipShown") != 0;
+			else
+				return false;
+		}
+		set {
+			PlayerPrefs.SetInt ("WasInBuildTipShown", value ? 1 : 0);
+			FireDataFieldChanged (DataFields.WasInBuildTipShown);
+		}
+	}
+	public bool WasInBattleTipShown {
+		get {
+			if (PlayerPrefs.HasKey ("WasInBattleTipShown"))
+				return PlayerPrefs.GetInt ("WasInBattleTipShown") != 0;
+			else
+				return false;
+		}
+		set {
+			PlayerPrefs.SetInt ("WasInBattleTipShown", value ? 1 : 0);
+			FireDataFieldChanged (DataFields.WasInBattleTipShown);
+		}
+	}
 	public int MonstersDefeated {
 		get {
 			if (PlayerPrefs.HasKey ("MonstersDefeated"))
@@ -34,7 +58,7 @@ public class DataScript : MonoBehaviour {
 		get {
 			if (PlayerPrefs.HasKey ("Gold"))
 				return PlayerPrefs.GetInt ("Gold");
-			else return 100;
+			else return 50;
 		}
 		set {
 			PlayerPrefs.SetInt ("Gold", value);
@@ -69,6 +93,28 @@ public class DataScript : MonoBehaviour {
 			FireDataFieldChanged (DataFields.Buildings);
 		}
 	}
+	public bool IsSoundEffectsEnabled {
+		get {
+			if (PlayerPrefs.HasKey ("IsSoundEffectsEnabled"))
+				return PlayerPrefs.GetInt ("IsSoundEffectsEnabled") != 0;
+			return true;
+		}
+		set {
+			PlayerPrefs.SetInt ("IsSoundEffectsEnabled", value ? 1 : 0);
+			FireDataFieldChanged (DataFields.IsSoundEffectsEnabled);
+		}
+	}
+	public bool IsMusicEnabled {
+		get {
+			if (PlayerPrefs.HasKey ("IsMusicEnabled"))
+			    return PlayerPrefs.GetInt ("IsMusicEnabled") != 0;
+			return true;
+		}
+		set {
+			PlayerPrefs.SetInt ("IsMusicEnabled", value ? 1 : 0);
+			FireDataFieldChanged (DataFields.IsMusicEnabled);
+		}
+	}
 	public enum DataFields
 	{
 		HasPremium,
@@ -76,6 +122,10 @@ public class DataScript : MonoBehaviour {
 		Gold,
 		VillageLevel,
 		Buildings,
+		WasInBuildTipShown,
+		WasInBattleTipShown,
+		IsSoundEffectsEnabled,
+		IsMusicEnabled,
 	}
 	public class DataFieldChangedEventArgs : EventArgs {
 		public DataFields FieldChanged;

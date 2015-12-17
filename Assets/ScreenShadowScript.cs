@@ -31,11 +31,11 @@ public class ScreenShadowScript : MonoBehaviour {
 	}
 	Image _image;
 	// Use this for initialization
-	void Start () {
+	protected virtual void Start () {
 		_image = GetComponent<Image>() as Image;
 	}
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 		if (IsShown) {
 			if (this._image.color != Color.white)
 			{

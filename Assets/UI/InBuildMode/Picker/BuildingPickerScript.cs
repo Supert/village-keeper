@@ -60,10 +60,12 @@ public class BuildingPickerScript : MonoBehaviour {
 		previousButton.onClick.AddListener (() => {
 			var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
 			CurrentBuildingType = (BuildingScript.BuildingTypes) (((byte) CurrentBuildingType - 1 + n) % n);
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		nextButton.onClick.AddListener (() => {
 			var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
 			CurrentBuildingType = (BuildingScript.BuildingTypes) (((byte) CurrentBuildingType + 1 + n) % n);
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		this.CurrentBuildingType = BuildingScript.BuildingTypes.Farm;
 	}
@@ -74,6 +76,8 @@ public class BuildingPickerScript : MonoBehaviour {
 			case CoreScript.GameStates.InBuildMode:
 				offscreen.Show ();
 				break;
+			case CoreScript.GameStates.InHelp:
+				break;
 			default:
 				offscreen.Hide ();
 				break;
@@ -82,11 +86,12 @@ public class BuildingPickerScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-
-		if (Input.GetMouseButtonDown (0)) {
-			if (RectTransformUtility.RectangleContainsScreenPoint (this.iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost) {
-				CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-				CurrentPreparedBuilding.gameObject.SetActive (true);
+		if (CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode) {
+			if (Input.GetMouseButtonDown (0)) {
+				if (RectTransformUtility.RectangleContainsScreenPoint (this.iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost) {
+					CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+					CurrentPreparedBuilding.gameObject.SetActive (true);
+				}
 			}
 		}
 	}

@@ -11,6 +11,7 @@ public class StartBattleButtonScript : MonoBehaviour {
 		var button = GetComponent<Button> () as Button;
 		button.onClick.AddListener (() => {
 			CoreScript.Instance.GameState = CoreScript.GameStates.InBattle;
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		CoreScript.Instance.GameStateChanged += (sender, e) => {
 			switch (e.NewState) {

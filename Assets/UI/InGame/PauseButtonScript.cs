@@ -20,6 +20,7 @@ public class PauseButtonScript : MonoBehaviour {
 				CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
 				break;
 			}
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		CoreScript.Instance.GameStateChanged += (sender, e) => {
 			var s = _button.spriteState;

@@ -48,6 +48,8 @@ public class InfoAndUpgradesWindowScript : MonoBehaviour {
 			SetValues ();
 			_offscreen.Show ();
 			break;
+		case CoreScript.GameStates.InHelp:
+			break;
 		default:
 			_offscreen.Hide ();
 			break;
@@ -73,6 +75,7 @@ public class InfoAndUpgradesWindowScript : MonoBehaviour {
 			if (CoreScript.Instance.Data.Gold >= CoreScript.Instance.Data.GetCastleUpgradeCost ()) {
 				CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost ();
 				CoreScript.Instance.Data.VillageLevel++;
+				CoreScript.Instance.Audio.PlayClick ();
 			}
 
 		});
