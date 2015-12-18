@@ -47,7 +47,13 @@ public class SoundSettingsScript : MonoBehaviour {
 				break;
 			}
 		};
-		MusicButton.onClick.AddListener (() => CoreScript.Instance.Data.IsMusicEnabled = !CoreScript.Instance.Data.IsMusicEnabled);
-		SoundsButton.onClick.AddListener (() => CoreScript.Instance.Data.IsSoundEffectsEnabled = !CoreScript.Instance.Data.IsSoundEffectsEnabled);
+		MusicButton.onClick.AddListener (() => {
+			CoreScript.Instance.Data.IsMusicEnabled = !CoreScript.Instance.Data.IsMusicEnabled;
+			CoreScript.Instance.Audio.PlayClick ();
+		});
+		SoundsButton.onClick.AddListener (() => {
+			CoreScript.Instance.Data.IsSoundEffectsEnabled = !CoreScript.Instance.Data.IsSoundEffectsEnabled;
+			CoreScript.Instance.Audio.PlayClick ();
+		});
 	}
 }

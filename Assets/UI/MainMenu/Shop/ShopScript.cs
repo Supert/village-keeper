@@ -16,9 +16,11 @@ public class ShopScript : MonoBehaviour {
 		yield return null;
 		thounsandButton.onClick.AddListener (() => {
 			SoomlaStore.BuyMarketItem (EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		tenThousandButton.onClick.AddListener (() => {
 			SoomlaStore.BuyMarketItem (EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
+			CoreScript.Instance.Audio.PlayClick ();
 		});
 		CoreScript.Instance.GameStateChanged += (object sender, CoreScript.GameStateChangedEventArgs e) => {
 			switch (e.NewState) {

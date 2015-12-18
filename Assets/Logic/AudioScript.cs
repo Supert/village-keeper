@@ -101,7 +101,7 @@ public class AudioScript : MonoBehaviour {
 		}
 	}
 	public void PlayMonsterHit () {
-		if (CoreScript.Instance.Data.IsSoundEffectsEnabled) {
+		if (CoreScript.Instance.Data.IsSoundEffectsEnabled && CoreScript.Instance.GameState == CoreScript.GameStates.InBattle) {
 			MonsterAS.clip = AudioClips [AudioClipNames.MonsterHit];
 			MonsterAS.Play ();
 		}
