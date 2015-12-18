@@ -178,6 +178,7 @@ public class DataScript : MonoBehaviour {
 			this.Gold += 1000;
 		if (pvi.ItemId == EconomyAssets.TEN_THOUSAND_COINS.ItemId)
 			this.Gold += 10000;
+		HasPremium = true;
 	}
 	void Start () {
 		StoreEvents.OnMarketPurchase += onMarketPurchase;
