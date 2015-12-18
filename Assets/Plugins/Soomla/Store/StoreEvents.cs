@@ -673,6 +673,7 @@ namespace Soomla.Store {
             if (eventJSON.HasField("payload")) {
                 payload = eventJSON["payload"].str;
             }
+            Debug.Log("StoreEvents.onMarketPurchaseDeferred");
 			StoreEvents.OnMarketPurchaseDeferred(pvi, payload);
 			//StoreEvents.OnMarketPurchaseDeferred(new MarketPurchaseDeferredEvent(pvi, payload) );
         }
@@ -683,7 +684,7 @@ namespace Soomla.Store {
 		/// <param name="message">Message that contains information about the market purchase.</param>
 		public void onMarketPurchase(string message) {
 			Debug.Log ("SOOMLA/UNITY onMarketPurchase:" + message);
-
+            Debug.Log("StoreEvents onMArketPurchase");
 			var eventJSON = new JSONObject(message);
 
 			PurchasableVirtualItem pvi = (PurchasableVirtualItem)StoreInfo.GetItemByItemId(eventJSON["itemId"].str);

@@ -186,6 +186,7 @@ namespace Soomla.Store
 				extraJSON.AddField("purchaseToken", "fake_purchaseToken_zyxw9876");
 			#endif
 				eventJSON.AddField("extra", extraJSON);
+                Debug.Log("SoomlaStore _buyMarketItem");
 				StoreEvents.Instance.onMarketPurchase(eventJSON.print());
 
 				// in the editor we just give the item... no real market.

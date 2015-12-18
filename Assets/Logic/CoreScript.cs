@@ -115,12 +115,13 @@ public class CoreScript : MonoBehaviour {
 		Instance = this;
 	}
 	// Use this for initialization
-	void Start () {
-		StartCoroutine (InitCoroutine());
+	void Start ()
+    {
+        SoomlaStore.Initialize(new EconomyAssets());
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        StartCoroutine (InitCoroutine());
 	}
 	IEnumerator InitCoroutine () {
-		SoomlaStore.Initialize (new EconomyAssets ());
-		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		yield return null;
 		yield return null;
 		this._gameState = GameStates.InMenu;
