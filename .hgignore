@@ -9,6 +9,13 @@ UpgradeLog.htm
 Village Keeper.keystore
 PROMO/*
 Assets/ThirdPartyCode/*
+Assets/AStarPathfinder/*
+Assets/GoogleMobileAds/*
+Assets/Plugins/*
+Assets/Resources/*
+Assets/Soomla*
+Assets/WebPlayerTemplates/*
+obj/Debug/*
 syntax: regexp
 ^Build/.*
 ^Library/.*
