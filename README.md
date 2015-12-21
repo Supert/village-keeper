@@ -31,8 +31,8 @@ Obviously, third-party assets have their own licensing terms. There is list of t
 
 Authors of sounds used:
 
-*TeknoAXE
-*freesound.org users LiamG_SFX, brendan89, and TeamMasaka
+* TeknoAXE
+* freesound.org users LiamG_SFX, brendan89, and TeamMasaka
 
 ### Contact me ###
 
