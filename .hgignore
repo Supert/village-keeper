@@ -5,6 +5,9 @@ syntax: glob
 *.csproj
 *.pidb
 *.unitypackage
+UpgradeLog.htm
+Village Keeper.keystore
+PROMO/*
 Assets/ThirdPartyCode/*
 syntax: regexp
 ^Build/.*
