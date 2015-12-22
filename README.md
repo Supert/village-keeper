@@ -11,7 +11,7 @@ Repo is pretty messy right now, I was just commiting pretty much everything in p
 
 You need up-to-date Unity3D and Android SDK. 
 
-Also, you need to add to project Soomla In-App Purchase, GoogleMobileAds and APathfinderByDeenGames. You can find links to it below. Simply follow up their instructions and remove 
+Also, you need to add to project Soomla In-App Purchase, GoogleMobileAds and APathfinderByDeenGames. You can find links to it below. Simply follow up their instructions. 
 
 Please note that Soomla and GoogleMobileAds conflict with each other. To resolve it, remove in-app-billing-service-aidl.jar from GoogleMobileAds folder.
 
