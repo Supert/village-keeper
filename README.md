@@ -7,11 +7,15 @@ Little about myself: my name is Alexey Korolev and I am C# developer. I was enga
 
 ### How do I get set up? ###
 
-NB: This section will be updated as I clean up repository from 3-rd party code and other stuff.
-
 Repo is pretty messy right now, I was just commiting pretty much everything in project folder. Wrong usage, I know.
 
-All you need to launch it is up-to-date Unity3D and Android SDK. All my stuff located in Assets/VillageKeeper folder.
+You need up-to-date Unity3D and Android SDK. 
+
+Also, you need to add to project Soomla In-App Purchase, GoogleMobileAds and APathfinderByDeenGames. You can find links to it below. Simply follow up their instructions and remove 
+
+Please note that Soomla and GoogleMobileAds conflict with each other. To resolve it, remove in-app-billing-service-aidl.jar from GoogleMobileAds folder.
+
+All my stuff located in Assets/VillageKeeper folder.
 
 ### Licensing terms ###
 
