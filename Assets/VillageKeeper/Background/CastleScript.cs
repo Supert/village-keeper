@@ -4,9 +4,18 @@ using UnityEngine.UI;
 public class CastleScript : MonoBehaviour {
 	private Image _image;
 	public List<Sprite> castleSprites;
+	public List<Sprite> castleWinterSpecialSprites;
 	public void SetSprite () {
-		if (this._image.sprite != castleSprites[CoreScript.Instance.Data.VillageLevel])
-			this._image.sprite = castleSprites[CoreScript.Instance.Data.VillageLevel];
+		switch (CoreScript.Instance.TodaySpecial) {
+		case CoreScript.Specials.None:
+			if (this._image.sprite != castleSprites[CoreScript.Instance.Data.VillageLevel])
+				this._image.sprite = castleSprites[CoreScript.Instance.Data.VillageLevel];
+			break;
+		case CoreScript.Specials.Winter:
+			if (this._image.sprite != castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel])
+				this._image.sprite = castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel];
+			break;
+		}
 	}
 	void Awake () {
 		_image = GetComponent<Image> () as Image;

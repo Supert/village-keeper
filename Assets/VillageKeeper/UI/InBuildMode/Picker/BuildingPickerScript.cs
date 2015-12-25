@@ -23,7 +23,10 @@ public class BuildingPickerScript : MonoBehaviour {
 	private Dictionary<BuildingScript.BuildingTypes, BuildingScript> _buildingsPrepared = new Dictionary<BuildingScript.BuildingTypes, BuildingScript> ();
 	public BuildingScript CurrentPreparedBuilding {
 		get {
-			if (!_buildingsPrepared.ContainsKey(CurrentBuildingType) || _buildingsPrepared[CurrentBuildingType] == null || _buildingsPrepared[CurrentBuildingType] != null) {
+			if (!_buildingsPrepared.ContainsKey(CurrentBuildingType) 
+			    || _buildingsPrepared[CurrentBuildingType] == null 
+			    || _buildingsPrepared[CurrentBuildingType].Tile != null 
+			    || _buildingsPrepared[CurrentBuildingType].gameObject == null) {
 				PrepareBuildingOfType (CurrentBuildingType);
 			}
 			return _buildingsPrepared[CurrentBuildingType];
@@ -42,16 +45,13 @@ public class BuildingPickerScript : MonoBehaviour {
 			this.iconImage.sprite = GetSpriteForIconByType (value);
 		}
 	}
-	// Use this for initialization
 	void PrepareBuildingOfType (BuildingScript.BuildingTypes type) {
-		if (!_buildingsPrepared.ContainsKey (type) || _buildingsPrepared [type].Tile != null) {
-			var bs = BuildingScript.GetNewBuildingOfType (type);
-			bs.gameObject.SetActive (false);
-			if (!_buildingsPrepared.ContainsKey (type))
-				_buildingsPrepared.Add (type, bs);
-			else 
-				_buildingsPrepared [type] = bs;
-		}
+		var bs = BuildingScript.GetNewBuildingOfType (type);
+		bs.gameObject.SetActive (false);
+		if (!_buildingsPrepared.ContainsKey (type))
+			_buildingsPrepared.Add (type, bs);
+		else 
+			_buildingsPrepared [type] = bs;
 	}
 	void Awake () {
 		foreach (BuildingScript.BuildingTypes v in Enum.GetValues (typeof (BuildingScript.BuildingTypes))) {
@@ -91,6 +91,7 @@ public class BuildingPickerScript : MonoBehaviour {
 				if (RectTransformUtility.RectangleContainsScreenPoint (this.iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost) {
 					CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 					CurrentPreparedBuilding.gameObject.SetActive (true);
+					PrepareBuildingOfType (CurrentBuildingType);
 				}
 			}
 		}

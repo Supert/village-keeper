@@ -4,7 +4,9 @@ using UnityEngine.UI;
 [RequireComponent (typeof (RectTransform))]
 [RequireComponent (typeof(Image))]
 public class ArcherScript : MonoBehaviour
-{
+{	
+	public Image hat;
+	private Animator _animator;
 	public ArrowLoadBarScript arrowBar;
 	private RectTransform _rect;
 	private bool _isLoaded;
@@ -29,18 +31,13 @@ public class ArcherScript : MonoBehaviour
 		}
 		private set {
 			_state = value;
-			switch (value) {
-			case (ArcherAimingValues.AimingDown):
-				this.image.sprite = archerReadyAimingDownSprite;
+			_animator.SetInteger ("CurrentState", (int) value);
+			switch (CoreScript.Instance.TodaySpecial) {
+			case CoreScript.Specials.None:
+				hat.gameObject.SetActive (false);
 				break;
-			case (ArcherAimingValues.AimingStraight):
-				this.image.sprite = archerReadyAimingStraightSprite;
-				break;
-			case (ArcherAimingValues.AimingUp):
-				this.image.sprite = archerReadyAimingUpSprite;
-				break;
-			case (ArcherAimingValues.Unloaded):
-				this.image.sprite = archerUnloadedSprite;
+			case CoreScript.Specials.Winter:
+				hat.gameObject.SetActive (true);
 				break;
 			}
 		}
@@ -53,6 +50,7 @@ public class ArcherScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		this._animator = GetComponent<Animator> () as Animator;
 		this.image = GetComponent<Image> () as Image;
 		this._rect = GetComponent<RectTransform> () as RectTransform;
 	}
