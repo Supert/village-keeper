@@ -4,10 +4,12 @@ using System.Collections;
 public class MonsterHealthBarScript : BarScript {
 	// Use this for initialization
 	private OffScreenMenuScript _offscreenMenu;
-	void Awake () {
+	protected override void Awake () {
+		base.Awake ();
 		_offscreenMenu = GetComponent<OffScreenMenuScript> () as OffScreenMenuScript;
 	}
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
 	}
 	void OnGameStateChanged (CoreScript.GameStateChangedEventArgs e) {
@@ -26,7 +28,8 @@ public class MonsterHealthBarScript : BarScript {
 		}
 	}
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
+		base.Update ();
 		this.MaxValue = CoreScript.Instance.Monster.maxHealth;
 		this.CurrentValue = CoreScript.Instance.Monster.Health;
 	}

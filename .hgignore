@@ -15,6 +15,7 @@ Assets/Plugins/*
 Assets/Resources/*
 Assets/Soomla*
 Assets/WebPlayerTemplates/*
+ProjectSettings/*
 obj/Debug/*
 syntax: regexp
 ^Build/.*

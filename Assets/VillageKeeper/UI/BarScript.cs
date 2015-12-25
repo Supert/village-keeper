@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 public class BarScript : MonoBehaviour {
-	public RectTransform barFillerRT;
+	public Image barFillerImage;
 	private float _maxValue = 1f;
 	public float MaxValue {
 		get {
@@ -28,20 +28,26 @@ public class BarScript : MonoBehaviour {
 			return _currentValue;
 		}
 		set {
-			var s = this.barFillerRT.localScale;
 			if (value >= MaxValue) {
 				_currentValue = MaxValue;
-				s.x = 1f;
+				barFillerImage.fillAmount = 1f;
 		}
 			else if (value <= minValue){
 				_currentValue = minValue;
-				s.x = 0f;
+				barFillerImage.fillAmount = 0f;
 			}
 			else if (MaxValue - minValue != 0) {
 				_currentValue = value;
-				s.x = RelativeCurrentValue;
+				barFillerImage.fillAmount = RelativeCurrentValue;
 			}
-			this.barFillerRT.localScale = s;
 		}
+	}
+	protected virtual void Awake () {
+		barFillerImage.color = new Color (0, 0, 0, 0);
+	}
+	protected virtual void Start () {
+		barFillerImage.color = new Color (1, 1, 1, 1);
+	}
+	protected virtual void Update () {
 	}
 }

@@ -9,19 +9,21 @@ public class ArrowLoadBarScript : BarScript
 	private RectTransform _rect;
 	private Image _fillerImage;
 	// Use this for initialization
-	void Start () {
-		this._fillerImage = barFillerRT.GetComponent<Image> () as Image;
+	protected override void Start () {
+		base.Start ();
+		this._fillerImage = barFillerImage.GetComponent<Image> () as Image;
 		
 		this._rect = this.GetComponent<RectTransform> () as RectTransform;
 		this.MaxValue = _rect.rect.width / _rect.localScale.x;
 		this.minValue = 0;
 	}
 	// Update is called once per frame
-	void Update ()
+	protected override void Update ()
 	{
+		base.Update ();
 		if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle) { 
 			if (!Input.GetMouseButton (0) && RelativeCurrentValue < 1)
-				RelativeCurrentValue -= Time.deltaTime * 3;
+				RelativeCurrentValue -= Time.deltaTime * 5;
 			else
 				CurrentValue = -CoreScript.Instance.Controls.TouchDeltaPosition.x * 3f;
 			if (RelativeCurrentValue == 1f) { 
@@ -32,6 +34,9 @@ public class ArrowLoadBarScript : BarScript
 					this._fillerImage.sprite = partiallyLoadedBarFillerSprite;
 			}
 		}
+	}
+	protected override void Awake () {
+		base.Awake ();
 	}
 }
 
