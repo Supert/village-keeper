@@ -2,7 +2,7 @@
 
 It is repository of mobile game Village Keeper ([GooglePlay page](https://play.google.com/store/apps/details?id=com.ZinovyGames.VillageKeeper))
 
-### How do I get set up? ###
+### How-to set up ###
 
 You need Unity3D 2017.2 and up-to-date Android SDK. 
 
