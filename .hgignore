@@ -5,6 +5,7 @@ syntax: glob
 *.csproj
 *.pidb
 *.unitypackage
+*.suo
 UpgradeLog.htm
 Village Keeper.keystore
 PROMO/*

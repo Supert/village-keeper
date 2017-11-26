@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 [RequireComponent (typeof (RectTransform))]
 [RequireComponent (typeof(Image))]
@@ -42,7 +41,7 @@ public class ArcherScript : MonoBehaviour
 			}
 		}
 	}
-	private Image image;
+	//private Image image;
 	public Sprite archerUnloadedSprite;
 	public Sprite archerReadyAimingUpSprite;
 	public Sprite archerReadyAimingStraightSprite;
@@ -50,9 +49,9 @@ public class ArcherScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		this._animator = GetComponent<Animator> () as Animator;
-		this.image = GetComponent<Image> () as Image;
-		this._rect = GetComponent<RectTransform> () as RectTransform;
+		_animator = GetComponent<Animator> () as Animator;
+		//this.image = GetComponent<Image> () as Image;
+		_rect = GetComponent<RectTransform> () as RectTransform;
 	}
 	
 	// Update is called once per frame
@@ -60,15 +59,15 @@ public class ArcherScript : MonoBehaviour
 	{
 		if (IsLoaded) {
 			if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
-				this.State = ArcherAimingValues.AimingDown;
+				State = ArcherAimingValues.AimingDown;
 			else {
 				if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
-					this.State = ArcherAimingValues.AimingStraight;
+					State = ArcherAimingValues.AimingStraight;
 				else
-					this.State = ArcherAimingValues.AimingUp;
+					State = ArcherAimingValues.AimingUp;
 			}
 		} else
-			this.State = ArcherAimingValues.Unloaded;
+			State = ArcherAimingValues.Unloaded;
 	}
 	public float GetAimingAngleInRads () {
 		switch (this.State) {

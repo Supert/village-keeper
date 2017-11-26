@@ -107,7 +107,7 @@ public class CoreScript : MonoBehaviour {
 	private MainMenuScript _mainMenu;
 	public MainMenuScript MainMenu {
 		get {
-			if (_mainMenu = null) {
+			if (_mainMenu == null) {
 				_mainMenu = FindObjectOfType (typeof (MainMenuScript)) as MainMenuScript;
 			}
 			return _mainMenu;
