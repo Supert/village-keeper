@@ -41,7 +41,7 @@ namespace Soomla.Store
 		public PurchaseWithMarket (string productId, double price) :
 			base()
 		{
-			this.MarketItem = new MarketItem(productId, price);
+            MarketItem = new MarketItem(productId, price);
 		}
 		
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Soomla.Store
 		public PurchaseWithMarket (MarketItem marketItem) :
 			base()
 		{
-			this.MarketItem = marketItem;
+            MarketItem = marketItem;
 		}
 
 		/// <summary>

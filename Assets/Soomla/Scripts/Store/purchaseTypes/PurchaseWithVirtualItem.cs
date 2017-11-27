@@ -47,8 +47,8 @@ namespace Soomla.Store
 		public PurchaseWithVirtualItem (String targetItemId, int amount) :
 			base()
 		{
-			this.TargetItemId = targetItemId;
-			this.Amount = amount;
+            TargetItemId = targetItemId;
+            Amount = amount;
 		}
 
 		/// <summary>

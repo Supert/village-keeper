@@ -33,8 +33,8 @@ namespace Soomla.Store {
 		/// The itemId is a unique id that every item in the SOOMLA economy have.
 		/// </summary>
 		public string ItemId {
-			get { return this._id; }
-			set { this._id = value; }
+			get { return _id; }
+			set { _id = value; }
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Soomla.Store {
 
 		public override bool Equals(object obj)	{
 			return (obj != null) &&
-				(obj.GetType() == this.GetType()) &&
+				(obj.GetType() == GetType()) &&
 					(((VirtualItem)obj).ItemId == ItemId);
 		}
 

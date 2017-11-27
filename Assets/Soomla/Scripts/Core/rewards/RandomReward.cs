@@ -91,7 +91,7 @@ namespace Soomla {
 			}
 
 			if (canBeGivenRewards.Count == 0) {
-				SoomlaUtils.LogDebug(TAG, "No more rewards to give in this Random Reward: " + this.ID);
+				SoomlaUtils.LogDebug(TAG, "No more rewards to give in this Random Reward: " + ID);
 				return false;
 			}
 

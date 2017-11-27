@@ -45,8 +45,8 @@ namespace Soomla.Store {
 		/// <param name="productId">The id of the current item in the market.</param>
 		/// <param name="price">The actual $$ cost of the current item in the market.</param>
 		public MarketItem(string productId, double price){
-			this.ProductId = productId;
-			this.Price = price;
+            ProductId = productId;
+            Price = price;
 		}
 
 		/// <summary>
@@ -70,29 +70,29 @@ namespace Soomla.Store {
 			Price = jsonObject[StoreJSONConsts.MARKETITEM_PRICE].n;
 
 			if (jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICE]) {
-				this.MarketPriceAndCurrency = jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICE].str;
+                MarketPriceAndCurrency = jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICE].str;
 			} else {
-				this.MarketPriceAndCurrency = "";
+                MarketPriceAndCurrency = "";
 			}
 			if (jsonObject[StoreJSONConsts.MARKETITEM_MARKETTITLE]) {
-				this.MarketTitle = jsonObject[StoreJSONConsts.MARKETITEM_MARKETTITLE].str;
+                MarketTitle = jsonObject[StoreJSONConsts.MARKETITEM_MARKETTITLE].str;
 			} else {
-				this.MarketTitle = "";
+                MarketTitle = "";
 			}
 			if (jsonObject[StoreJSONConsts.MARKETITEM_MARKETDESC]) {
-				this.MarketDescription = jsonObject[StoreJSONConsts.MARKETITEM_MARKETDESC].str;
+                MarketDescription = jsonObject[StoreJSONConsts.MARKETITEM_MARKETDESC].str;
 			} else {
-				this.MarketDescription = "";
+                MarketDescription = "";
 			}
 			if (jsonObject[StoreJSONConsts.MARKETITEM_MARKETCURRENCYCODE]) {
-				this.MarketCurrencyCode = jsonObject[StoreJSONConsts.MARKETITEM_MARKETCURRENCYCODE].str;
+                MarketCurrencyCode = jsonObject[StoreJSONConsts.MARKETITEM_MARKETCURRENCYCODE].str;
 			} else {
-				this.MarketCurrencyCode = "";
+                MarketCurrencyCode = "";
 			}
 			if (jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICEMICROS]) {
-				this.MarketPriceMicros = System.Convert.ToInt64(jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICEMICROS].n);
+                MarketPriceMicros = System.Convert.ToInt64(jsonObject[StoreJSONConsts.MARKETITEM_MARKETPRICEMICROS].n);
 			} else {
-				this.MarketPriceMicros = 0;
+                MarketPriceMicros = 0;
 			}
 		}
 
@@ -104,14 +104,14 @@ namespace Soomla.Store {
 		public JSONObject toJSONObject() {
 			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
 			obj.AddField (Soomla.JSONConsts.SOOM_CLASSNAME, SoomlaUtils.GetClassName (this));
-			obj.AddField(StoreJSONConsts.MARKETITEM_PRODUCT_ID, this.ProductId);
-			obj.AddField(StoreJSONConsts.MARKETITEM_PRICE, (float)this.Price);
+			obj.AddField(StoreJSONConsts.MARKETITEM_PRODUCT_ID, ProductId);
+			obj.AddField(StoreJSONConsts.MARKETITEM_PRICE, (float)Price);
 
-			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETPRICE, this.MarketPriceAndCurrency);
-			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETTITLE, this.MarketTitle);
-			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETDESC, this.MarketDescription);
-			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETCURRENCYCODE, this.MarketCurrencyCode);
-			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETPRICEMICROS, (float)this.MarketPriceMicros);
+			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETPRICE, MarketPriceAndCurrency);
+			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETTITLE, MarketTitle);
+			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETDESC, MarketDescription);
+			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETCURRENCYCODE, MarketCurrencyCode);
+			obj.AddField(StoreJSONConsts.MARKETITEM_MARKETPRICEMICROS, (float)MarketPriceMicros);
 
 			return obj;
 		}

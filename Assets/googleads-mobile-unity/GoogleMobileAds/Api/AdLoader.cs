@@ -31,34 +31,34 @@ namespace GoogleMobileAds.Api
 
         private AdLoader(Builder builder)
         {
-            this.AdUnitId = string.Copy(builder.AdUnitId);
-            this.CustomNativeTemplateClickHandlers =
+            AdUnitId = string.Copy(builder.AdUnitId);
+            CustomNativeTemplateClickHandlers =
                     new Dictionary<string, Action<CustomNativeTemplateAd, string>>(
                     builder.CustomNativeTemplateClickHandlers);
-            this.TemplateIds = new HashSet<string>(builder.TemplateIds);
-            this.AdTypes = new HashSet<NativeAdType>(builder.AdTypes);
+            TemplateIds = new HashSet<string>(builder.TemplateIds);
+            AdTypes = new HashSet<NativeAdType>(builder.AdTypes);
 
             Type googleMobileAdsClientFactory = Type.GetType(
                 "GoogleMobileAds.GoogleMobileAdsClientFactory,Assembly-CSharp");
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildAdLoaderClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.adLoaderClient = (IAdLoaderClient)method.Invoke(null, new object[] { this });
+            adLoaderClient = (IAdLoaderClient)method.Invoke(null, new object[] { this });
 
-            this.adLoaderClient.OnCustomNativeTemplateAdLoaded +=
+            adLoaderClient.OnCustomNativeTemplateAdLoaded +=
                     delegate (object sender, CustomNativeEventArgs args)
             {
-                if (this.OnCustomNativeTemplateAdLoaded != null)
+                if (OnCustomNativeTemplateAdLoaded != null)
                 {
-                    this.OnCustomNativeTemplateAdLoaded(this, args);
+                    OnCustomNativeTemplateAdLoaded(this, args);
                 }
             };
-            this.adLoaderClient.OnAdFailedToLoad += delegate (
+            adLoaderClient.OnAdFailedToLoad += delegate (
                 object sender, AdFailedToLoadEventArgs args)
             {
-                if (this.OnAdFailedToLoad != null)
+                if (OnAdFailedToLoad != null)
                 {
-                    this.OnAdFailedToLoad(this, args);
+                    OnAdFailedToLoad(this, args);
                 }
             };
         }
@@ -81,17 +81,17 @@ namespace GoogleMobileAds.Api
 
         public void LoadAd(AdRequest request)
         {
-            this.adLoaderClient.LoadAd(request);
+            adLoaderClient.LoadAd(request);
         }
 
         public class Builder
         {
             public Builder(string adUnitId)
             {
-                this.AdUnitId = adUnitId;
-                this.AdTypes = new HashSet<NativeAdType>();
-                this.TemplateIds = new HashSet<string>();
-                this.CustomNativeTemplateClickHandlers =
+                AdUnitId = adUnitId;
+                AdTypes = new HashSet<NativeAdType>();
+                TemplateIds = new HashSet<string>();
+                CustomNativeTemplateClickHandlers =
                         new Dictionary<string, Action<CustomNativeTemplateAd, string>>();
             }
 
@@ -109,8 +109,8 @@ namespace GoogleMobileAds.Api
 
             public Builder ForCustomNativeAd(string templateId)
             {
-                this.TemplateIds.Add(templateId);
-                this.AdTypes.Add(NativeAdType.CustomTemplate);
+                TemplateIds.Add(templateId);
+                AdTypes.Add(NativeAdType.CustomTemplate);
                 return this;
             }
 
@@ -118,9 +118,9 @@ namespace GoogleMobileAds.Api
                     string templateId,
                     Action<CustomNativeTemplateAd, string> callback)
             {
-                this.TemplateIds.Add(templateId);
-                this.CustomNativeTemplateClickHandlers[templateId] = callback;
-                this.AdTypes.Add(NativeAdType.CustomTemplate);
+                TemplateIds.Add(templateId);
+                CustomNativeTemplateClickHandlers[templateId] = callback;
+                AdTypes.Add(NativeAdType.CustomTemplate);
                 return this;
             }
 

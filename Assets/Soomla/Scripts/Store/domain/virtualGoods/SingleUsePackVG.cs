@@ -62,8 +62,8 @@ namespace Soomla.Store {
 		public SingleUsePackVG(string goodItemId, int amount, string name, string description, string itemId, PurchaseType purchaseType)
 			: base(name, description, itemId, purchaseType)
 		{
-			this.GoodItemId = goodItemId;
-			this.GoodAmount = amount;
+            GoodItemId = goodItemId;
+            GoodAmount = amount;
 		}
 
 #if UNITY_WP8 && !UNITY_EDITOR
@@ -81,7 +81,7 @@ namespace Soomla.Store {
 			: base(jsonItem)
 		{
 			GoodItemId = jsonItem[StoreJSONConsts.VGP_GOOD_ITEMID].str;
-	        this.GoodAmount = System.Convert.ToInt32(((JSONObject)jsonItem[StoreJSONConsts.VGP_GOOD_AMOUNT]).n);
+            GoodAmount = System.Convert.ToInt32(((JSONObject)jsonItem[StoreJSONConsts.VGP_GOOD_AMOUNT]).n);
 		}
 
 		/// <summary>

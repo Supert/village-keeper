@@ -11,7 +11,7 @@ namespace GoogleMobileAds.Api.Mediation
 
         public MediationExtras()
         {
-            this.Extras = new Dictionary<string, string>();
+            Extras = new Dictionary<string, string>();
         }
 
         public abstract string AndroidMediationExtraBuilderClassName { get; }

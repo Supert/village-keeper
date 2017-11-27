@@ -104,7 +104,7 @@ namespace Soomla.Store {
 		public EquippableVG(EquippingModel equippingModel, string name, string description, string itemId, PurchaseType purchaseType)
 			: base(name, description, itemId, purchaseType)
 		{
-			this.Equipping = equippingModel;
+            Equipping = equippingModel;
 		}
 
 #if UNITY_WP8 && !UNITY_EDITOR
@@ -135,16 +135,16 @@ namespace Soomla.Store {
 			: base(jsonItem)
 		{
 			string equippingStr = jsonItem[StoreJSONConsts.EQUIPPABLE_EQUIPPING].str;
-			this.Equipping = EquippingModel.CATEGORY;
+            Equipping = EquippingModel.CATEGORY;
 			switch(equippingStr){
 				case "local":
-					this.Equipping = EquippingModel.LOCAL;
+                    Equipping = EquippingModel.LOCAL;
 					break;
 				case "global":
-					this.Equipping = EquippingModel.GLOBAL;
+                    Equipping = EquippingModel.GLOBAL;
 					break;
 				default:
-					this.Equipping = EquippingModel.CATEGORY;
+                    Equipping = EquippingModel.CATEGORY;
 					break;
 			}
 		}
@@ -155,7 +155,7 @@ namespace Soomla.Store {
 		public override JSONObject toJSONObject() 
 		{
 			JSONObject obj = base.toJSONObject();
-			obj.AddField(StoreJSONConsts.EQUIPPABLE_EQUIPPING, this.Equipping.ToString());
+			obj.AddField(StoreJSONConsts.EQUIPPABLE_EQUIPPING, Equipping.ToString());
 			
 			return obj;
 		}
@@ -181,11 +181,11 @@ namespace Soomla.Store {
 				if (Equipping == EquippingModel.CATEGORY) {
 					VirtualCategory category = null;
 					try {
-						category = StoreInfo.GetCategoryForVirtualGood(this.ItemId);
+						category = StoreInfo.GetCategoryForVirtualGood(ItemId);
 					} catch (VirtualItemNotFoundException) {
 						SoomlaUtils.LogError(TAG,
 						                     "Tried to unequip all other category VirtualGoods but there was no " +
-						                     "associated category. virtual good itemId: " + this.ItemId);
+						                     "associated category. virtual good itemId: " + ItemId);
 						return;
 					}
 					

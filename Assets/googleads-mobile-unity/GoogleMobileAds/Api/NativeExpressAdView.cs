@@ -31,8 +31,8 @@ namespace GoogleMobileAds.Api
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildNativeExpressAdClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.client = (INativeExpressAdClient)method.Invoke(null, null);
-            this.client.CreateNativeExpressAdView(adUnitId, adSize, position);
+            client = (INativeExpressAdClient)method.Invoke(null, null);
+            client.CreateNativeExpressAdView(adUnitId, adSize, position);
 
             ConfigureNativeExpressAdEvents();
         }
@@ -45,8 +45,8 @@ namespace GoogleMobileAds.Api
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildNativeExpressAdClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.client = (INativeExpressAdClient)method.Invoke(null, null);
-            this.client.CreateNativeExpressAdView(adUnitId, adSize, x, y);
+            client = (INativeExpressAdClient)method.Invoke(null, null);
+            client.CreateNativeExpressAdView(adUnitId, adSize, x, y);
 
             ConfigureNativeExpressAdEvents();
         }
@@ -65,66 +65,66 @@ namespace GoogleMobileAds.Api
         // Loads a native express ad.
         public void LoadAd(AdRequest request)
         {
-            this.client.LoadAd(request);
+            client.LoadAd(request);
         }
 
         // Hides the NativeExpressAdView from the screen.
         public void Hide()
         {
-            this.client.HideNativeExpressAdView();
+            client.HideNativeExpressAdView();
         }
 
         // Shows the NativeExpressAdView on the screen.
         public void Show()
         {
-            this.client.ShowNativeExpressAdView();
+            client.ShowNativeExpressAdView();
         }
 
         // Destroys the NativeExpressAdView.
         public void Destroy()
         {
-            this.client.DestroyNativeExpressAdView();
+            client.DestroyNativeExpressAdView();
         }
 
         private void ConfigureNativeExpressAdEvents()
         {
-            this.client.OnAdLoaded += (sender, args) =>
+            client.OnAdLoaded += (sender, args) =>
             {
-                if(this.OnAdLoaded != null)
+                if(OnAdLoaded != null)
                 {
-                    this.OnAdLoaded(this, args);
+                    OnAdLoaded(this, args);
                 }
             };
 
-            this.client.OnAdFailedToLoad += (sender, args) =>
+            client.OnAdFailedToLoad += (sender, args) =>
             {
-                if(this.OnAdFailedToLoad != null)
+                if(OnAdFailedToLoad != null)
                 {
-                    this.OnAdFailedToLoad(this, args);
+                    OnAdFailedToLoad(this, args);
                 }
             };
 
-            this.client.OnAdOpening += (sender, args) =>
+            client.OnAdOpening += (sender, args) =>
             {
-                if(this.OnAdOpening != null)
+                if(OnAdOpening != null)
                 {
-                    this.OnAdOpening(this, args);
+                    OnAdOpening(this, args);
                 }
             };
 
-            this.client.OnAdClosed += (sender, args) =>
+            client.OnAdClosed += (sender, args) =>
             {
-                if(this.OnAdClosed != null)
+                if(OnAdClosed != null)
                 {
-                    this.OnAdClosed(this, args);
+                    OnAdClosed(this, args);
                 }
             };
 
-            this.client.OnAdLeavingApplication += (sender, args) =>
+            client.OnAdLeavingApplication += (sender, args) =>
             {
-                if(this.OnAdLeavingApplication != null)
+                if(OnAdLeavingApplication != null)
                 {
-                    this.OnAdLeavingApplication(this, args);
+                    OnAdLeavingApplication(this, args);
                 }
             };
         }
@@ -132,7 +132,7 @@ namespace GoogleMobileAds.Api
         // Returns the mediation adapter class name.
         public string MediationAdapterClassName()
         {
-            return this.client.MediationAdapterClassName();
+            return client.MediationAdapterClassName();
         }
     }
 }

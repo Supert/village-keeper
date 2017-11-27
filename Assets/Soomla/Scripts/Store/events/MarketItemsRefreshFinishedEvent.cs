@@ -15,7 +15,7 @@ namespace Soomla.Store
 
 		public MarketItemsRefreshFinishedEvent (List<MarketItem> marketItems, Object sender) : base(sender)
 		{
-			this.mMarketItems = marketItems;
+            mMarketItems = marketItems;
 		}
 
 		public List<MarketItem> getMarketItems ()

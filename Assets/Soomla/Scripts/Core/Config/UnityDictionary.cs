@@ -113,7 +113,7 @@ namespace UnityEngine {
 		}
 
 		public bool TryGetValue(K key, out V value) {
-			if (!this.ContainsKey(key)) {
+			if (!ContainsKey(key)) {
 				value = default(V);
 				return false;
 			}

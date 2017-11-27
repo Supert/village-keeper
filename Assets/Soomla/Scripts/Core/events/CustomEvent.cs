@@ -16,18 +16,18 @@ namespace Soomla
 
 		public CustomEvent (String name, Dictionary<String, String> extra, Object sender): base(sender)
 		{
-			this.Name = name;
-			this.Extra = extra;
+            Name = name;
+            Extra = extra;
 		}
 	
 		public String GetName ()
 		{
-			return this.Name;
+			return Name;
 		}
 
 		public Dictionary<String, String> GetExtra ()
 		{
-			return this.Extra;
+			return Extra;
 		}
 	}
 }

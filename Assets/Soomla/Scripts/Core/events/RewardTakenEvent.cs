@@ -19,12 +19,12 @@ namespace Soomla
 
 		public RewardTakenEvent (String rewardId, Object sender) : base(sender)
 		{
-			this.Reward = Reward.GetReward (rewardId);
+            Reward = Reward.GetReward (rewardId);
 		}
 
 		public RewardTakenEvent (Reward reward, Object sender) : base(sender)
 		{
-			this.Reward = reward;
+            Reward = reward;
 		}
 	}
 }

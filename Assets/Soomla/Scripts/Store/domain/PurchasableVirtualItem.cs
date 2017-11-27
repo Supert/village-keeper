@@ -38,10 +38,10 @@ namespace Soomla.Store {
 		protected PurchasableVirtualItem (string name, string description, string itemId, PurchaseType purchaseType) :
 			base(name, description, itemId)
 		{
-			this.PurchaseType = purchaseType;
+            PurchaseType = purchaseType;
 
-			if (this.PurchaseType != null) {
-				this.PurchaseType.AssociatedItem = this;
+			if (PurchaseType != null) {
+                PurchaseType.AssociatedItem = this;
 			}
 		}
 
@@ -145,8 +145,8 @@ namespace Soomla.Store {
 	            SoomlaUtils.LogError(TAG, "Couldn't determine what type of class is the given purchaseType.");
 	        }
 
-			if (this.PurchaseType != null) {
-				this.PurchaseType.AssociatedItem = this;
+			if (PurchaseType != null) {
+                PurchaseType.AssociatedItem = this;
 			}
 		}
 		

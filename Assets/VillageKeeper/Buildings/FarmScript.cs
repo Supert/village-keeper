@@ -1,20 +1,22 @@
 using UnityEngine;
-using System;
+
 public class FarmScript : BuildingScript
 {
-	public SpriteRenderer cropsSR;
-	public Sprite winterSpecialCropsSprite;
+    public override BuildingTypes Type
+    {
+        get
+        {
+            return BuildingTypes.Farm;
+        }
+    }
 
-	protected void Start () {
-		if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
-			this.cropsSR.sprite = winterSpecialCropsSprite;
-	}
+    public SpriteRenderer cropsSR;
+    public Sprite winterSpecialCropsSprite;
 
-	public override BuildingTypes Type {
-		get {
-			return BuildingTypes.Farm;
-		}
-	}
+    protected void Start()
+    {
+        if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+            cropsSR.sprite = winterSpecialCropsSprite;
+    }
+
 }
-
-

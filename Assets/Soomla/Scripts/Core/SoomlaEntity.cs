@@ -47,9 +47,9 @@ namespace Soomla {
 		/// <param name="id">unique id.</param>
 		protected SoomlaEntity (string id, string name, string description)
 		{
-			this.Name = name;
-			this.Description = description;
-			this._id = id;
+            Name = name;
+            Description = description;
+            _id = id;
 		}
 		
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -80,16 +80,16 @@ namespace Soomla {
 			}
 
 			if (jsonEntity[JSONConsts.SOOM_ENTITY_NAME]) {
-				this.Name = jsonEntity[JSONConsts.SOOM_ENTITY_NAME].str;
+                Name = jsonEntity[JSONConsts.SOOM_ENTITY_NAME].str;
 			} else {
-				this.Name = "";
+                Name = "";
 			}
 			if (jsonEntity[JSONConsts.SOOM_ENTITY_DESCRIPTION]) {
-				this.Description = jsonEntity[JSONConsts.SOOM_ENTITY_DESCRIPTION].str;
+                Description = jsonEntity[JSONConsts.SOOM_ENTITY_DESCRIPTION].str;
 			} else {
-				this.Description = "";
+                Description = "";
 			}
-			this._id = jsonEntity[JSONConsts.SOOM_ENTITY_ID].str;
+            _id = jsonEntity[JSONConsts.SOOM_ENTITY_ID].str;
 		}
 		
 		/// <summary>
@@ -97,15 +97,15 @@ namespace Soomla {
 		/// </summary>
 		/// <returns>A <c>JSONObject</c> representation of the current <c>SoomlaEntity</c>.</returns>
 		public virtual JSONObject toJSONObject() {
-			if (string.IsNullOrEmpty(this._id)) {
+			if (string.IsNullOrEmpty(_id)) {
 				SoomlaUtils.LogError(TAG, "This is BAD! We don't have ID in the this SoomlaEntity. Stopping here.");
 				return null;
 			}
 
 			JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-			obj.AddField(JSONConsts.SOOM_ENTITY_NAME, this.Name);
-			obj.AddField(JSONConsts.SOOM_ENTITY_DESCRIPTION, this.Description);
-			obj.AddField(JSONConsts.SOOM_ENTITY_ID, this._id);
+			obj.AddField(JSONConsts.SOOM_ENTITY_NAME, Name);
+			obj.AddField(JSONConsts.SOOM_ENTITY_DESCRIPTION, Description);
+			obj.AddField(JSONConsts.SOOM_ENTITY_ID, _id);
 			obj.AddField(JSONConsts.SOOM_CLASSNAME, SoomlaUtils.GetClassName(this));
 			
 			return obj;
@@ -181,9 +181,9 @@ namespace Soomla {
 		}
 
 		public virtual T Clone(string newId) {
-			JSONObject obj = this.toJSONObject();
+			JSONObject obj = toJSONObject();
 			obj.SetField(JSONConsts.SOOM_ENTITY_ID, JSONObject.CreateStringObject(newId));
-			return (T) Activator.CreateInstance(this.GetType(), new object[] { obj });
+			return (T) Activator.CreateInstance(GetType(), new object[] { obj });
 		}
 	}
 }

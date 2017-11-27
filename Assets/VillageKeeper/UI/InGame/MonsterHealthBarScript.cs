@@ -1,36 +1,41 @@
-using UnityEngine;
-using System.Collections;
+public class MonsterHealthBarScript : BarScript
+{
+    private OffScreenMenuScript offscreenMenu;
 
-public class MonsterHealthBarScript : BarScript {
-	// Use this for initialization
-	private OffScreenMenuScript _offscreenMenu;
-	protected override void Awake () {
-		base.Awake ();
-		_offscreenMenu = GetComponent<OffScreenMenuScript> () as OffScreenMenuScript;
-	}
-	protected override void Start () {
-		base.Start ();
-		CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged (e);
-	}
-	void OnGameStateChanged (CoreScript.GameStateChangedEventArgs e) {
-		switch (e.NewState) {
-		case CoreScript.GameStates.InBattle:
-			this._offscreenMenu.Show ();
-			this.MaxValue = CoreScript.Instance.Monster.maxHealth;
-			this.minValue = 0;
-			break;
-		case CoreScript.GameStates.Paused:
-		case CoreScript.GameStates.InHelp:
-			break;
-		default:
-			this._offscreenMenu.Hide ();
-			break;
-		}
-	}
-	// Update is called once per frame
-	protected override void Update () {
-		base.Update ();
-		this.MaxValue = CoreScript.Instance.Monster.maxHealth;
-		this.CurrentValue = CoreScript.Instance.Monster.Health;
-	}
+    protected override void Awake()
+    {
+        base.Awake();
+        offscreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
+    }
+
+    void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
+    {
+        switch (e.NewState)
+        {
+            case CoreScript.GameStates.InBattle:
+                offscreenMenu.Show();
+                MaxValue = CoreScript.Instance.Monster.maxHealth;
+                minValue = 0;
+                break;
+            case CoreScript.GameStates.Paused:
+            case CoreScript.GameStates.InHelp:
+                break;
+            default:
+                offscreenMenu.Hide();
+                break;
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        MaxValue = CoreScript.Instance.Monster.maxHealth;
+        CurrentValue = CoreScript.Instance.Monster.Health;
+    }
 }

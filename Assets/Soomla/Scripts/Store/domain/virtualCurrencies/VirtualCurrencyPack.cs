@@ -53,8 +53,8 @@ namespace Soomla.Store{
 		public VirtualCurrencyPack(string name, string description, string itemId, int currencyAmount, string currencyItemId, PurchaseType purchaseType)
 			: base(name, description, itemId, purchaseType)
 		{
-			this.CurrencyAmount = currencyAmount;
-			this.CurrencyItemId = currencyItemId;
+            CurrencyAmount = currencyAmount;
+            CurrencyItemId = currencyItemId;
 		}
 
 #if UNITY_WP8 && !UNITY_EDITOR
@@ -74,7 +74,7 @@ namespace Soomla.Store{
 		public VirtualCurrencyPack(JSONObject jsonItem)
 			: base(jsonItem)
 		{
-			this.CurrencyAmount = System.Convert.ToInt32(((JSONObject)jsonItem[StoreJSONConsts.CURRENCYPACK_CURRENCYAMOUNT]).n);
+            CurrencyAmount = System.Convert.ToInt32(((JSONObject)jsonItem[StoreJSONConsts.CURRENCYPACK_CURRENCYAMOUNT]).n);
 			
 			CurrencyItemId = jsonItem[StoreJSONConsts.CURRENCYPACK_CURRENCYITEMID].str;
 		}
@@ -85,8 +85,8 @@ namespace Soomla.Store{
 		/// <returns>JSON object.</returns>
 		public override JSONObject toJSONObject() {
 			JSONObject obj = base.toJSONObject();
-			obj.AddField(StoreJSONConsts.CURRENCYPACK_CURRENCYAMOUNT, this.CurrencyAmount);
-			obj.AddField(StoreJSONConsts.CURRENCYPACK_CURRENCYITEMID, this.CurrencyItemId);
+			obj.AddField(StoreJSONConsts.CURRENCYPACK_CURRENCYAMOUNT, CurrencyAmount);
+			obj.AddField(StoreJSONConsts.CURRENCYPACK_CURRENCYITEMID, CurrencyItemId);
 			return obj;
 		}
 

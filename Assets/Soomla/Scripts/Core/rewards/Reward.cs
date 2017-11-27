@@ -50,7 +50,7 @@ namespace Soomla {
 		{
 			Schedule = Schedule.AnyTimeOnce();
 
-			RewardsMap.AddOrUpdate(this.ID, this);
+			RewardsMap.AddOrUpdate(ID, this);
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Soomla {
 				Schedule = null;
 			}
 
-			RewardsMap.AddOrUpdate(this.ID, this);
+			RewardsMap.AddOrUpdate(ID, this);
 		}
 
 		/// <summary>

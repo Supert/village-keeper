@@ -18,8 +18,8 @@ namespace Soomla
 
 		public SoomlaEvent(Object sender, String payload)
 		{
-			this.Sender = sender;
-			this.Payload = payload;
+            Sender = sender;
+            Payload = payload;
 		}
     }
 }

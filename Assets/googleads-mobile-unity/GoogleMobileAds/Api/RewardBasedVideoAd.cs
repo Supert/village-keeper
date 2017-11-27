@@ -40,62 +40,62 @@ namespace GoogleMobileAds.Api
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildRewardBasedVideoAdClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.client = (IRewardBasedVideoAdClient)method.Invoke(null, null);
+            client = (IRewardBasedVideoAdClient)method.Invoke(null, null);
             client.CreateRewardBasedVideoAd();
 
-            this.client.OnAdLoaded += (sender, args) =>
+            client.OnAdLoaded += (sender, args) =>
                 {
-                    if (this.OnAdLoaded != null)
+                    if (OnAdLoaded != null)
                     {
-                        this.OnAdLoaded(this, args);
+                        OnAdLoaded(this, args);
                     }
                 };
 
-            this.client.OnAdFailedToLoad += (sender, args) =>
+            client.OnAdFailedToLoad += (sender, args) =>
                 {
-                    if (this.OnAdFailedToLoad != null)
+                    if (OnAdFailedToLoad != null)
                     {
-                        this.OnAdFailedToLoad(this, args);
+                        OnAdFailedToLoad(this, args);
                     }
                 };
 
-            this.client.OnAdOpening += (sender, args) =>
+            client.OnAdOpening += (sender, args) =>
                 {
-                    if (this.OnAdOpening != null)
+                    if (OnAdOpening != null)
                     {
-                        this.OnAdOpening(this, args);
+                        OnAdOpening(this, args);
                     }
                 };
 
-            this.client.OnAdStarted += (sender, args) =>
+            client.OnAdStarted += (sender, args) =>
                 {
-                    if (this.OnAdStarted != null)
+                    if (OnAdStarted != null)
                     {
-                        this.OnAdStarted(this, args);
+                        OnAdStarted(this, args);
                     }
                 };
 
-            this.client.OnAdClosed += (sender, args) =>
+            client.OnAdClosed += (sender, args) =>
                 {
-                    if (this.OnAdClosed != null)
+                    if (OnAdClosed != null)
                     {
-                        this.OnAdClosed(this, args);
+                        OnAdClosed(this, args);
                     }
                 };
 
-            this.client.OnAdLeavingApplication += (sender, args) =>
+            client.OnAdLeavingApplication += (sender, args) =>
                 {
-                    if (this.OnAdLeavingApplication != null)
+                    if (OnAdLeavingApplication != null)
                     {
-                        this.OnAdLeavingApplication(this, args);
+                        OnAdLeavingApplication(this, args);
                     }
                 };
 
-            this.client.OnAdRewarded += (sender, args) =>
+            client.OnAdRewarded += (sender, args) =>
                 {
-                    if (this.OnAdRewarded != null)
+                    if (OnAdRewarded != null)
                     {
-                        this.OnAdRewarded(this, args);
+                        OnAdRewarded(this, args);
                     }
                 };
         }
@@ -136,7 +136,7 @@ namespace GoogleMobileAds.Api
         // Returns the mediation adapter class name.
         public string MediationAdapterClassName()
         {
-            return this.client.MediationAdapterClassName();
+            return client.MediationAdapterClassName();
         }
     }
 }

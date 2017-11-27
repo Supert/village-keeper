@@ -76,9 +76,9 @@ namespace Soomla.Store {
 		public UpgradeVG(string goodItemId, string nextItemId, string prevItemId, string name, string description, string itemId, PurchaseType purchaseType)
 			: base(name, description, itemId, purchaseType)
 		{
-			this.GoodItemId = goodItemId;
-			this.PrevItemId = prevItemId;
-			this.NextItemId = nextItemId;
+            GoodItemId = goodItemId;
+            PrevItemId = prevItemId;
+            NextItemId = nextItemId;
 		}
 
 #if UNITY_WP8 && !UNITY_EDITOR
@@ -107,9 +107,9 @@ namespace Soomla.Store {
 		public override JSONObject toJSONObject() 
 		{
 	        JSONObject jsonObject = base.toJSONObject();
-            jsonObject.AddField(StoreJSONConsts.VGU_GOOD_ITEMID, this.GoodItemId);
-            jsonObject.AddField(StoreJSONConsts.VGU_PREV_ITEMID, string.IsNullOrEmpty(this.PrevItemId) ? "" : this.PrevItemId);
-			jsonObject.AddField(StoreJSONConsts.VGU_NEXT_ITEMID, string.IsNullOrEmpty(this.NextItemId) ? "" : this.NextItemId);
+            jsonObject.AddField(StoreJSONConsts.VGU_GOOD_ITEMID, GoodItemId);
+            jsonObject.AddField(StoreJSONConsts.VGU_PREV_ITEMID, string.IsNullOrEmpty(PrevItemId) ? "" : PrevItemId);
+			jsonObject.AddField(StoreJSONConsts.VGU_NEXT_ITEMID, string.IsNullOrEmpty(NextItemId) ? "" : NextItemId);
 	
 	        return jsonObject;
 		}
@@ -134,8 +134,8 @@ namespace Soomla.Store {
 			UpgradeVG upgradeVG = VirtualGoodsStorage.GetCurrentUpgrade(good);
 
 			return ((upgradeVG == null && string.IsNullOrEmpty(PrevItemId)) ||
-			        (upgradeVG != null && ((upgradeVG.NextItemId == this.ItemId) ||
-			                       (upgradeVG.PrevItemId == this.ItemId))))
+			        (upgradeVG != null && ((upgradeVG.NextItemId == ItemId) ||
+			                       (upgradeVG.PrevItemId == ItemId))))
 				&& base.canBuy();
 		}
 

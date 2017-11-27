@@ -27,7 +27,7 @@ public sealed class ObjectKvp : UnityNameValuePair<string> {
 	public string value = null;
 
 	override public string Value {
-		get { return this.value; }
+		get { return value; }
 		set { this.value = value; }
 	}
 

@@ -31,7 +31,7 @@ namespace GoogleMobileAds.Api
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildBannerClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.client = (IBannerClient)method.Invoke(null, null);
+            client = (IBannerClient)method.Invoke(null, null);
             client.CreateBannerView(adUnitId, adSize, position);
 
             ConfigureBannerEvents();
@@ -45,7 +45,7 @@ namespace GoogleMobileAds.Api
             MethodInfo method = googleMobileAdsClientFactory.GetMethod(
                 "BuildBannerClient",
                 BindingFlags.Static | BindingFlags.Public);
-            this.client = (IBannerClient)method.Invoke(null, null);
+            client = (IBannerClient)method.Invoke(null, null);
             client.CreateBannerView(adUnitId, adSize, x, y);
 
             ConfigureBannerEvents();
@@ -88,43 +88,43 @@ namespace GoogleMobileAds.Api
 
         private void ConfigureBannerEvents()
         {
-            this.client.OnAdLoaded += (sender, args) =>
+            client.OnAdLoaded += (sender, args) =>
             {
-                if (this.OnAdLoaded != null)
+                if (OnAdLoaded != null)
                 {
-                    this.OnAdLoaded(this, args);
+                    OnAdLoaded(this, args);
                 }
             };
 
-            this.client.OnAdFailedToLoad += (sender, args) =>
+            client.OnAdFailedToLoad += (sender, args) =>
             {
-                if (this.OnAdFailedToLoad != null)
+                if (OnAdFailedToLoad != null)
                 {
-                    this.OnAdFailedToLoad(this, args);
+                    OnAdFailedToLoad(this, args);
                 }
             };
 
-            this.client.OnAdOpening += (sender, args) =>
+            client.OnAdOpening += (sender, args) =>
             {
-                if (this.OnAdOpening != null)
+                if (OnAdOpening != null)
                 {
-                    this.OnAdOpening(this, args);
+                    OnAdOpening(this, args);
                 }
             };
 
-            this.client.OnAdClosed += (sender, args) =>
+            client.OnAdClosed += (sender, args) =>
             {
-                if (this.OnAdClosed != null)
+                if (OnAdClosed != null)
                 {
-                    this.OnAdClosed(this, args);
+                    OnAdClosed(this, args);
                 }
             };
 
-            this.client.OnAdLeavingApplication += (sender, args) =>
+            client.OnAdLeavingApplication += (sender, args) =>
             {
-                if (this.OnAdLeavingApplication != null)
+                if (OnAdLeavingApplication != null)
                 {
-                    this.OnAdLeavingApplication(this, args);
+                    OnAdLeavingApplication(this, args);
                 }
             };
         }
@@ -132,7 +132,7 @@ namespace GoogleMobileAds.Api
         // Returns the mediation adapter class name.
         public string MediationAdapterClassName()
         {
-            return this.client.MediationAdapterClassName();
+            return client.MediationAdapterClassName();
         }
     }
 }

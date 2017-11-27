@@ -3,35 +3,41 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SkyScript : MonoBehaviour {
-	public GameObject Clouds;
-	private List<RectTransform> _cloudsList = new List<RectTransform> ();
-	// Use this for initialization
-	void Start () {
-		_cloudsList.Add (Clouds.GetComponent<RectTransform> ());
-		_cloudsList.Add (Instantiate<GameObject> (Clouds).GetComponent<RectTransform> ());
-		for (int i = 0; i < _cloudsList.Count; i++) {
-			_cloudsList[i].SetParent (this.transform.parent, false);
-			var ap = _cloudsList[i].anchoredPosition;
-			ap.x = (i - 1) * _cloudsList[i].rect.width;
-			_cloudsList[i].anchoredPosition = ap;
+public class SkyScript : MonoBehaviour
+{
+    public GameObject Clouds;
+    private List<RectTransform> _cloudsList = new List<RectTransform>();
 
-		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle || CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode) {
-			foreach (var c in _cloudsList) {
-				var ap = c.anchoredPosition;
-				ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
-				if (ap.x < -c.rect.width)
-					ap.x += c.rect.width * 2;
-				if (ap.x > c.rect.width) {
-					ap.x -= c.rect.width * 2;
-				}
-				c.anchoredPosition = ap;
-			}
-		}
-	}
+    void Start()
+    {
+        _cloudsList.Add(Clouds.GetComponent<RectTransform>());
+        _cloudsList.Add(Instantiate<GameObject>(Clouds).GetComponent<RectTransform>());
+        for (int i = 0; i < _cloudsList.Count; i++)
+        {
+            _cloudsList[i].SetParent(transform.parent, false);
+            var ap = _cloudsList[i].anchoredPosition;
+            ap.x = (i - 1) * _cloudsList[i].rect.width;
+            _cloudsList[i].anchoredPosition = ap;
+
+        }
+    }
+
+    void Update()
+    {
+        if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle || CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode)
+        {
+            foreach (var c in _cloudsList)
+            {
+                var ap = c.anchoredPosition;
+                ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
+                if (ap.x < -c.rect.width)
+                    ap.x += c.rect.width * 2;
+                if (ap.x > c.rect.width)
+                {
+                    ap.x -= c.rect.width * 2;
+                }
+                c.anchoredPosition = ap;
+            }
+        }
+    }
 }
