@@ -8,7 +8,6 @@ public class UiScript : MonoBehaviour
     void Start()
     {
         CoreScript.Instance.GameStateChanged += (sender, e) => StartCoroutine(OnGameStateChangedCoroutine(e));
-
     }
 
     private IEnumerator OnGameStateChangedCoroutine(CoreScript.GameStateChangedEventArgs e)

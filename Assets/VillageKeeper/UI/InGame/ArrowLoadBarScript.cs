@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class ArrowLoadBarScript : BarScript
 {
@@ -19,9 +18,8 @@ public class ArrowLoadBarScript : BarScript
         minValue = 0;
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle)
         {
             if (!Input.GetMouseButton(0) && RelativeCurrentValue < 1)
@@ -40,9 +38,4 @@ public class ArrowLoadBarScript : BarScript
             }
         }
     }
-    protected override void Awake()
-    {
-        base.Awake();
-    }
 }
-

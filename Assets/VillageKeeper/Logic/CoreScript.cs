@@ -188,7 +188,7 @@ public class CoreScript : MonoBehaviour
 
     void Start()
     {
-        SoomlaStore.Initialize(new EconomyAssets());
+        //SoomlaStore.Initialize(new EconomyAssets());
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         StartCoroutine(InitCoroutine());
     }

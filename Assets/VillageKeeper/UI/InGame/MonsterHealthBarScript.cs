@@ -32,9 +32,8 @@ public class MonsterHealthBarScript : BarScript
         }
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         MaxValue = CoreScript.Instance.Monster.maxHealth;
         CurrentValue = CoreScript.Instance.Monster.Health;
     }
