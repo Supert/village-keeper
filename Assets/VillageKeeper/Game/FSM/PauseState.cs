@@ -2,18 +2,18 @@
 
 namespace VillageKeeper.Game.FSM
 {
-    public class PauseState : State<GameStateArgs>
+    public class PauseState : State<Args>
     {
         public override void Enter()
         {
             base.Enter();
         }
 
-        public override State<GameStateArgs> Event(GameStateArgs args)
+        public override State<Args> Event(Args args)
         {
-            if (args.type == GameStateArgs.Types.GoToBattle)
+            if (args.type == Args.Types.GoToBattle)
                 return new BattleState();
-            if (args.type == GameStateArgs.Types.GoToMenu)
+            if (args.type == Args.Types.GoToMenu)
                 return new MenuState();
             return base.Event(args);
         }

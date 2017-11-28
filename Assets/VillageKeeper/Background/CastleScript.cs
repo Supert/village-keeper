@@ -1,54 +1,48 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class CastleScript : MonoBehaviour
+using VillageKeeper.Game;
+
+namespace VillageKeeper.UI
 {
-    private Image image;
-    public List<Sprite> castleSprites;
-    public List<Sprite> castleWinterSpecialSprites;
-    public void SetSprite()
+    public class CastleScript : MonoBehaviour
     {
-        switch (CoreScript.Instance.TodaySpecial)
+        private Image image;
+        public List<Sprite> castleSprites;
+        public List<Sprite> castleWinterSpecialSprites;
+        public void SetSprite()
         {
-            case CoreScript.Specials.None:
-                if (image.sprite != castleSprites[CoreScript.Instance.Data.VillageLevel])
-                    image.sprite = castleSprites[CoreScript.Instance.Data.VillageLevel];
-                break;
-            case CoreScript.Specials.Winter:
-                if (image.sprite != castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel])
-                    image.sprite = castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel];
-                break;
+            switch (CoreScript.Instance.TodaySpecial)
+            {
+                case CoreScript.Specials.None:
+                    if (image.sprite != castleSprites[CoreScript.Instance.Data.VillageLevel])
+                        image.sprite = castleSprites[CoreScript.Instance.Data.VillageLevel];
+                    break;
+                case CoreScript.Specials.Winter:
+                    if (image.sprite != castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel])
+                        image.sprite = castleWinterSpecialSprites[CoreScript.Instance.Data.VillageLevel];
+                    break;
+            }
         }
-    }
 
-    void Awake()
-    {
-        image = GetComponent<Image>() as Image;
-    }
-
-    void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
-    {
-        switch (e.NewState)
+        void Awake()
         {
-            case CoreScript.GameStates.InBuildMode:
-                SetSprite();
-                break;
+            image = GetComponent<Image>() as Image;
         }
-    }
 
-    void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
-    {
-        switch (e.FieldChanged)
+        void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
         {
-            case DataScript.DataFields.VillageLevel:
-                SetSprite();
-                break;
+            switch (e.FieldChanged)
+            {
+                case DataScript.DataFields.VillageLevel:
+                    SetSprite();
+                    break;
+            }
         }
-    }
 
-    void Start()
-    {
-        CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+        void Start()
+        {
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+        }
     }
 }

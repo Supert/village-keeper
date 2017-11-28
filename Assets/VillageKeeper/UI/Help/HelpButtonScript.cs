@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.Game;
 
-public class HelpButtonScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    void Start()
+    public class HelpButtonScript : MonoBehaviour
     {
-        var button = GetComponent<Button>() as Button;
-        button.onClick.AddListener(() =>
+        void Start()
         {
-            CoreScript.Instance.GameState = CoreScript.GameStates.InHelp;
-            CoreScript.Instance.Audio.PlayClick();
-        });
-    }
-
-    void Update()
-    {
-
+            var button = GetComponent<Button>() as Button;
+            button.onClick.AddListener(() =>
+            {
+                if (CoreScript.Instance.FSM.Current == typeof(Game.FSM.BattleState))
+                    CoreScript.Instance.FSM.Event(new Game.FSM.Args(Game.FSM.Args.Types.ShowBattleHelp));
+                else
+                    if (CoreScript.Instance.FSM.Current == typeof(Game.FSM.BuildState))
+                    CoreScript.Instance.FSM.Event(new Game.FSM.Args(Game.FSM.Args.Types.ShowBuildHelp));
+                CoreScript.Instance.Audio.PlayClick();
+            });
+        }
     }
 }

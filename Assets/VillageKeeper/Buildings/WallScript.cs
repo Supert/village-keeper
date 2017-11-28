@@ -1,13 +1,16 @@
-﻿public class WallScript : BuildingScript
+﻿namespace VillageKeeper.Game
 {
-    public byte wallLevel;
-    public override BuildingTypes Type
+    public class WallScript : BuildingScript
     {
-        get
+        public byte wallLevel;
+        public override BuildingTypes Type
         {
-            if (wallLevel == 0)
-                return BuildingTypes.WallWooden;
-            else return BuildingTypes.WallStone;
+            get
+            {
+                if (wallLevel == 0)
+                    return BuildingTypes.WallWooden;
+                else return BuildingTypes.WallStone;
+            }
         }
     }
 }

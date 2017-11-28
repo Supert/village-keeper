@@ -1,202 +1,161 @@
 using UnityEngine;
-using AssemblyCSharp;
-using System.Collections;
 using System;
-using Soomla.Store;
-[RequireComponent(typeof(WindScript))]
-public class CoreScript : MonoBehaviour
+using VillageKeeper.FSM;
+
+namespace VillageKeeper.Game
 {
-    public enum GameStates
+    [RequireComponent(typeof(WindScript))]
+    public class CoreScript : MonoBehaviour
     {
-        InMenu,
-        InShop,
-        InBattle,
-        Paused,
-        RoundFinished,
-        InBuildMode,
-        InHelp,
-    }
 
-    private GameStates gameState;
-    public GameStates GameState
-    {
-        get
+        public enum Specials
         {
-            return gameState;
+            None,
+            Winter,
         }
-        set
+
+        private Specials? todaySpecial = null;
+        public Specials TodaySpecial
         {
-            var previousState = gameState;
-            gameState = value;
-            if (GameStateChanged != null)
-                GameStateChanged(this, new GameStateChangedEventArgs(value, previousState));
-        }
-    }
-
-    public class GameStateChangedEventArgs : EventArgs
-    {
-        public GameStateChangedEventArgs(GameStates newState, GameStates previousState)
-        {
-            NewState = newState;
-            PreviousState = previousState;
-        }
-        public GameStates NewState;
-        public GameStates PreviousState;
-    }
-
-    public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
-
-    public enum Specials
-    {
-        None,
-        Winter,
-    }
-
-    private Specials? todaySpecial = null;
-    public Specials TodaySpecial
-    {
-        get
-        {
-            if (todaySpecial == null)
+            get
             {
-                var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
-                var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
-                if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
-                    todaySpecial = (Specials?)Specials.Winter;
-                else
-                    todaySpecial = (Specials?)Specials.None;
+                if (todaySpecial == null)
+                {
+                    var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
+                    var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
+                    if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
+                        todaySpecial = (Specials?)Specials.Winter;
+                    else
+                        todaySpecial = (Specials?)Specials.None;
+                }
+                return todaySpecial.Value;
             }
-            return todaySpecial.Value;
         }
-    }
 
-    //Day and Month matter only
-    private bool CheckIfDateIsInPeriodOfYear(DateTime date, DateTime beginning, DateTime end)
-    {
-        var _date = new DateTime(2012, date.Month, date.Day);
-        var _beginning = new DateTime(2012, beginning.Month, beginning.Day);
-        var _end = new DateTime(2012, end.Month, end.Day);
-        if (_beginning > _end)
-            _end = _end.AddYears(1);
-        if (_date >= _beginning && _date <= _end)
-            return true;
-        _date = _date.AddYears(1);
-        if (_date >= _beginning && _date <= _end)
-            return true;
-        return false;
-    }
-
-    private MonsterScript monster;
-    public MonsterScript Monster
-    {
-        get
+        //Day and Month matter only
+        private bool CheckIfDateIsInPeriodOfYear(DateTime date, DateTime beginning, DateTime end)
         {
-            if (monster == null)
-                monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
-            return monster;
+            var testDate = new DateTime(2012, date.Month, date.Day);
+            var testBeginning = new DateTime(2012, beginning.Month, beginning.Day);
+            var testEnd = new DateTime(2012, end.Month, end.Day);
+            if (testBeginning > testEnd)
+                testEnd = testEnd.AddYears(1);
+            if (testDate >= testBeginning && testDate <= testEnd)
+                return true;
+            testDate = testDate.AddYears(1);
+            if (testDate >= testBeginning && testDate <= testEnd)
+                return true;
+            return false;
         }
-    }
 
-    private ArcherScript archer;
-    public ArcherScript Archer
-    {
-        get
-        {
-            if (archer == null)
-                archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
-            return archer;
-        }
-    }
+        public FSM<FSM.Args> FSM { get; private set; }
 
-    private WindScript wind;
-    public WindScript Wind
-    {
-        get
-        {
-            if (wind == null)
-                wind = FindObjectOfType(typeof(WindScript)) as WindScript;
-            return wind;
-        }
-    }
-    private ControlsScript controls;
-    public ControlsScript Controls
-    {
-        get
-        {
-            if (controls == null)
-                controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
-            return controls;
-        }
-    }
+        public UI.UiManager UiManager { get; private set; }
 
-    private MainMenuScript mainMenu;
-    public MainMenuScript MainMenu
-    {
-        get
+        private MonsterScript monster;
+        public MonsterScript Monster
         {
-            if (mainMenu == null)
+            get
             {
-                mainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
+                if (monster == null)
+                    monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
+                return monster;
             }
-            return mainMenu;
         }
-    }
-    private DataScript data;
-    public DataScript Data
-    {
-        get
+
+        private ArcherScript archer;
+        public ArcherScript Archer
         {
-            if (data == null)
+            get
             {
-                data = GetComponent<DataScript>() as DataScript;
+                if (archer == null)
+                    archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
+                return archer;
             }
-            return data;
         }
-    }
-    private BuildingsAreaScript buildingsArea;
-    public BuildingsAreaScript BuildingsArea
-    {
-        get
+
+        private WindScript wind;
+        public WindScript Wind
         {
-            if (buildingsArea == null)
+            get
             {
-                buildingsArea = FindObjectOfType<BuildingsAreaScript>();
-
+                if (wind == null)
+                    wind = FindObjectOfType(typeof(WindScript)) as WindScript;
+                return wind;
             }
-            return buildingsArea;
         }
-    }
-    private AudioScript audioScript;
-    public AudioScript Audio
-    {
-        get
+
+        private ControlsScript controls;
+        public ControlsScript Controls
         {
-            if (audioScript == null)
+            get
             {
-                audioScript = GetComponent<AudioScript>();
+                if (controls == null)
+                    controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
+                return controls;
             }
-            return audioScript;
         }
-    }
 
-    public static CoreScript Instance { get; private set; }
+        private MainMenuScript mainMenu;
+        public MainMenuScript MainMenu
+        {
+            get
+            {
+                if (mainMenu == null)
+                {
+                    mainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
+                }
+                return mainMenu;
+            }
+        }
 
-    void Awake()
-    {
-        Instance = this;
-    }
+        private DataScript data;
+        public DataScript Data
+        {
+            get
+            {
+                if (data == null)
+                {
+                    data = GetComponent<DataScript>() as DataScript;
+                }
+                return data;
+            }
+        }
 
-    void Start()
-    {
-        //SoomlaStore.Initialize(new EconomyAssets());
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        StartCoroutine(InitCoroutine());
-    }
+        private BuildingsAreaScript buildingsArea;
+        public BuildingsAreaScript BuildingsArea
+        {
+            get
+            {
+                if (buildingsArea == null)
+                {
+                    buildingsArea = FindObjectOfType<BuildingsAreaScript>();
 
-    IEnumerator InitCoroutine()
-    {
-        yield return null;
-        yield return null;
-        gameState = GameStates.InMenu;
+                }
+                return buildingsArea;
+            }
+        }
+
+        private AudioScript audioScript;
+        public AudioScript Audio
+        {
+            get
+            {
+                if (audioScript == null)
+                {
+                    audioScript = GetComponent<AudioScript>();
+                }
+                return audioScript;
+            }
+        }
+
+        public static CoreScript Instance { get; private set; }
+
+        void Awake()
+        {
+            Instance = this;
+            FSM = new FSM<FSM.Args>(new FSM.InitState());
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        }
     }
 }

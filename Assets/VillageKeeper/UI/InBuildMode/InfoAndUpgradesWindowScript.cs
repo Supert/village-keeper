@@ -1,96 +1,99 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class InfoAndUpgradesWindowScript : MonoBehaviour
+namespace VillageKeeper.Game
 {
-    public BreadToGoldLabelScript currentBreadToGold;
-    public BreadToGoldLabelScript upgradeBreadToGold;
-    public GameObject castleUpgradeWindow;
-    public Sprite firstCastleUpgradeSprite;
-    public Sprite secondCastleUpgradeSprite;
-    public Image castleUpgradeIcon;
-    public Text upgradePriceText;
-    public Button upgradeButton;
-    private OffScreenMenuScript offscreen;
-
-    void SetUpgradeButton()
+    public class InfoAndUpgradesWindowScript : MonoBehaviour
     {
-        var data = CoreScript.Instance.Data;
-        if (data.Gold >= data.GetCastleUpgradeCost())
-            upgradeButton.interactable = true;
-        else
-            upgradeButton.interactable = false;
-    }
+        public BreadToGoldLabelScript currentBreadToGold;
+        public BreadToGoldLabelScript upgradeBreadToGold;
+        public GameObject castleUpgradeWindow;
+        public Sprite firstCastleUpgradeSprite;
+        public Sprite secondCastleUpgradeSprite;
+        public Image castleUpgradeIcon;
+        public Text upgradePriceText;
+        public Button upgradeButton;
+        private OffScreenMenuScript offscreen;
 
-    void SetValues()
-    {
-        var data = CoreScript.Instance.Data;
-        currentBreadToGold.goldText.text = data.GetBreadToGoldMultiplier().ToString();
-        upgradeBreadToGold.goldText.text = data.GetBreadToGoldMultiplier(data.VillageLevel + 1).ToString();
-        upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
-        switch (data.VillageLevel)
+        void SetUpgradeButton()
         {
-            case 0:
-                castleUpgradeWindow.SetActive(true);
-                castleUpgradeIcon.sprite = firstCastleUpgradeSprite;
-                upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
-                break;
-            case 1:
-                castleUpgradeWindow.SetActive(true);
-                castleUpgradeIcon.sprite = secondCastleUpgradeSprite;
-                break;
-            case 2:
-                castleUpgradeWindow.SetActive(false);
-                break;
-            default:
-                break;
+            var data = CoreScript.Instance.Data;
+            if (data.Gold >= data.GetCastleUpgradeCost())
+                upgradeButton.interactable = true;
+            else
+                upgradeButton.interactable = false;
         }
-        SetUpgradeButton();
-    }
 
-    void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
-    {
-        switch (e.NewState)
+        void SetValues()
         {
-            case CoreScript.GameStates.InBuildMode:
-                SetValues();
-                offscreen.Show();
-                break;
-            case CoreScript.GameStates.InHelp:
-                break;
-            default:
-                offscreen.Hide();
-                break;
-        }
-    }
-
-    void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
-    {
-        switch (e.FieldChanged)
-        {
-            case DataScript.DataFields.Gold:
-                SetUpgradeButton();
-                break;
-            case DataScript.DataFields.VillageLevel:
-                SetValues();
-                break;
-        }
-    }
-
-    void Start()
-    {
-        offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-        CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-        upgradeButton.onClick.AddListener(() =>
-        {
-            if (CoreScript.Instance.Data.Gold >= CoreScript.Instance.Data.GetCastleUpgradeCost())
+            var data = CoreScript.Instance.Data;
+            currentBreadToGold.goldText.text = data.GetBreadToGoldMultiplier().ToString();
+            upgradeBreadToGold.goldText.text = data.GetBreadToGoldMultiplier(data.VillageLevel + 1).ToString();
+            upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
+            switch (data.VillageLevel)
             {
-                CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost();
-                CoreScript.Instance.Data.VillageLevel++;
-                CoreScript.Instance.Audio.PlayClick();
+                case 0:
+                    castleUpgradeWindow.SetActive(true);
+                    castleUpgradeIcon.sprite = firstCastleUpgradeSprite;
+                    upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
+                    break;
+                case 1:
+                    castleUpgradeWindow.SetActive(true);
+                    castleUpgradeIcon.sprite = secondCastleUpgradeSprite;
+                    break;
+                case 2:
+                    castleUpgradeWindow.SetActive(false);
+                    break;
+                default:
+                    break;
             }
-        });
+            SetUpgradeButton();
+        }
+
+        void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
+        {
+            switch (e.NewState)
+            {
+                case CoreScript.GameStates.InBuildMode:
+                    SetValues();
+                    offscreen.Show();
+                    break;
+                case CoreScript.GameStates.InHelp:
+                    break;
+                default:
+                    offscreen.Hide();
+                    break;
+            }
+        }
+
+        void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
+        {
+            switch (e.FieldChanged)
+            {
+                case DataScript.DataFields.Gold:
+                    SetUpgradeButton();
+                    break;
+                case DataScript.DataFields.VillageLevel:
+                    SetValues();
+                    break;
+            }
+        }
+
+        void Start()
+        {
+            offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+            CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+            upgradeButton.onClick.AddListener(() =>
+            {
+                if (CoreScript.Instance.Data.Gold >= CoreScript.Instance.Data.GetCastleUpgradeCost())
+                {
+                    CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost();
+                    CoreScript.Instance.Data.VillageLevel++;
+                    CoreScript.Instance.Audio.PlayClick();
+                }
+            });
+        }
     }
 }

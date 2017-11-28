@@ -2,16 +2,16 @@
 
 namespace VillageKeeper.Game.FSM
 {
-    public class InitState : State<GameStateArgs>
+    public class InitState : State<Args>
     {
         public override void Enter()
         {
             base.Enter();
         }
 
-        public override State<GameStateArgs> Event(GameStateArgs args)
+        public override State<Args> Event(Args args)
         {
-            if (args.type == GameStateArgs.Types.GameInitialized)
+            if (args.type == Args.Types.GameInitialized)
                 return new MenuState();
             return base.Event(args);
         }

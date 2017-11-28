@@ -1,6 +1,6 @@
 ﻿namespace VillageKeeper.Game.FSM
 {
-    public class GameStateArgs
+    public class Args
     {
         public enum Types
         {
@@ -25,7 +25,7 @@
         public Types type;
         public object[] args;
 
-        public GameStateArgs(Types type, params object[] args)
+        public Args(Types type, params object[] args)
         {
             this.type = type;
             this.args = args;

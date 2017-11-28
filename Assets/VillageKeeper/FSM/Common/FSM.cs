@@ -1,8 +1,18 @@
-﻿namespace VillageKeeper.FSM
+﻿using System;
+
+namespace VillageKeeper.FSM
 {
     public class FSM<T>
     {
         private State<T> current;
+        
+        public Type Current
+        {
+            get
+            {
+                return current == null ? null : current.GetType();
+            }
+        }
 
         public FSM(State<T> state)
         {

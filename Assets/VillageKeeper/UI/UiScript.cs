@@ -1,18 +1,21 @@
 using UnityEngine;
 using System.Collections;
 
-public class UiScript : MonoBehaviour
+namespace VillageKeeper.Game
 {
-    public HelpMenuScript helpMenu;
-
-    void Start()
+    public class UiScript : MonoBehaviour
     {
-        CoreScript.Instance.GameStateChanged += (sender, e) => StartCoroutine(OnGameStateChangedCoroutine(e));
-    }
+        public HelpMenuScript helpMenu;
 
-    private IEnumerator OnGameStateChangedCoroutine(CoreScript.GameStateChangedEventArgs e)
-    {
-        yield return null;
-        helpMenu.OnGameStateChanged(e);
+        void Start()
+        {
+            CoreScript.Instance.GameStateChanged += (sender, e) => StartCoroutine(OnGameStateChangedCoroutine(e));
+        }
+
+        private IEnumerator OnGameStateChangedCoroutine(CoreScript.GameStateChangedEventArgs e)
+        {
+            yield return null;
+            helpMenu.OnGameStateChanged(e);
+        }
     }
 }

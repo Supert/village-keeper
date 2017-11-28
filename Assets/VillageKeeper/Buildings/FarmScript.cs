@@ -1,22 +1,24 @@
 using UnityEngine;
 
-public class FarmScript : BuildingScript
+namespace VillageKeeper.Game
 {
-    public override BuildingTypes Type
+    public class FarmScript : BuildingScript
     {
-        get
+        public override BuildingTypes Type
         {
-            return BuildingTypes.Farm;
+            get
+            {
+                return BuildingTypes.Farm;
+            }
+        }
+
+        public SpriteRenderer cropsSR;
+        public Sprite winterSpecialCropsSprite;
+
+        protected void Start()
+        {
+            if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+                cropsSR.sprite = winterSpecialCropsSprite;
         }
     }
-
-    public SpriteRenderer cropsSR;
-    public Sprite winterSpecialCropsSprite;
-
-    protected void Start()
-    {
-        if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
-            cropsSR.sprite = winterSpecialCropsSprite;
-    }
-
 }

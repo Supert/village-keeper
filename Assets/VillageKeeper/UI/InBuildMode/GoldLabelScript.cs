@@ -2,39 +2,42 @@
 using System.Collections;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
-public class GoldLabelScript : MonoBehaviour
+namespace VillageKeeper.Game
 {
-    private Text text;
-    private void SetText()
+    [RequireComponent(typeof(Text))]
+    public class GoldLabelScript : MonoBehaviour
     {
-        text.text = CoreScript.Instance.Data.Gold.ToString();
-    }
-
-    void Awake()
-    {
-        text = GetComponent<Text>() as Text;
-    }
-
-    void Start()
-    {
-        CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-    }
-
-    void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
-    {
-        switch (e.NewState)
+        private Text text;
+        private void SetText()
         {
-            case CoreScript.GameStates.InBuildMode:
-                SetText();
-                break;
+            text.text = CoreScript.Instance.Data.Gold.ToString();
         }
-    }
 
-    void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
-    {
-        if (e.FieldChanged == DataScript.DataFields.Gold)
-            SetText();
+        void Awake()
+        {
+            text = GetComponent<Text>() as Text;
+        }
+
+        void Start()
+        {
+            CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+        }
+
+        void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
+        {
+            switch (e.NewState)
+            {
+                case CoreScript.GameStates.InBuildMode:
+                    SetText();
+                    break;
+            }
+        }
+
+        void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
+        {
+            if (e.FieldChanged == DataScript.DataFields.Gold)
+                SetText();
+        }
     }
 }
