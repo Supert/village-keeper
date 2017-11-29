@@ -151,7 +151,7 @@ namespace VillageKeeper.Game
         public void Damage()
         {
             Health--;
-            CoreScript.Instance.Audio.PlayBuildingHit();
+            CoreScript.Instance.AudioManager.PlayBuildingHit();
         }
 
         protected virtual void DestroySelf()

@@ -11,7 +11,7 @@ namespace VillageKeeper.UI
             button.onClick.AddListener(() =>
             {
                 CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
         }
     }

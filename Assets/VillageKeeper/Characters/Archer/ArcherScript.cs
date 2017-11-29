@@ -106,7 +106,7 @@ namespace VillageKeeper.Game
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position + (Vector2)_rect.TransformVector(new Vector2(_rect.rect.width / 2, _rect.rect.height * 0.6f));
                 arrow.Init(initialPosition, _targetPosition, GetAimingAngleInRads());
-                CoreScript.Instance.Audio.PlayArrowShot();
+                CoreScript.Instance.AudioManager.PlayArrowShot();
             }
         }
     }

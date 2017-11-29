@@ -4,11 +4,18 @@ namespace VillageKeeper.UI
 {
     public class UiManager : MonoBehaviour
     {
+        public WindScript Wind { get; private set; }
+
         private CastleScript castle;
         private HelpMenuScript help;
         private GoldLabelScript gold;
         private InfoAndUpgradesWindowScript castleInfoAndUpgrades;
         private MonsterHealthBarScript monsterHealthBar;
+
+        public void Init()
+        {
+            Wind = FindObjectOfType(typeof(WindScript)) as WindScript;
+        }
 
         public void OnBuildModeEntered()
         {

@@ -37,13 +37,13 @@ namespace VillageKeeper.UI
                         CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
                         break;
                 }
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
 
             homeButton.onClick.AddListener(() =>
             {
                 CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
         }
 

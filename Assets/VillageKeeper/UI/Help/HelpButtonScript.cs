@@ -16,7 +16,7 @@ namespace VillageKeeper.UI
                 else
                     if (CoreScript.Instance.FSM.Current == FSM.States.Build)
                     CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.ShowBuildHelp);
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
         }
     }

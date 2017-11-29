@@ -86,13 +86,13 @@ namespace VillageKeeper.UI
             {
                 var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
                 CurrentBuildingType = (BuildingScript.BuildingTypes)(((byte)CurrentBuildingType - 1 + n) % n);
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
             nextButton.onClick.AddListener(() =>
             {
                 var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
                 CurrentBuildingType = (BuildingScript.BuildingTypes)(((byte)CurrentBuildingType + 1 + n) % n);
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
             CurrentBuildingType = BuildingScript.BuildingTypes.Farm;
         }

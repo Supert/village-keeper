@@ -83,19 +83,19 @@ namespace VillageKeeper.UI
             nextButton.onClick.AddListener(() =>
             {
                 CurrentTipNumber++;
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
                 CurrentTipNumber--;
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
 
             closeButton.onClick.AddListener(() =>
             {
                 OnCloseClick();
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
         }
 

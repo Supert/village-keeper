@@ -7,33 +7,37 @@ using VillageKeeper.Audio;
 
 namespace VillageKeeper
 {
-    [RequireComponent(typeof(WindScript))]
     public class CoreScript : MonoBehaviour
     {
-
         public enum Specials
         {
             None,
             Winter,
         }
 
-        private Specials? todaySpecial = null;
-        public Specials TodaySpecial
-        {
-            get
-            {
-                if (todaySpecial == null)
-                {
-                    var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
-                    var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
-                    if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
-                        todaySpecial = (Specials?)Specials.Winter;
-                    else
-                        todaySpecial = (Specials?)Specials.None;
-                }
-                return todaySpecial.Value;
-            }
-        }
+        public static CoreScript Instance { get; private set; }
+
+        public StateMachine FSM { get; private set; }
+
+        public UiManager UiManager { get; private set; }
+
+        public GameController GameManager { get; private set; }
+        
+        public MonsterScript Monster { get; private set; }
+
+        public ArcherScript Archer { get; private set; }
+        
+        public ControlsScript Controls { get; private set; }
+
+        public MainMenuScript MainMenu { get; private set; }
+
+        public DataScript Data { get; private set; }
+
+        public BuildingsAreaScript BuildingsArea { get; private set; }
+
+        public AudioManager AudioManager { get; private set; }
+        
+        public Specials TodaySpecial { get; private set; }
 
         //Day and Month matter only
         private bool CheckIfDateIsInPeriodOfYear(DateTime date, DateTime beginning, DateTime end)
@@ -51,114 +55,39 @@ namespace VillageKeeper
             return false;
         }
 
-        public StateMachine FSM { get; private set; }
-
-        public UiManager UiManager { get; private set; }
-
-        private MonsterScript monster;
-        public MonsterScript Monster
+        private Specials GetTodaySpecial()
         {
-            get
-            {
-                if (monster == null)
-                    monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
-                return monster;
-            }
+            var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
+            var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
+            if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
+                return Specials.Winter;
+            else
+                return Specials.None;
         }
-
-        private ArcherScript archer;
-        public ArcherScript Archer
-        {
-            get
-            {
-                if (archer == null)
-                    archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
-                return archer;
-            }
-        }
-
-        private WindScript wind;
-        public WindScript Wind
-        {
-            get
-            {
-                if (wind == null)
-                    wind = FindObjectOfType(typeof(WindScript)) as WindScript;
-                return wind;
-            }
-        }
-
-        private ControlsScript controls;
-        public ControlsScript Controls
-        {
-            get
-            {
-                if (controls == null)
-                    controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
-                return controls;
-            }
-        }
-
-        private MainMenuScript mainMenu;
-        public MainMenuScript MainMenu
-        {
-            get
-            {
-                if (mainMenu == null)
-                {
-                    mainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
-                }
-                return mainMenu;
-            }
-        }
-
-        private DataScript data;
-        public DataScript Data
-        {
-            get
-            {
-                if (data == null)
-                {
-                    data = GetComponent<DataScript>() as DataScript;
-                }
-                return data;
-            }
-        }
-
-        private BuildingsAreaScript buildingsArea;
-        public BuildingsAreaScript BuildingsArea
-        {
-            get
-            {
-                if (buildingsArea == null)
-                {
-                    buildingsArea = FindObjectOfType<BuildingsAreaScript>();
-
-                }
-                return buildingsArea;
-            }
-        }
-
-        private AudioScript audioScript;
-        public AudioScript Audio
-        {
-            get
-            {
-                if (audioScript == null)
-                {
-                    audioScript = GetComponent<AudioScript>();
-                }
-                return audioScript;
-            }
-        }
-
-        public static CoreScript Instance { get; private set; }
 
         void Awake()
         {
             Instance = this;
             FSM = new StateMachine();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+            Monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
+            Archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
+            Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
+            MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
+            Data = GetComponent<DataScript>() as DataScript;
+            BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
+            TodaySpecial = GetTodaySpecial();
+
+            GameManager = transform.Find("Game").GetComponent<global::GameController>();
+            UiManager = transform.Find("Ui").GetComponent<UiManager>();
+            AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
+
+            GameManager.Init();
+            UiManager.Init();
+            AudioManager.Init();
+
+            FSM.Event(StateMachineEvents.GameInitialized);
         }
     }
 }

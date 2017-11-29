@@ -63,12 +63,12 @@ namespace VillageKeeper.UI
             MusicButton.onClick.AddListener(() =>
             {
                 CoreScript.Instance.Data.IsMusicEnabled = !CoreScript.Instance.Data.IsMusicEnabled;
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
             SoundsButton.onClick.AddListener(() =>
             {
                 CoreScript.Instance.Data.IsSoundEffectsEnabled = !CoreScript.Instance.Data.IsSoundEffectsEnabled;
-                CoreScript.Instance.Audio.PlayClick();
+                CoreScript.Instance.AudioManager.PlayClick();
             });
         }
     }

@@ -85,7 +85,7 @@ namespace VillageKeeper.UI
                 {
                     CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost();
                     CoreScript.Instance.Data.VillageLevel++;
-                    CoreScript.Instance.Audio.PlayClick();
+                    CoreScript.Instance.AudioManager.PlayClick();
                 }
             });
         }

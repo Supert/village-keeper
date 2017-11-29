@@ -210,7 +210,7 @@ namespace VillageKeeper.Game
         {
             Health--;
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            CoreScript.Instance.Audio.PlayMonsterHit();
+            CoreScript.Instance.AudioManager.PlayMonsterHit();
         }
 
         public void Kill()
