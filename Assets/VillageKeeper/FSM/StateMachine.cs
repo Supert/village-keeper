@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace VillageKeeper.FSM
 {
@@ -11,13 +12,13 @@ namespace VillageKeeper.FSM
             { States.Empty, null },
             { States.BattleHelp, new BattleHelpState() },
             { States.Battle, new BattleState() },
-            {States.BuildHelp, new BuildHelpState() },
-            {States.Build, new BuildState() },
-            {States.Init, new InitState() },
-            {States.Menu, new MenuState() },
-            {States.Pause, new PauseState() },
-            {States.RoundFinished, new RoundFinishedState() },
-            {States.Shop, new ShopState() }
+            { States.BuildHelp, new BuildHelpState() },
+            { States.Build, new BuildState() },
+            { States.Init, new InitState() },
+            { States.Menu, new MenuState() },
+            { States.Pause, new PauseState() },
+            { States.RoundFinished, new RoundFinishedState() },
+            { States.Shop, new ShopState() }
         };
 
 
@@ -33,6 +34,26 @@ namespace VillageKeeper.FSM
         {
             current = States.Init;
             states[current].Enter();
+        }
+
+        public void SubscribeToEnter(States state, Action handler)
+        {
+            states[state].OnEnter += handler;
+        }
+
+        public void UnsubscribeFromEnter(States state, Action handler)
+        {
+            states[state].OnEnter -= handler;
+        }
+
+        public void SubscribeToExit(States state, Action handler)
+        {
+            states[state].OnExit += handler;
+        }
+
+        public void UnsubscribeFromExit(States state, Action handler)
+        {
+            states[state].OnExit -= handler;
         }
 
         public void Event(StateMachineEvents type, params object[] args)

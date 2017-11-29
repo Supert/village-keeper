@@ -51,9 +51,9 @@ namespace VillageKeeper
             return false;
         }
 
-        public FSM.StateMachine FSM { get; private set; }
+        public StateMachine FSM { get; private set; }
 
-        public UI.UiManager UiManager { get; private set; }
+        public UiManager UiManager { get; private set; }
 
         private MonsterScript monster;
         public MonsterScript Monster
