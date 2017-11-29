@@ -5,8 +5,6 @@ namespace VillageKeeper.FSM
 {
     public partial class StateMachine
     {
-        public States current;
-
         private Dictionary<States, State> states = new Dictionary<States, State>
         {
             { States.Empty, null },
@@ -20,20 +18,13 @@ namespace VillageKeeper.FSM
             { States.RoundFinished, new RoundFinishedState() },
             { States.Shop, new ShopState() }
         };
-
-
-        public States Current
-        {
-            get
-            {
-                return current;
-            }
-        }
+        
+        public States Current { get; private set; }
 
         public StateMachine()
         {
-            current = States.Init;
-            states[current].Enter();
+            Current = States.Init;
+            states[Current].Enter();
         }
 
         public void SubscribeToEnter(States state, Action handler)
@@ -58,13 +49,13 @@ namespace VillageKeeper.FSM
 
         public void Event(StateMachineEvents type, params object[] args)
         {
-            States result = states[current].Event(type, args);
+            States result = states[Current].Event(type, args);
             if (result == States.Empty)
                 return;
 
-            states[current].Exit();
-            current = result;
-            states[current].Enter();
+            states[Current].Exit();
+            Current = result;
+            states[Current].Enter();
         }
     }
 }
