@@ -10,7 +10,7 @@ namespace VillageKeeper.UI
             var button = GetComponent<Button>() as Button;
             button.onClick.AddListener(() =>
             {
-                CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBuild));
+                CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
                 CoreScript.Instance.Audio.PlayClick();
             });
         }

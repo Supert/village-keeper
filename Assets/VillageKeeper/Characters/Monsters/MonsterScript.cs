@@ -218,7 +218,7 @@ namespace VillageKeeper.Game
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
             var ghost = (GameObject)Instantiate(Resources.Load("Ghost"));
             ghost.transform.localPosition = transform.localPosition;
-            CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.RoundFinished));
+            CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
 
         void MoveTowardsColor(Color targetColor, float animationDuration)
@@ -358,7 +358,7 @@ namespace VillageKeeper.Game
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 MoveTowardsColor(Color.white, 0.200f);
 
@@ -390,7 +390,7 @@ namespace VillageKeeper.Game
                     }
                 }
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.RoundFinishedState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.RoundFinished)
             {
                 MoveTowardsColor(new Color(1, 1, 1, 0), 1f);
             }

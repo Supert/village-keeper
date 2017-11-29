@@ -1,8 +1,6 @@
 ﻿namespace VillageKeeper.FSM
 {
-    public class Args
-    {
-        public enum Types
+    public enum StateMachineEvents
         {
             //Init
             GameInitialized,
@@ -22,14 +20,4 @@
             Pause,
             RoundFinished,
         }
-
-        public Types type;
-        public object[] args;
-
-        public Args(Types type, params object[] args)
-        {
-            this.type = type;
-            this.args = args;
-        }
-    }
 }

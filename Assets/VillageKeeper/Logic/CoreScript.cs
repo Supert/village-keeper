@@ -51,7 +51,7 @@ namespace VillageKeeper
             return false;
         }
 
-        public FSM<FSM.Args> FSM { get; private set; }
+        public FSM.StateMachine FSM { get; private set; }
 
         public UI.UiManager UiManager { get; private set; }
 
@@ -157,7 +157,7 @@ namespace VillageKeeper
         void Awake()
         {
             Instance = this;
-            FSM = new FSM<FSM.Args>(new FSM.InitState());
+            FSM = new StateMachine();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
     }

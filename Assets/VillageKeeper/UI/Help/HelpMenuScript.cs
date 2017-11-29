@@ -19,10 +19,10 @@ namespace VillageKeeper.UI
             switch (mode)
             {
                 case Modes.Build:
-                    CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToBuild));
+                    CoreScript.Instance.FSM.Event(StateMachineEvents.GoToBuild);
                     break;
                 case Modes.Battle:
-                    CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToBattle));
+                    CoreScript.Instance.FSM.Event(StateMachineEvents.GoToBattle);
                     break;
             }
 

@@ -45,7 +45,7 @@ namespace VillageKeeper.Game
         protected override void Update()
         {
             base.Update();
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState)
+            if (CoreScript.Instance.FSM.Current == FSM.States.Battle
                 && isLoaded
                 && Vector2.Distance(transform.position, CoreScript.Instance.Monster.transform.localPosition) < CoreScript.Instance.BuildingsArea.CellWorldSize.x * 4)
             {

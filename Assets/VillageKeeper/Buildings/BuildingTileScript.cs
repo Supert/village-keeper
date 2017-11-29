@@ -59,11 +59,11 @@ namespace VillageKeeper.Game
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Build)
             {
                 spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 0.25f);
             }

@@ -22,7 +22,7 @@ namespace VillageKeeper.UI
 
         protected void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 if (!Input.GetMouseButton(0) && RelativeCurrentValue < 1)
                     RelativeCurrentValue -= Time.deltaTime * 5;

@@ -72,7 +72,7 @@ namespace VillageKeeper.UI
             SetFurniture();
             shopShadow.ShadowButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToMenu));
+                CoreScript.Instance.FSM.Event(StateMachineEvents.GoToMenu);
             });
 
             CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>

@@ -68,7 +68,7 @@ namespace VillageKeeper
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
 #if UNITY_EDITOR
                 SimulateTouchesInUnity();
@@ -76,32 +76,32 @@ namespace VillageKeeper
 			    CheckForTouches ();
 #endif
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.Pause));
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.Pause);
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.PauseState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.Pause)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToMenu));
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.RoundFinishedState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.RoundFinished)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToMenu));
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.ShopState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.Shop)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToMenu));
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.MenuState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.Menu)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                     Application.Quit();
             }
-            else if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState))
+            else if (CoreScript.Instance.FSM.Current == FSM.States.Build)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToMenu));
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
         }
     }

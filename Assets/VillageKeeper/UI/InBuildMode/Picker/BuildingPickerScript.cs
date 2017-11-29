@@ -118,7 +118,7 @@ namespace VillageKeeper.UI
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState)
+            if (CoreScript.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
                 && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost)

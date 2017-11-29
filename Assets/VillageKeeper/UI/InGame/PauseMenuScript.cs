@@ -31,10 +31,10 @@ namespace VillageKeeper.UI
                 switch (mode)
                 {
                     case Modes.Pause:
-                        CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBattle));
+                        CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBattle);
                         break;
                     case Modes.RoundFinished:
-                        CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBuild));
+                        CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
                         break;
                 }
                 CoreScript.Instance.Audio.PlayClick();
@@ -42,7 +42,7 @@ namespace VillageKeeper.UI
 
             homeButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToMenu));
+                CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
                 CoreScript.Instance.Audio.PlayClick();
             });
         }

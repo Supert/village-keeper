@@ -26,7 +26,7 @@ namespace VillageKeeper.UI
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState) || CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Build || CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 foreach (var c in _cloudsList)
                 {

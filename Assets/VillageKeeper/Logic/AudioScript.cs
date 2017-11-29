@@ -140,7 +140,7 @@ namespace VillageKeeper.Audio
 
         public void PlayMonsterHit()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled && CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled && CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 MonsterAS.clip = AudioClips[AudioClipNames.MonsterHit];
                 MonsterAS.Play();
@@ -150,7 +150,7 @@ namespace VillageKeeper.Audio
         public IEnumerator MonsterRandomSoundsCoroutine(float delayInSeconds)
         {
             yield return new WaitForSeconds(delayInSeconds);
-            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 if (!MonsterAS.isPlaying)
                 {

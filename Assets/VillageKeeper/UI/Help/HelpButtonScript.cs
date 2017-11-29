@@ -11,11 +11,11 @@ namespace VillageKeeper.UI
             var button = GetComponent<Button>() as Button;
             button.onClick.AddListener(() =>
             {
-                if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.ShowBattleHelp));
+                if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.ShowBattleHelp);
                 else
-                    if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState))
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.ShowBuildHelp));
+                    if (CoreScript.Instance.FSM.Current == FSM.States.Build)
+                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.ShowBuildHelp);
                 CoreScript.Instance.Audio.PlayClick();
             });
         }
