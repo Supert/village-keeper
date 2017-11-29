@@ -1,8 +1,11 @@
 using UnityEngine;
 using System;
 using VillageKeeper.FSM;
+using VillageKeeper.Game;
+using VillageKeeper.UI;
+using VillageKeeper.Audio;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper
 {
     [RequireComponent(typeof(WindScript))]
     public class CoreScript : MonoBehaviour

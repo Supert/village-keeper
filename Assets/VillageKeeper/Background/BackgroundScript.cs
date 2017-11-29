@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-public class BackgroundScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public Image mountains;
-    public Image village;
-    public Sprite winterMountains;
-    public Sprite winterVillage;
-
-    void Start()
+    public class BackgroundScript : MonoBehaviour
     {
-        if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+        public Image mountains;
+        public Image village;
+        public Sprite winterMountains;
+        public Sprite winterVillage;
+
+        void Start()
         {
-            mountains.sprite = winterMountains;
-            village.sprite = winterVillage;
+            if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+            {
+                mountains.sprite = winterMountains;
+                village.sprite = winterVillage;
+            }
         }
     }
 }

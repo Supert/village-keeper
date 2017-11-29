@@ -5,8 +5,9 @@ using System.IO;
 using System.Linq;
 using System;
 using Soomla.Store;
+using VillageKeeper.Game;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper
 {
     public class DataScript : MonoBehaviour
     {
@@ -249,16 +250,16 @@ namespace VillageKeeper.Game
         void Start()
         {
             StartCoroutine(InitCoroutine());
-            CoreScript.Instance.GameStateChanged += (sender, e) =>
-            {
-                switch (e.NewState)
-                {
-                    case CoreScript.GameStates.RoundFinished:
-                        MonstersDefeated++;
-                        Gold += GetRoundFinishedBonusGold();
-                        break;
-                }
-            };
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.RoundFinished:
+            //            MonstersDefeated++;
+            //            Gold += GetRoundFinishedBonusGold();
+            //            break;
+            //    }
+            //};
         }
     }
 }

@@ -1,23 +1,25 @@
-public class InGameScreenShadowScript : ScreenShadowScript
+namespace VillageKeeper.UI
 {
-    protected override void Start()
+    public class InGameScreenShadowScript : ScreenShadowScript
     {
-        base.Start();
-
-        CoreScript.Instance.GameStateChanged += (object sender, CoreScript.GameStateChangedEventArgs e) =>
+        protected override void Start()
         {
-            switch (e.NewState)
-            {
-                case CoreScript.GameStates.InHelp:
-                case CoreScript.GameStates.Paused:
-                case CoreScript.GameStates.RoundFinished:
-                    Show();
-                    break;
-                default:
-                    Hide();
-                    break;
-            }
-        };
+            base.Start();
+
+            //CoreScript.Instance.GameStateChanged += (object sender, CoreScript.GameStateChangedEventArgs e) =>
+            //{
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.InHelp:
+            //        case CoreScript.GameStates.Paused:
+            //        case CoreScript.GameStates.RoundFinished:
+            //            Show();
+            //            break;
+            //        default:
+            //            Hide();
+            //            break;
+            //    }
+            //};
+        }
     }
 }
-

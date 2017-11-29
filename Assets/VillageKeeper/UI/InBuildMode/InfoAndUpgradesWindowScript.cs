@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.Game;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper.UI
 {
     public class InfoAndUpgradesWindowScript : MonoBehaviour
     {
@@ -24,7 +25,17 @@ namespace VillageKeeper.Game
                 upgradeButton.interactable = false;
         }
 
-        void SetValues()
+        public void Show()
+        {
+            offscreen.Show();
+        }
+
+        public void Hide()
+        {
+            offscreen.Hide();
+        }
+
+        public void SetValues()
         {
             var data = CoreScript.Instance.Data;
             currentBreadToGold.goldText.text = data.GetBreadToGoldMultiplier().ToString();
@@ -50,22 +61,6 @@ namespace VillageKeeper.Game
             SetUpgradeButton();
         }
 
-        void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
-        {
-            switch (e.NewState)
-            {
-                case CoreScript.GameStates.InBuildMode:
-                    SetValues();
-                    offscreen.Show();
-                    break;
-                case CoreScript.GameStates.InHelp:
-                    break;
-                default:
-                    offscreen.Hide();
-                    break;
-            }
-        }
-
         void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
         {
             switch (e.FieldChanged)
@@ -82,7 +77,6 @@ namespace VillageKeeper.Game
         void Start()
         {
             offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
             CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
             CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
             upgradeButton.onClick.AddListener(() =>

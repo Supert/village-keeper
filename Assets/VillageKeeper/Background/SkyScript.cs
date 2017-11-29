@@ -3,40 +3,43 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SkyScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public GameObject Clouds;
-    private List<RectTransform> _cloudsList = new List<RectTransform>();
-
-    void Start()
+    public class SkyScript : MonoBehaviour
     {
-        _cloudsList.Add(Clouds.GetComponent<RectTransform>());
-        _cloudsList.Add(Instantiate<GameObject>(Clouds).GetComponent<RectTransform>());
-        for (int i = 0; i < _cloudsList.Count; i++)
-        {
-            _cloudsList[i].SetParent(transform.parent, false);
-            var ap = _cloudsList[i].anchoredPosition;
-            ap.x = (i - 1) * _cloudsList[i].rect.width;
-            _cloudsList[i].anchoredPosition = ap;
+        public GameObject Clouds;
+        private List<RectTransform> _cloudsList = new List<RectTransform>();
 
-        }
-    }
-
-    void Update()
-    {
-        if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle || CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode)
+        void Start()
         {
-            foreach (var c in _cloudsList)
+            _cloudsList.Add(Clouds.GetComponent<RectTransform>());
+            _cloudsList.Add(Instantiate<GameObject>(Clouds).GetComponent<RectTransform>());
+            for (int i = 0; i < _cloudsList.Count; i++)
             {
-                var ap = c.anchoredPosition;
-                ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
-                if (ap.x < -c.rect.width)
-                    ap.x += c.rect.width * 2;
-                if (ap.x > c.rect.width)
+                _cloudsList[i].SetParent(transform.parent, false);
+                var ap = _cloudsList[i].anchoredPosition;
+                ap.x = (i - 1) * _cloudsList[i].rect.width;
+                _cloudsList[i].anchoredPosition = ap;
+
+            }
+        }
+
+        void Update()
+        {
+            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState) || CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            {
+                foreach (var c in _cloudsList)
                 {
-                    ap.x -= c.rect.width * 2;
+                    var ap = c.anchoredPosition;
+                    ap.x += CoreScript.Instance.Wind.Strength * Time.deltaTime * 10;
+                    if (ap.x < -c.rect.width)
+                        ap.x += c.rect.width * 2;
+                    if (ap.x > c.rect.width)
+                    {
+                        ap.x -= c.rect.width * 2;
+                    }
+                    c.anchoredPosition = ap;
                 }
-                c.anchoredPosition = ap;
             }
         }
     }

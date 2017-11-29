@@ -17,10 +17,10 @@ namespace VillageKeeper.Game
             }
         }
 
-        private bool _isLoaded = true;
+        private bool isLoaded = true;
         public void Shoot()
         {
-            if (_isLoaded)
+            if (isLoaded)
             {
                 var _targetPosition = CoreScript.Instance.Monster.transform.localPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
@@ -28,7 +28,7 @@ namespace VillageKeeper.Game
                 var vectorToCalcAngle = (Vector2)_targetPosition + new Vector2(0, CoreScript.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
                 var angle = Mathf.Atan2(vectorToCalcAngle.y, vectorToCalcAngle.x);
                 arrow.Init(initialPosition, _targetPosition, angle);
-                _isLoaded = false;
+                isLoaded = false;
                 StartCoroutine(ReloadCoroutine());
             }
         }
@@ -39,18 +39,17 @@ namespace VillageKeeper.Game
                 yield return new WaitForSeconds(3f);
             else
                 yield return new WaitForSeconds(1.5f);
-            _isLoaded = true;
+            isLoaded = true;
         }
 
         protected override void Update()
         {
             base.Update();
-            if (CoreScript.Instance.GameState == CoreScript.GameStates.InBattle)
+            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState)
+                && isLoaded
+                && Vector2.Distance(transform.position, CoreScript.Instance.Monster.transform.localPosition) < CoreScript.Instance.BuildingsArea.CellWorldSize.x * 4)
             {
-                if (_isLoaded && Vector2.Distance((Vector2)transform.position, (Vector2)CoreScript.Instance.Monster.transform.localPosition) < CoreScript.Instance.BuildingsArea.CellWorldSize.x * 4)
-                {
-                    Shoot();
-                }
+                Shoot();
             }
         }
     }

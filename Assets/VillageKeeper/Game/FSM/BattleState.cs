@@ -1,12 +1,15 @@
-﻿using VillageKeeper.FSM;
-
-namespace VillageKeeper.Game.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class BattleState : State<Args>
     {
         public override void Enter()
         {
             base.Enter();
+            if (!CoreScript.Instance.Data.WasInBattleTipShown)
+            {
+                CoreScript.Instance.FSM.Event(new Args(Args.Types.ShowBattleHelp));
+                CoreScript.Instance.Data.WasInBattleTipShown = true;
+            }
         }
 
         public override State<Args> Event(Args args)
@@ -15,6 +18,8 @@ namespace VillageKeeper.Game.FSM
                 return new BattleHelpState();
             if (args.type == Args.Types.Pause)
                 return new PauseState();
+            if (args.type == Args.Types.RoundFinished)
+                return new RoundFinishedState();
             return base.Event(args);
         }
 

@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopButtonScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    void Start()
+    public class ShopButtonScript : MonoBehaviour
     {
-        var button = GetComponent<Button>() as Button;
-        button.onClick.AddListener(() =>
+        void Start()
         {
-            CoreScript.Instance.GameState = CoreScript.GameStates.InShop;
-            CoreScript.Instance.Audio.PlayClick();
-        });
+            var button = GetComponent<Button>() as Button;
+            button.onClick.AddListener(() =>
+            {
+                CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToShop));
+                CoreScript.Instance.Audio.PlayClick();
+            });
+        }
     }
 }

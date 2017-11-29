@@ -1,36 +1,30 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class StartBattleButtonScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    private OffScreenMenuScript _offScreenMenu;
-    void Awake()
+    public class StartBattleButtonScript : MonoBehaviour
     {
-        _offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-    }
-    void Start()
-    {
-        var button = GetComponent<Button>() as Button;
-        button.onClick.AddListener(() =>
+        private OffScreenMenuScript offScreenMenu;
+
+        void Awake()
         {
-            CoreScript.Instance.GameState = CoreScript.GameStates.InBattle;
-            CoreScript.Instance.Audio.PlayClick();
-        });
-        CoreScript.Instance.GameStateChanged += (sender, e) =>
+            offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+        }
+
+        void Start()
         {
-            switch (e.NewState)
+            var button = GetComponent<Button>() as Button;
+            button.onClick.AddListener(() =>
             {
-                case CoreScript.GameStates.Paused:
-                case CoreScript.GameStates.RoundFinished:
-                case CoreScript.GameStates.InBattle:
-                case CoreScript.GameStates.InMenu:
-                case CoreScript.GameStates.InShop:
-                    _offScreenMenu.Hide();
-                    break;
-                case CoreScript.GameStates.InBuildMode:
-                    _offScreenMenu.Show();
-                    break;
-            }
-        };
+                CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBattle));
+                CoreScript.Instance.Audio.PlayClick();
+            });
+        }
+
+        public void Show()
+        {
+            offScreenMenu.Show();
+        }
     }
 }

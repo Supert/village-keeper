@@ -1,36 +1,39 @@
 ﻿using UnityEngine;
 using GoogleMobileAds.Api;
 
-public class AdScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    void Start()
+    public class AdScript : MonoBehaviour
     {
-        BannerView bannerView = new BannerView("ca-app-pub-4407695866243191/3291644660", AdSize.Banner, AdPosition.Bottom);
-        AdRequest adRequest = new AdRequest.Builder().Build();
-        bannerView.LoadAd(adRequest);
-
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
+        void Start()
         {
-            if (e.FieldChanged == DataScript.DataFields.HasPremium)
-            {
-                bannerView.Hide();
-            }
-        };
+            BannerView bannerView = new BannerView("ca-app-pub-4407695866243191/3291644660", AdSize.Banner, AdPosition.Bottom);
+            AdRequest adRequest = new AdRequest.Builder().Build();
+            bannerView.LoadAd(adRequest);
 
-        CoreScript.Instance.GameStateChanged += (sender, e) =>
-        {
-            if (!CoreScript.Instance.Data.HasPremium)
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
             {
-                switch (e.NewState)
+                if (e.FieldChanged == DataScript.DataFields.HasPremium)
                 {
-                    case CoreScript.GameStates.InMenu:
-                        bannerView.Show();
-                        break;
-                    default:
-                        bannerView.Hide();
-                        break;
+                    bannerView.Hide();
                 }
-            }
-        };
+            };
+
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    if (!CoreScript.Instance.Data.HasPremium)
+            //    {
+            //        switch (e.NewState)
+            //        {
+            //            case CoreScript.GameStates.InMenu:
+            //                bannerView.Show();
+            //                break;
+            //            default:
+            //                bannerView.Hide();
+            //                break;
+            //        }
+            //    }
+            //};
+        }
     }
 }

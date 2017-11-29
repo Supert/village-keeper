@@ -1,6 +1,6 @@
 ﻿namespace VillageKeeper.FSM
 {
-    public class PauseState : State<Args>
+    public class RoundFinishedState : State<Args>
     {
         public override void Enter()
         {
@@ -9,8 +9,8 @@
 
         public override State<Args> Event(Args args)
         {
-            if (args.type == Args.Types.GoToBattle)
-                return new BattleState();
+            if (args.type == Args.Types.GoToBuild)
+                return new BuildState();
             if (args.type == Args.Types.GoToMenu)
                 return new MenuState();
             return base.Event(args);

@@ -1,49 +1,52 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseButtonScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public Sprite inBattleSprite;
-    public Sprite inBattlePressedSprite;
-    public Sprite inBuildModeSprite;
-    public Sprite inBuildModePressedSprite;
-    private Button button;
-
-    void Start()
+    public class PauseButtonScript : MonoBehaviour
     {
-        button = GetComponent<Button>() as Button;
+        public Sprite inBattleSprite;
+        public Sprite inBattlePressedSprite;
+        public Sprite inBuildModeSprite;
+        public Sprite inBuildModePressedSprite;
+        private Button button;
 
-        button.onClick.AddListener(() =>
+        void Start()
         {
-            switch (CoreScript.Instance.GameState)
-            {
-                case CoreScript.GameStates.InBattle:
-                    CoreScript.Instance.GameState = CoreScript.GameStates.Paused;
-                    break;
-                case CoreScript.GameStates.InBuildMode:
-                    CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
-                    break;
-            }
-            CoreScript.Instance.Audio.PlayClick();
-        });
+            button = GetComponent<Button>() as Button;
 
-        CoreScript.Instance.GameStateChanged += (sender, e) =>
-        {
-            var s = button.spriteState;
-            switch (e.NewState)
-            {
-                case CoreScript.GameStates.InBattle:
-                    button.image.sprite = inBattleSprite;
-                    s.pressedSprite = inBattlePressedSprite;
-                    button.spriteState = s;
-                    break;
-                case CoreScript.GameStates.InBuildMode:
-                    button.image.sprite = inBuildModeSprite;
-                    s = button.spriteState;
-                    s.pressedSprite = inBuildModePressedSprite;
-                    button.spriteState = s;
-                    break;
-            }
-        };
+            //button.onClick.AddListener(() =>
+            //{
+            //    switch (CoreScript.Instance.GameState)
+            //    {
+            //        case CoreScript.GameStates.InBattle:
+            //            CoreScript.Instance.GameState = CoreScript.GameStates.Paused;
+            //            break;
+            //        case CoreScript.GameStates.InBuildMode:
+            //            CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
+            //            break;
+            //    }
+            //    CoreScript.Instance.Audio.PlayClick();
+            //});
+
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    var s = button.spriteState;
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.InBattle:
+            //            button.image.sprite = inBattleSprite;
+            //            s.pressedSprite = inBattlePressedSprite;
+            //            button.spriteState = s;
+            //            break;
+            //        case CoreScript.GameStates.InBuildMode:
+            //            button.image.sprite = inBuildModeSprite;
+            //            s = button.spriteState;
+            //            s.pressedSprite = inBuildModePressedSprite;
+            //            button.spriteState = s;
+            //            break;
+            //    }
+            //};
+        }
     }
 }

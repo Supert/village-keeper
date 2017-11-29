@@ -1,12 +1,15 @@
-﻿using VillageKeeper.FSM;
-
-namespace VillageKeeper.Game.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class BuildState : State<Args>
     {
         public override void Enter()
         {
             base.Enter();
+            if (!CoreScript.Instance.Data.WasInBuildTipShown)
+            {
+                CoreScript.Instance.FSM.Event(new Args(Args.Types.ShowBuildHelp));
+                CoreScript.Instance.Data.WasInBuildTipShown = true;
+            }
         }
 
         public override State<Args> Event(Args args)

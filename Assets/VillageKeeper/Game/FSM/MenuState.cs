@@ -1,6 +1,4 @@
-﻿using VillageKeeper.FSM;
-
-namespace VillageKeeper.Game.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class MenuState : State<Args>
     {

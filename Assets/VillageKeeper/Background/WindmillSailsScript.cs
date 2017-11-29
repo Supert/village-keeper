@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class WindmillSailsScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    void Update()
+    public class WindmillSailsScript : MonoBehaviour
     {
-        switch (CoreScript.Instance.GameState)
+        void Update()
         {
-            case CoreScript.GameStates.InBattle:
-            case CoreScript.GameStates.InBuildMode:
+            if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState) || CoreScript.Instance.FSM.Current == typeof(FSM.BuildState))
                 transform.Rotate(0, 0, -CoreScript.Instance.Wind.Strength * Time.deltaTime * 10);
-                break;
         }
     }
 }

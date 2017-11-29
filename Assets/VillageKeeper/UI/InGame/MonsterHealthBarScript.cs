@@ -1,4 +1,6 @@
-namespace VillageKeeper.Game
+using System;
+
+namespace VillageKeeper.UI
 {
     public class MonsterHealthBarScript : BarScript
     {
@@ -9,29 +11,17 @@ namespace VillageKeeper.Game
             base.Awake();
             offscreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
         }
-
-        protected override void Start()
+        
+        public void Show()
         {
-            base.Start();
-            CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
+            offscreenMenu.Show();
+            MaxValue = CoreScript.Instance.Monster.maxHealth;
+            minValue = 0;
         }
 
-        void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
+        public void Hide()
         {
-            switch (e.NewState)
-            {
-                case CoreScript.GameStates.InBattle:
-                    offscreenMenu.Show();
-                    MaxValue = CoreScript.Instance.Monster.maxHealth;
-                    minValue = 0;
-                    break;
-                case CoreScript.GameStates.Paused:
-                case CoreScript.GameStates.InHelp:
-                    break;
-                default:
-                    offscreenMenu.Hide();
-                    break;
-            }
+            offscreenMenu.Hide();
         }
 
         protected void Update()

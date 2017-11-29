@@ -1,4 +1,4 @@
-﻿namespace VillageKeeper.Game.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class Args
     {
@@ -20,6 +20,7 @@
             //Battle
             ShowBattleHelp,
             Pause,
+            RoundFinished,
         }
 
         public Types type;

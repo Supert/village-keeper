@@ -1,109 +1,113 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.UI;
 
-[RequireComponent(typeof(RectTransform))]
-[RequireComponent(typeof(Image))]
-public class ArcherScript : MonoBehaviour
+namespace VillageKeeper.Game
 {
-    public enum ArcherAimingValues
+    [RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(Image))]
+    public class ArcherScript : MonoBehaviour
     {
-        Unloaded = 0,
-        AimingDown,
-        AimingStraight,
-        AimingUp,
-    }
-
-    public Image hat;
-    private Animator _animator;
-    public ArrowLoadBarScript arrowBar;
-    private RectTransform _rect;
-
-    private bool _isLoaded;
-    public bool IsLoaded
-    {
-        get
+        public enum ArcherAimingValues
         {
-            if (arrowBar.RelativeCurrentValue == 1)
-                return true;
-            else return false;
+            Unloaded = 0,
+            AimingDown,
+            AimingStraight,
+            AimingUp,
         }
-    }
 
-    private ArcherAimingValues _state = 0;
-    public ArcherAimingValues State
-    {
-        get
+        public Image hat;
+        private Animator _animator;
+        public ArrowLoadBarScript arrowBar;
+        private RectTransform _rect;
+
+        private bool _isLoaded;
+        public bool IsLoaded
         {
-            return _state;
-        }
-        private set
-        {
-            _state = value;
-            _animator.SetInteger("CurrentState", (int)value);
-            switch (CoreScript.Instance.TodaySpecial)
+            get
             {
-                case CoreScript.Specials.None:
-                    hat.gameObject.SetActive(false);
-                    break;
-                case CoreScript.Specials.Winter:
-                    hat.gameObject.SetActive(true);
-                    break;
+                if (arrowBar.RelativeCurrentValue == 1)
+                    return true;
+                else return false;
             }
         }
-    }
 
-    public Sprite archerUnloadedSprite;
-    public Sprite archerReadyAimingUpSprite;
-    public Sprite archerReadyAimingStraightSprite;
-    public Sprite archerReadyAimingDownSprite;
-
-    void Start()
-    {
-        _animator = GetComponent<Animator>() as Animator;
-        _rect = GetComponent<RectTransform>() as RectTransform;
-    }
-
-    void Update()
-    {
-        if (IsLoaded)
+        private ArcherAimingValues _state = 0;
+        public ArcherAimingValues State
         {
-            if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
-                State = ArcherAimingValues.AimingDown;
-            else
+            get
             {
-                if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
-                    State = ArcherAimingValues.AimingStraight;
+                return _state;
+            }
+            private set
+            {
+                _state = value;
+                _animator.SetInteger("CurrentState", (int)value);
+                switch (CoreScript.Instance.TodaySpecial)
+                {
+                    case CoreScript.Specials.None:
+                        hat.gameObject.SetActive(false);
+                        break;
+                    case CoreScript.Specials.Winter:
+                        hat.gameObject.SetActive(true);
+                        break;
+                }
+            }
+        }
+
+        public Sprite archerUnloadedSprite;
+        public Sprite archerReadyAimingUpSprite;
+        public Sprite archerReadyAimingStraightSprite;
+        public Sprite archerReadyAimingDownSprite;
+
+        void Start()
+        {
+            _animator = GetComponent<Animator>() as Animator;
+            _rect = GetComponent<RectTransform>() as RectTransform;
+        }
+
+        void Update()
+        {
+            if (IsLoaded)
+            {
+                if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
+                    State = ArcherAimingValues.AimingDown;
                 else
-                    State = ArcherAimingValues.AimingUp;
+                {
+                    if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
+                        State = ArcherAimingValues.AimingStraight;
+                    else
+                        State = ArcherAimingValues.AimingUp;
+                }
             }
+            else
+                State = ArcherAimingValues.Unloaded;
         }
-        else
-            State = ArcherAimingValues.Unloaded;
-    }
 
-    public float GetAimingAngleInRads()
-    {
-        switch (State)
+        public float GetAimingAngleInRads()
         {
-            case (ArcherAimingValues.AimingDown):
-                return Mathf.Deg2Rad * (-11f);
-            case (ArcherAimingValues.AimingStraight):
-                return 0f;
-            case (ArcherAimingValues.AimingUp):
-                return Mathf.Deg2Rad * 9f;
+            switch (State)
+            {
+                case (ArcherAimingValues.AimingDown):
+                    return Mathf.Deg2Rad * (-11f);
+                case (ArcherAimingValues.AimingStraight):
+                    return 0f;
+                case (ArcherAimingValues.AimingUp):
+                    return Mathf.Deg2Rad * 9f;
+            }
+            return 0f;
         }
-        return 0f;
-    }
 
-    public void Shoot(Vector2 targetPosition)
-    {
-        if (IsLoaded)
+        public void Shoot(Vector2 targetPosition)
         {
-            var _targetPosition = targetPosition;
-            var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
-            var initialPosition = (Vector2)transform.position + (Vector2)_rect.TransformVector(new Vector2(_rect.rect.width / 2, _rect.rect.height * 0.6f));
-            arrow.Init(initialPosition, _targetPosition, GetAimingAngleInRads());
-            CoreScript.Instance.Audio.PlayArrowShot();
+            if (IsLoaded)
+            {
+                var _targetPosition = targetPosition;
+                var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
+                var initialPosition = (Vector2)transform.position + (Vector2)_rect.TransformVector(new Vector2(_rect.rect.width / 2, _rect.rect.height * 0.6f));
+                arrow.Init(initialPosition, _targetPosition, GetAimingAngleInRads());
+                CoreScript.Instance.Audio.PlayArrowShot();
+            }
         }
     }
 }

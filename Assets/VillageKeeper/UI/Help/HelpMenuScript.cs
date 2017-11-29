@@ -1,40 +1,32 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.FSM;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper.UI
 {
-    public class BattleHelpMenuScript : HelpMenuScript
+    public class HelpMenuScript : MonoBehaviour
     {
-        protected override Action OnCloseClick
+        private enum Modes
         {
-            get
-            {
-                return () =>
-                {
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBattle));
-                };
-            }
+            Build,
+            Battle,
         }
-    }
 
-    public class BuildHelpMenuScript : HelpMenuScript
-    {
-        protected override Action OnCloseClick
+        private Modes mode;
+
+        protected void OnCloseClick()
         {
-            get
+            switch (mode)
             {
-                return () =>
-                {
-                    CoreScript.Instance.FSM.Event(new FSM.Args(FSM.Args.Types.GoToBuild));
-                };
+                case Modes.Build:
+                    CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToBuild));
+                    break;
+                case Modes.Battle:
+                    CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToBattle));
+                    break;
             }
-        }
-    }
 
-    public abstract class HelpMenuScript : MonoBehaviour
-    {
-        protected abstract Action OnCloseClick { get; }
+        }
 
         private OffScreenMenuScript offscreen;
 
@@ -58,18 +50,18 @@ namespace VillageKeeper.Game
                     previousButton.gameObject.SetActive(false);
                 else
                     previousButton.gameObject.SetActive(true);
-                if (_currentTipNumber == _currentTips.Length - 1)
+                if (_currentTipNumber == currentTips.Length - 1)
                     nextButton.gameObject.SetActive(false);
                 else
                     nextButton.gameObject.SetActive(true);
-                tipText.text = _currentTips[_currentTipNumber];
-                tipCounterText.text = "Tip " + (_currentTipNumber + 1).ToString() + "/" + _currentTips.Length;
+                tipText.text = currentTips[_currentTipNumber];
+                tipCounterText.text = "Tip " + (_currentTipNumber + 1).ToString() + "/" + currentTips.Length;
 
             }
         }
 
-        private string[] _currentTips;
-        private string[] _inBuildModeTips = new string[] {
+        private string[] currentTips;
+        private string[] inBuildModeTips = new string[] {
         "Welcome to Village Keeper, Keeper! We just settled down here, in beautiful Unknown.",
         "Drag and drop farm to build it. Build defenses, too.",
         "One or two wooden watchtowers behind stockade would be enough at first.",
@@ -77,7 +69,7 @@ namespace VillageKeeper.Game
         "Click red button at top to read these tips again. Good luck, Keeper!"
     };
 
-        private string[] _inBattleTips = new string[] {
+        private string[] inBattleTips = new string[] {
         "Whoa! This monster is huge! Well, the bigger it is, the harder it fall.",
         "Do you see me standing at cliff? Swipe there to the left to draw a bow, then click at monster to shoot.",
         "Don't hesitate to shoot as fast as you can. We are not short of arrows.",
@@ -87,16 +79,19 @@ namespace VillageKeeper.Game
         void Start()
         {
             offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+
             nextButton.onClick.AddListener(() =>
             {
                 CurrentTipNumber++;
                 CoreScript.Instance.Audio.PlayClick();
             });
+
             previousButton.onClick.AddListener(() =>
             {
                 CurrentTipNumber--;
                 CoreScript.Instance.Audio.PlayClick();
             });
+
             closeButton.onClick.AddListener(() =>
             {
                 OnCloseClick();
@@ -104,44 +99,35 @@ namespace VillageKeeper.Game
             });
         }
 
-        public void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
+        public void ShowBattle()
         {
-            switch (e.NewState)
+            Show(Modes.Battle);
+        }
+
+        public void ShowBuild()
+        {
+            Show(Modes.Build);
+        }
+
+        private void Show(Modes mode)
+        {
+            this.mode = mode;
+            switch (mode)
             {
-                case CoreScript.GameStates.InBuildMode:
-                    if (!CoreScript.Instance.Data.WasInBuildTipShown)
-                    {
-                        CoreScript.Instance.GameState = CoreScript.GameStates.InHelp;
-                        CoreScript.Instance.Data.WasInBuildTipShown = true;
-                    }
-                    else
-                    {
-                        offscreen.Hide();
-                    }
+                case Modes.Build:
+                    currentTips = inBuildModeTips;
                     break;
-                case CoreScript.GameStates.InBattle:
-                    if (!CoreScript.Instance.Data.WasInBattleTipShown)
-                    {
-                        CoreScript.Instance.GameState = CoreScript.GameStates.InHelp;
-                        CoreScript.Instance.Data.WasInBattleTipShown = true;
-                    }
-                    else
-                    {
-                        offscreen.Hide();
-                    }
-                    break;
-                case CoreScript.GameStates.InHelp:
-                    previousState = e.PreviousState;
-                    _currentTips = previousState == CoreScript.GameStates.InBattle ? _inBattleTips : _inBuildModeTips;
-                    CurrentTipNumber = 0;
-                    offscreen.Show();
-                    break;
-                case CoreScript.GameStates.Paused:
-                    break;
-                default:
-                    offscreen.Hide();
+                case Modes.Battle:
+                    currentTips = inBattleTips;
                     break;
             }
+            CurrentTipNumber = 0;
+            offscreen.Show();
+        }
+
+        public void Hide()
+        {
+            offscreen.Hide();
         }
     }
 }

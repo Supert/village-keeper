@@ -1,12 +1,11 @@
-﻿using VillageKeeper.FSM;
-
-namespace VillageKeeper.Game.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class BuildHelpState : State<Args>
     {
         public override void Enter()
         {
             base.Enter();
+            CoreScript.Instance.UiManager.OnBuildHelpEntered();
         }
 
         public override State<Args> Event(Args args)

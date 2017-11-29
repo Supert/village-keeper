@@ -2,8 +2,9 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using VillageKeeper.Game;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper.UI
 {
     public class BuildingPickerScript : MonoBehaviour
     {
@@ -99,27 +100,28 @@ namespace VillageKeeper.Game
         void Start()
         {
             var offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            CoreScript.Instance.GameStateChanged += (sender, e) =>
-            {
-                switch (e.NewState)
-                {
-                    case CoreScript.GameStates.InBuildMode:
-                        offscreen.Show();
-                        break;
-                    case CoreScript.GameStates.InHelp:
-                        break;
-                    default:
-                        offscreen.Hide();
-                        break;
-                }
-            };
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.InBuildMode:
+            //            offscreen.Show();
+            //            break;
+            //        case CoreScript.GameStates.InHelp:
+            //            break;
+            //        default:
+            //            offscreen.Hide();
+            //            break;
+            //    }
+            //};
         }
 
         void Update()
         {
-            if (CoreScript.Instance.GameState == CoreScript.GameStates.InBuildMode
+            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState)
                 && Input.GetMouseButtonDown(0)
-                && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main) && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost)
+                && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
+                && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

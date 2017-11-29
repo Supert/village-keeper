@@ -3,51 +3,44 @@ using UnityEngine.UI;
 using System.Collections;
 using Soomla.Store;
 
-public class ShopScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    OffScreenMenuScript _offScreenMenu;
-    public Button thounsandButton;
-    public Button tenThousandButton;
-
-    void Start()
+    public class ShopScript : MonoBehaviour
     {
-        _offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-        StartCoroutine(InitCoroutine());
-    }
+        OffScreenMenuScript offScreenMenu;
+        public Button thounsandButton;
+        public Button tenThousandButton;
 
-    IEnumerator InitCoroutine()
-    {
-        yield return null;
-        thounsandButton.onClick.AddListener(() =>
+        void Start()
         {
-            SoomlaStore.BuyMarketItem(EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
-            CoreScript.Instance.Audio.PlayClick();
-        });
-        tenThousandButton.onClick.AddListener(() =>
+            offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+            StartCoroutine(InitCoroutine());
+        }
+
+        public void Show()
         {
-            SoomlaStore.BuyMarketItem(EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
-            CoreScript.Instance.Audio.PlayClick();
-        });
-        CoreScript.Instance.GameStateChanged += (object sender, CoreScript.GameStateChangedEventArgs e) =>
+            offScreenMenu.Show();
+        }
+
+        public void Hide()
         {
-            switch (e.NewState)
+            offScreenMenu.Hide();
+        }
+
+        IEnumerator InitCoroutine()
+        {
+            yield return null;
+            thounsandButton.onClick.AddListener(() =>
             {
-                case CoreScript.GameStates.InBattle:
-                    _offScreenMenu.Hide();
-                    break;
-                case CoreScript.GameStates.InMenu:
-                    _offScreenMenu.Hide();
-                    break;
-                case CoreScript.GameStates.InShop:
-                    _offScreenMenu.Show();
-                    break;
-                case CoreScript.GameStates.Paused:
-                    _offScreenMenu.Hide();
-                    break;
-                case CoreScript.GameStates.RoundFinished:
-                    _offScreenMenu.Hide();
-                    break;
-            }
-        };
+                SoomlaStore.BuyMarketItem(EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
+                CoreScript.Instance.Audio.PlayClick();
+            });
+
+            tenThousandButton.onClick.AddListener(() =>
+            {
+                SoomlaStore.BuyMarketItem(EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
+                CoreScript.Instance.Audio.PlayClick();
+            });
+        }
     }
 }

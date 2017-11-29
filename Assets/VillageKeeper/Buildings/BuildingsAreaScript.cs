@@ -35,18 +35,18 @@ namespace VillageKeeper.Game
                     _buildingsGrid[i, j].transform.localPosition = lp;
                 }
             }
-            CoreScript.Instance.GameStateChanged += (sender, e) =>
-            {
-                switch (e.NewState)
-                {
-                    case CoreScript.GameStates.InBuildMode:
-                        LoadBuildings();
-                        break;
-                    case CoreScript.GameStates.RoundFinished:
-                        SaveBuildings();
-                        break;
-                }
-            };
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.InBuildMode:
+            //            LoadBuildings();
+            //            break;
+            //        case CoreScript.GameStates.RoundFinished:
+            //            SaveBuildings();
+            //            break;
+            //    }
+            //};
         }
 
         public Vector2 CellWorldSize

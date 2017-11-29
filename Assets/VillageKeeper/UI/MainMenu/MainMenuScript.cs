@@ -1,86 +1,91 @@
 using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.FSM;
 
-public class MainMenuScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public Text monstersDefeatedText;
-    public ScreenShadowScript shopShadow;
-    OffScreenMenuScript offScreenMenu;
-    public Image roomFurniture;
-    public Sprite freeFurniture;
-    public Sprite premiumFurniture;
-
-    void SetScores()
+    public class MainMenuScript : MonoBehaviour
     {
-        var monstersDefeated = CoreScript.Instance.Data.MonstersDefeated;
-        if (monstersDefeated == 0)
-            monstersDefeatedText.text = "No monsters defeated yet";
-        else
+        public Text monstersDefeatedText;
+        public ScreenShadowScript shopShadow;
+        OffScreenMenuScript offScreenMenu;
+        public Image roomFurniture;
+        public Sprite freeFurniture;
+        public Sprite premiumFurniture;
+
+        void SetScores()
         {
-            if (monstersDefeated == 1)
-                monstersDefeatedText.text = "First monster defeated!";
+            var monstersDefeated = CoreScript.Instance.Data.MonstersDefeated;
+            if (monstersDefeated == 0)
+                monstersDefeatedText.text = "No monsters defeated yet";
             else
-                monstersDefeatedText.text = monstersDefeated + " monsters defeated";
-        }
-    }
-
-    private void SetFurniture()
-    {
-        if (CoreScript.Instance.Data.HasPremium)
-        {
-            if (roomFurniture.sprite != premiumFurniture)
-                roomFurniture.sprite = premiumFurniture;
-        }
-        else
-        {
-            if (roomFurniture.sprite != freeFurniture)
-                roomFurniture.sprite = freeFurniture;
-        }
-    }
-
-    void Start()
-    {
-        offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-        SetScores();
-        SetFurniture();
-        shopShadow.ShadowButton.onClick.AddListener(() =>
-        {
-            CoreScript.Instance.GameState = CoreScript.GameStates.InMenu;
-        });
-        CoreScript.Instance.GameStateChanged += (sender, e) =>
-        {
-            switch (e.NewState)
             {
-                case CoreScript.GameStates.InBuildMode:
-                case CoreScript.GameStates.Paused:
-                case CoreScript.GameStates.RoundFinished:
-                case CoreScript.GameStates.InBattle:
-                    offScreenMenu.Hide();
-                    shopShadow.Hide();
-                    break;
-                case CoreScript.GameStates.InMenu:
-                    SetFurniture();
-                    SetScores();
-                    offScreenMenu.Show();
-                    shopShadow.Hide();
-                    break;
-                case CoreScript.GameStates.InShop:
-                    offScreenMenu.Show();
-                    shopShadow.Show();
-                    break;
+                if (monstersDefeated == 1)
+                    monstersDefeatedText.text = "First monster defeated!";
+                else
+                    monstersDefeatedText.text = monstersDefeated + " monsters defeated";
             }
-        };
+        }
 
-        CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
+        private void SetFurniture()
         {
-            switch (e.FieldChanged)
+            if (CoreScript.Instance.Data.HasPremium)
             {
-                case DataScript.DataFields.HasPremium:
-                    SetFurniture();
-                    break;
-                default:
-                    break;
+                if (roomFurniture.sprite != premiumFurniture)
+                    roomFurniture.sprite = premiumFurniture;
             }
-        };
+            else
+            {
+                if (roomFurniture.sprite != freeFurniture)
+                    roomFurniture.sprite = freeFurniture;
+            }
+        }
+
+        public void ShowMenu()
+        {
+            SetFurniture();
+            SetScores();
+            offScreenMenu.Show();
+        }
+
+        public void HideMenu()
+        {
+            offScreenMenu.Hide();
+        }
+
+        public void ShowShop()
+        {
+            ShowMenu();
+            offScreenMenu.Show();
+            shopShadow.Show();
+        }
+
+        public void HideShop()
+        {
+            shopShadow.Hide();
+        }
+
+        void Start()
+        {
+            offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+            SetScores();
+            SetFurniture();
+            shopShadow.ShadowButton.onClick.AddListener(() =>
+            {
+                CoreScript.Instance.FSM.Event(new Args(Args.Types.GoToMenu));
+            });
+
+            CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
+            {
+                switch (e.FieldChanged)
+                {
+                    case DataScript.DataFields.HasPremium:
+                        SetFurniture();
+                        break;
+                    default:
+                        break;
+                }
+            };
+        }
     }
 }

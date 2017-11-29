@@ -1,32 +1,35 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class CliffScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public Sprite winterSprite;
-
-    void Start()
+    public class CliffScript : MonoBehaviour
     {
-        if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+        public Sprite winterSprite;
+
+        void Start()
         {
-            var image = GetComponent<Image>() as Image;
-            image.sprite = winterSprite;
-        }
-        var offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-        CoreScript.Instance.GameStateChanged += (sender, e) =>
-        {
-            switch (e.NewState)
+            if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
             {
-                case CoreScript.GameStates.InBattle:
-                case CoreScript.GameStates.Paused:
-                    offscreen.Show();
-                    break;
-                case CoreScript.GameStates.InHelp:
-                    break;
-                default:
-                    offscreen.Hide();
-                    break;
+                var image = GetComponent<Image>() as Image;
+                image.sprite = winterSprite;
             }
-        };
+            var offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
+            //CoreScript.Instance.GameStateChanged += (sender, e) =>
+            //{
+            //    switch (e.NewState)
+            //    {
+            //        case CoreScript.GameStates.InBattle:
+            //        case CoreScript.GameStates.Paused:
+            //            offscreen.Show();
+            //            break;
+            //        case CoreScript.GameStates.InHelp:
+            //            break;
+            //        default:
+            //            offscreen.Hide();
+            //            break;
+            //    }
+            //};
+        }
     }
 }

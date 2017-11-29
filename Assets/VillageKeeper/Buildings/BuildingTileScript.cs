@@ -14,7 +14,7 @@ namespace VillageKeeper.Game
 
         public Sprite tileSpriteDefault;
         public Sprite tileSpriteHighlighted;
-        private SpriteRenderer _spriteRenderer;
+        private SpriteRenderer spriteRenderer;
 
         public int gridX;
         public int gridY;
@@ -33,14 +33,14 @@ namespace VillageKeeper.Game
                 {
                     case BuildingTileStates.Active:
                         gameObject.SetActive(true);
-                        _spriteRenderer.sprite = tileSpriteDefault;
+                        spriteRenderer.sprite = tileSpriteDefault;
                         break;
                     case BuildingTileStates.Disabled:
                         gameObject.SetActive(false);
                         break;
                     case BuildingTileStates.Highlightened:
                         gameObject.SetActive(true);
-                        _spriteRenderer.sprite = tileSpriteHighlighted;
+                        spriteRenderer.sprite = tileSpriteHighlighted;
                         break;
                 }
                 _state = value;
@@ -49,24 +49,23 @@ namespace VillageKeeper.Game
 
         void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
+            spriteRenderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
         }
 
         void Start()
         {
-            transform.localScale *= CoreScript.Instance.BuildingsArea.CellWorldSize.x / _spriteRenderer.bounds.size.x * 0.9f;
+            transform.localScale *= CoreScript.Instance.BuildingsArea.CellWorldSize.x / spriteRenderer.bounds.size.x * 0.9f;
         }
 
         void Update()
         {
-            switch (CoreScript.Instance.GameState)
+            if (CoreScript.Instance.FSM.Current == typeof(FSM.BuildState))
             {
-                case CoreScript.GameStates.InBuildMode:
-                    _spriteRenderer.color = Vector4.MoveTowards(_spriteRenderer.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
-                    break;
-                case CoreScript.GameStates.InBattle:
-                    _spriteRenderer.color = Vector4.MoveTowards(_spriteRenderer.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 0.25f);
-                    break;
+                spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
+            }
+            else if (CoreScript.Instance.FSM.Current == typeof(FSM.BattleState))
+            {
+                spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 0.25f);
             }
         }
     }

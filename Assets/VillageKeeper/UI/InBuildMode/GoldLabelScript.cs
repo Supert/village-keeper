@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using VillageKeeper.Game;
 
-namespace VillageKeeper.Game
+namespace VillageKeeper.UI
 {
     [RequireComponent(typeof(Text))]
     public class GoldLabelScript : MonoBehaviour
     {
         private Text text;
-        private void SetText()
+
+        public void SetText()
         {
             text.text = CoreScript.Instance.Data.Gold.ToString();
         }
@@ -20,18 +21,7 @@ namespace VillageKeeper.Game
 
         void Start()
         {
-            CoreScript.Instance.GameStateChanged += (sender, e) => OnGameStateChanged(e);
             CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-        }
-
-        void OnGameStateChanged(CoreScript.GameStateChangedEventArgs e)
-        {
-            switch (e.NewState)
-            {
-                case CoreScript.GameStates.InBuildMode:
-                    SetText();
-                    break;
-            }
         }
 
         void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
