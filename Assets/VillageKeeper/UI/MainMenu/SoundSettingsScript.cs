@@ -18,7 +18,7 @@ namespace VillageKeeper.UI
 
         void SetButtons()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled)
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get())
             {
                 SoundsButton.image.sprite = SoundsOnSprite;
                 var s = SoundsButton.spriteState;
@@ -32,7 +32,7 @@ namespace VillageKeeper.UI
                 s.pressedSprite = SoundsOffPressedSprite;
                 SoundsButton.spriteState = s;
             }
-            if (CoreScript.Instance.Data.IsMusicEnabled)
+            if (CoreScript.Instance.Data.IsMusicEnabled.Get())
             {
                 MusicButton.image.sprite = MusicOnSprite;
                 var s = MusicButton.spriteState;
@@ -48,26 +48,20 @@ namespace VillageKeeper.UI
             }
         }
 
-        void Start()
+        void Init()
         {
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
-            {
-                switch (e.FieldChanged)
-                {
-                    case DataScript.DataFields.IsSoundEffectsEnabled:
-                    case DataScript.DataFields.IsMusicEnabled:
-                        SetButtons();
-                        break;
-                }
-            };
+            CoreScript.Instance.Data.IsSoundEffectsEnabled.OnValueChanged += (b) => SetButtons();
+            CoreScript.Instance.Data.IsMusicEnabled.OnValueChanged += (b) => SetButtons();
+
             MusicButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.Data.IsMusicEnabled = !CoreScript.Instance.Data.IsMusicEnabled;
+                CoreScript.Instance.Data.IsMusicEnabled.Set(!CoreScript.Instance.Data.IsMusicEnabled.Get());
                 CoreScript.Instance.AudioManager.PlayClick();
             });
+
             SoundsButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.Data.IsSoundEffectsEnabled = !CoreScript.Instance.Data.IsSoundEffectsEnabled;
+                CoreScript.Instance.Data.IsSoundEffectsEnabled.Set(!CoreScript.Instance.Data.IsSoundEffectsEnabled.Get());
                 CoreScript.Instance.AudioManager.PlayClick();
             });
         }

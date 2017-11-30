@@ -18,8 +18,7 @@ namespace VillageKeeper.UI
 
         void SetUpgradeButton()
         {
-            var data = CoreScript.Instance.Data;
-            if (data.Gold >= data.GetCastleUpgradeCost())
+            if (CoreScript.Instance.Data.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
                 upgradeButton.interactable = true;
             else
                 upgradeButton.interactable = false;
@@ -37,16 +36,16 @@ namespace VillageKeeper.UI
 
         public void SetValues()
         {
-            var data = CoreScript.Instance.Data;
-            currentBreadToGold.goldText.text = data.GetBreadToGoldMultiplier().ToString();
-            upgradeBreadToGold.goldText.text = data.GetBreadToGoldMultiplier(data.VillageLevel + 1).ToString();
-            upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
-            switch (data.VillageLevel)
+            int villageLevel = CoreScript.Instance.Data.VillageLevel.Get();
+            currentBreadToGold.goldText.text = CoreScript.Instance.Balance.GetBreadToGoldMultiplier().ToString();
+            upgradeBreadToGold.goldText.text = CoreScript.Instance.Balance.GetBreadToGoldMultiplier(villageLevel + 1).ToString();
+            upgradePriceText.text = CoreScript.Instance.Balance.GetCastleUpgradeCost().ToString();
+            switch (villageLevel)
             {
                 case 0:
                     castleUpgradeWindow.SetActive(true);
                     castleUpgradeIcon.sprite = firstCastleUpgradeSprite;
-                    upgradePriceText.text = data.GetCastleUpgradeCost().ToString();
+                    upgradePriceText.text = CoreScript.Instance.Balance.GetCastleUpgradeCost().ToString();
                     break;
                 case 1:
                     castleUpgradeWindow.SetActive(true);
@@ -61,30 +60,17 @@ namespace VillageKeeper.UI
             SetUpgradeButton();
         }
 
-        void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
-        {
-            switch (e.FieldChanged)
-            {
-                case DataScript.DataFields.Gold:
-                    SetUpgradeButton();
-                    break;
-                case DataScript.DataFields.VillageLevel:
-                    SetValues();
-                    break;
-            }
-        }
-
-        void Start()
+        void Init()
         {
             offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
+            CoreScript.Instance.Data.Gold.OnValueChanged += (i) => SetUpgradeButton();
+            CoreScript.Instance.Data.VillageLevel.OnValueChanged += (i) => SetValues();
             upgradeButton.onClick.AddListener(() =>
             {
-                if (CoreScript.Instance.Data.Gold >= CoreScript.Instance.Data.GetCastleUpgradeCost())
+                if (CoreScript.Instance.Data.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
                 {
-                    CoreScript.Instance.Data.Gold -= CoreScript.Instance.Data.GetCastleUpgradeCost();
-                    CoreScript.Instance.Data.VillageLevel++;
+                    CoreScript.Instance.Data.Gold.Set(CoreScript.Instance.Data.Gold.Get() - CoreScript.Instance.Balance.GetCastleUpgradeCost());
+                    CoreScript.Instance.Data.VillageLevel.Set(CoreScript.Instance.Data.VillageLevel.Get() + 1);
                     CoreScript.Instance.AudioManager.PlayClick();
                 }
             });

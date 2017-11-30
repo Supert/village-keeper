@@ -61,9 +61,9 @@ namespace VillageKeeper.UI
             Show();
             title.text = "Victory!";
             roundFinishedText.SetActive(true);
-            WeCollectedFoodText.text = "We collected " + (CoreScript.Instance.Data.GetFarmsFood() + CoreScript.Instance.Data.GetWindmillBonusFood()).ToString();
-            WithMonsterBonusText.text = "With " + CoreScript.Instance.Data.GetMonsterBonusGold().ToString();
-            YouGainGoldText.text = "you gain " + CoreScript.Instance.Data.GetRoundFinishedBonusGold().ToString();
+            WeCollectedFoodText.text = "We collected " + (CoreScript.Instance.Balance.GetFarmsFood() + CoreScript.Instance.Balance.GetWindmillBonusFood()).ToString();
+            WithMonsterBonusText.text = "With " + CoreScript.Instance.Balance.GetMonsterBonusGold().ToString();
+            YouGainGoldText.text = "you gain " + CoreScript.Instance.Balance.GetRoundFinishedBonusGold().ToString();
         }
     }
 }

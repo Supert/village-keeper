@@ -1,16 +1,11 @@
 using UnityEngine;
+using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
     public class FarmScript : BuildingScript
     {
-        public override BuildingTypes Type
-        {
-            get
-            {
-                return BuildingTypes.Farm;
-            }
-        }
+        public override BuildingTypes Type { get { return BuildingTypes.Farm; } }
 
         public SpriteRenderer cropsSR;
         public Sprite winterSpecialCropsSprite;

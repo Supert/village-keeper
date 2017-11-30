@@ -1,4 +1,6 @@
-﻿namespace VillageKeeper.Game
+﻿using VillageKeeper.Data;
+
+namespace VillageKeeper.Game
 {
     public class WallScript : BuildingScript
     {

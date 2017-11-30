@@ -1,26 +1,12 @@
 ﻿using UnityEngine;
 using System;
-
-//set health on enter battle
+using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
-    public abstract class BuildingScript : MonoBehaviour
+    public abstract partial class BuildingScript : MonoBehaviour
     {
-        public enum BuildingTypes : byte
-        {
-            Farm = 0,
-            WallWooden,
-            WallStone,
-            WatchtowerWooden,
-            WatchtowerStone,
-            Windmill,
-        }
-
-        public abstract BuildingTypes Type
-        {
-            get;
-        }
+        public abstract BuildingTypes Type { get; }
 
         public static BuildingScript GetNewBuildingOfType(BuildingTypes type)
         {
@@ -176,7 +162,7 @@ namespace VillageKeeper.Game
                     var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
                     var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
                     var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.Data.Gold >= GoldCost)
+                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.Data.Gold.Get() >= GoldCost)
                     {
                         buildingsArea.BuyBuilding(this, closestCell);
                     }

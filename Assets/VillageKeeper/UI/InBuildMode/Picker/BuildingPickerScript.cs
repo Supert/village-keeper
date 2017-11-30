@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using VillageKeeper.Game;
+using VillageKeeper.Data;
 
 namespace VillageKeeper.UI
 {
@@ -16,20 +17,20 @@ namespace VillageKeeper.UI
         public Button previousButton;
         public Button nextButton;
 
-        private Dictionary<BuildingScript.BuildingTypes, Sprite> iconSprites = null;
+        private Dictionary<BuildingTypes, Sprite> iconSprites = null;
 
-        private Dictionary<BuildingScript.BuildingTypes, BuildingScript> buildingsPrepared = new Dictionary<BuildingScript.BuildingTypes, BuildingScript>();
+        private Dictionary<BuildingTypes, BuildingScript> buildingsPrepared = new Dictionary<BuildingTypes, BuildingScript>();
 
-        private BuildingScript.BuildingTypes currentBuildingType;
+        private BuildingTypes currentBuildingType;
 
-        private Sprite GetSpriteForIconByType(BuildingScript.BuildingTypes type)
+        private Sprite GetSpriteForIconByType(BuildingTypes type)
         {
             if (iconSprites == null || iconSprites.Count == 0)
             {
-                iconSprites = new Dictionary<BuildingScript.BuildingTypes, Sprite>();
-                foreach (BuildingScript.BuildingTypes v in Enum.GetValues(typeof(BuildingScript.BuildingTypes)))
+                iconSprites = new Dictionary<BuildingTypes, Sprite>();
+                foreach (BuildingTypes v in Enum.GetValues(typeof(BuildingTypes)))
                 {
-                    iconSprites.Add(v, Resources.Load<Sprite>("Buildings/Icons/" + Enum.GetName(typeof(BuildingScript.BuildingTypes), v)) as Sprite);
+                    iconSprites.Add(v, Resources.Load<Sprite>("Buildings/Icons/" + Enum.GetName(typeof(BuildingTypes), v)) as Sprite);
                 }
             }
             return iconSprites[type];
@@ -50,7 +51,7 @@ namespace VillageKeeper.UI
             }
         }
 
-        public BuildingScript.BuildingTypes CurrentBuildingType
+        public BuildingTypes CurrentBuildingType
         {
             get
             {
@@ -66,7 +67,7 @@ namespace VillageKeeper.UI
             }
         }
 
-        void PrepareBuildingOfType(BuildingScript.BuildingTypes type)
+        void PrepareBuildingOfType(BuildingTypes type)
         {
             var bs = BuildingScript.GetNewBuildingOfType(type);
             bs.gameObject.SetActive(false);
@@ -78,23 +79,23 @@ namespace VillageKeeper.UI
 
         void Awake()
         {
-            foreach (BuildingScript.BuildingTypes v in Enum.GetValues(typeof(BuildingScript.BuildingTypes)))
+            foreach (BuildingTypes v in Enum.GetValues(typeof(BuildingTypes)))
             {
                 PrepareBuildingOfType(v);
             }
             previousButton.onClick.AddListener(() =>
             {
-                var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
-                CurrentBuildingType = (BuildingScript.BuildingTypes)(((byte)CurrentBuildingType - 1 + n) % n);
+                var n = Enum.GetNames(typeof(BuildingTypes)).Length;
+                CurrentBuildingType = (BuildingTypes)(((byte)CurrentBuildingType - 1 + n) % n);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
             nextButton.onClick.AddListener(() =>
             {
-                var n = Enum.GetNames(typeof(BuildingScript.BuildingTypes)).Length;
-                CurrentBuildingType = (BuildingScript.BuildingTypes)(((byte)CurrentBuildingType + 1 + n) % n);
+                var n = Enum.GetNames(typeof(BuildingTypes)).Length;
+                CurrentBuildingType = (BuildingTypes)(((byte)CurrentBuildingType + 1 + n) % n);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
-            CurrentBuildingType = BuildingScript.BuildingTypes.Farm;
+            CurrentBuildingType = BuildingTypes.Farm;
         }
 
         void Start()
@@ -121,7 +122,7 @@ namespace VillageKeeper.UI
             if (CoreScript.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && CoreScript.Instance.Data.Gold >= CurrentPreparedBuilding.GoldCost)
+                && CoreScript.Instance.Data.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

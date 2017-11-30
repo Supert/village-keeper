@@ -11,12 +11,10 @@ namespace VillageKeeper.UI
             AdRequest adRequest = new AdRequest.Builder().Build();
             bannerView.LoadAd(adRequest);
 
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
+            CoreScript.Instance.Data.HasPremium.OnValueChanged += (b) =>
             {
-                if (e.FieldChanged == DataScript.DataFields.HasPremium)
-                {
+                if (b)
                     bannerView.Hide();
-                }
             };
 
             //CoreScript.Instance.GameStateChanged += (sender, e) =>

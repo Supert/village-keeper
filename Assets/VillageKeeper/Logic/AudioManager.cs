@@ -31,7 +31,7 @@ namespace VillageKeeper.Audio
 
         public void PlayArrowShot()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled)
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get())
             {
 
                 var n = UnityEngine.Random.Range(0, 3);
@@ -53,7 +53,7 @@ namespace VillageKeeper.Audio
 
         public void PlayBuildingHit()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled)
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get())
             {
                 buildingAS.Play();
             }
@@ -61,7 +61,7 @@ namespace VillageKeeper.Audio
 
         public void PlayClick()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled)
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get())
             {
                 clickAS.Play();
             }
@@ -69,7 +69,7 @@ namespace VillageKeeper.Audio
 
         public void PlayMonsterHit()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled && CoreScript.Instance.FSM.Current == FSM.States.Battle)
+            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get() && CoreScript.Instance.FSM.Current == FSM.States.Battle)
             {
                 monsterAS.clip = audioClips[AudioClipNames.MonsterHit];
                 monsterAS.Play();
@@ -120,7 +120,7 @@ namespace VillageKeeper.Audio
             buildingAS.clip = audioClips[AudioClipNames.BuildingHit];
 
 
-            if (CoreScript.Instance.Data.IsMusicEnabled)
+            if (CoreScript.Instance.Data.IsMusicEnabled.Get())
             {
                 backgroundAS.clip = audioClips[AudioClipNames.BackgroundPeace];
                 backgroundAS.volume = 1f;
@@ -128,18 +128,15 @@ namespace VillageKeeper.Audio
             }
             backgroundAS.loop = true;
 
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) =>
+            CoreScript.Instance.Data.IsMusicEnabled.OnValueChanged += (b) =>
             {
-                if (e.FieldChanged == DataScript.DataFields.IsMusicEnabled)
+                if (CoreScript.Instance.Data.IsMusicEnabled.Get())
                 {
-                    if (CoreScript.Instance.Data.IsMusicEnabled)
-                    {
-                        backgroundAS.Play();
-                    }
-                    else
-                    {
-                        backgroundAS.Stop();
-                    }
+                    backgroundAS.Play();
+                }
+                else
+                {
+                    backgroundAS.Stop();
                 }
             };
 
@@ -177,7 +174,7 @@ namespace VillageKeeper.Audio
             //    }
             //};
 
-            if (CoreScript.Instance.Data.IsMusicEnabled)
+            if (CoreScript.Instance.Data.IsMusicEnabled.Get())
             {
                 if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundPeace])
                 {

@@ -20,8 +20,8 @@ namespace VillageKeeper
         public StateMachine FSM { get; private set; }
 
         public UiManager UiManager { get; private set; }
-
         public GameController GameManager { get; private set; }
+        public AudioManager AudioManager { get; private set; }
         
         public MonsterScript Monster { get; private set; }
 
@@ -31,11 +31,11 @@ namespace VillageKeeper
 
         public MainMenuScript MainMenu { get; private set; }
 
-        public DataScript Data { get; private set; }
+        public Data.Data Data { get; private set; }
+        public Balance Balance { get; private set; }
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
 
-        public AudioManager AudioManager { get; private set; }
         
         public Specials TodaySpecial { get; private set; }
 
@@ -75,7 +75,10 @@ namespace VillageKeeper
             Archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
-            Data = GetComponent<DataScript>() as DataScript;
+
+            Data = GetComponent<Data.Data>();
+            Balance = new Balance();
+
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
             TodaySpecial = GetTodaySpecial();
 

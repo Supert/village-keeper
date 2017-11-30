@@ -11,23 +11,13 @@ namespace VillageKeeper.UI
 
         public void SetText()
         {
-            text.text = CoreScript.Instance.Data.Gold.ToString();
+            text.text = CoreScript.Instance.Data.Gold.Get().ToString();
         }
 
-        void Awake()
+        void Init()
         {
             text = GetComponent<Text>() as Text;
-        }
-
-        void Start()
-        {
-            CoreScript.Instance.Data.DataFieldChanged += (sender, e) => OnDataFieldChanged(e);
-        }
-
-        void OnDataFieldChanged(DataScript.DataFieldChangedEventArgs e)
-        {
-            if (e.FieldChanged == DataScript.DataFields.Gold)
-                SetText();
+            CoreScript.Instance.Data.Gold.OnValueChanged += (i) => SetText();
         }
     }
 }
