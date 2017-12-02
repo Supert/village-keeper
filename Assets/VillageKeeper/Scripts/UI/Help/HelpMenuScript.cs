@@ -36,27 +36,22 @@ namespace VillageKeeper.UI
         public Button previousButton;
         public Button nextButton;
 
-        private int _currentTipNumber;
+        private int currentTipNumber;
         public int CurrentTipNumber
         {
             get
             {
-                return _currentTipNumber;
+                return currentTipNumber;
             }
             private set
             {
-                _currentTipNumber = value;
-                if (_currentTipNumber == 0)
-                    previousButton.gameObject.SetActive(false);
-                else
-                    previousButton.gameObject.SetActive(true);
-                if (_currentTipNumber == currentTips.Length - 1)
-                    nextButton.gameObject.SetActive(false);
-                else
-                    nextButton.gameObject.SetActive(true);
-                tipText.text = currentTips[_currentTipNumber];
-                tipCounterText.text = "Tip " + (_currentTipNumber + 1).ToString() + "/" + currentTips.Length;
+                currentTipNumber = value;
 
+                previousButton.gameObject.SetActive(currentTipNumber > 0);
+                nextButton.gameObject.SetActive(currentTipNumber < currentTips.Length - 1);
+
+                tipText.text = currentTips[currentTipNumber];
+                tipCounterText.text = "Tip " + (currentTipNumber + 1).ToString() + "/" + currentTips.Length;
             }
         }
 
@@ -85,17 +80,7 @@ namespace VillageKeeper.UI
             });
         }
 
-        public void ShowBattle()
-        {
-            Show(Modes.Battle);
-        }
-
-        public void ShowBuild()
-        {
-            Show(Modes.Build);
-        }
-
-        private void Show(Modes mode)
+        public void Show(Modes mode)
         {
             this.mode = mode;
             currentTips = CoreScript.Instance.Localization.GetHelpTips(mode);

@@ -7,10 +7,10 @@
         public override void Enter()
         {
             base.Enter();
-            if (!CoreScript.Instance.Data.WasBattleTipShown.Get())
+            if (!CoreScript.Instance.CommonData.WasBattleTipShown.Get())
             {
                 CoreScript.Instance.FSM.Event(StateMachineEvents.ShowBattleHelp);
-                CoreScript.Instance.Data.WasBattleTipShown.Set(true);
+                CoreScript.Instance.CommonData.WasBattleTipShown.Set(true);
             }
         }
 

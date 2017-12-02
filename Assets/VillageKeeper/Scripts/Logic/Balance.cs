@@ -69,7 +69,7 @@ namespace VillageKeeper
 
         public int GetBreadToGoldMultiplier()
         {
-            return GetBreadToGoldMultiplier(CoreScript.Instance.Data.VillageLevel.Get());
+            return GetBreadToGoldMultiplier(CoreScript.Instance.CommonData.VillageLevel.Get());
         }
 
         public int GetBreadToGoldMultiplier(int villageLevel)
@@ -87,9 +87,9 @@ namespace VillageKeeper
 
         public int GetCastleUpgradeCost()
         {
-            if (CoreScript.Instance.Data.VillageLevel.Get() == 0)
+            if (CoreScript.Instance.CommonData.VillageLevel.Get() == 0)
                 return 600;
-            if (CoreScript.Instance.Data.VillageLevel.Get() == 1)
+            if (CoreScript.Instance.CommonData.VillageLevel.Get() == 1)
                 return 6000;
             return 0;
         }

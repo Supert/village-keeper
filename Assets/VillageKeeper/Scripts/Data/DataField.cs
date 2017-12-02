@@ -4,17 +4,29 @@ namespace VillageKeeper.Data
 {
     public abstract class DataField<T>
     {
-        protected T DefaultValue { get; set; }
+        protected T Value { get; private set; }
 
-        protected abstract string Id { get; }
+        protected string Id { get; private set; }
 
-        public abstract T Get();
+        public void Init(string dataFieldId)
+        {
+            Id = dataFieldId;
+            Value = GetDefaultValue();
+        }
+
+        protected abstract T GetDefaultValue();
+
+        public T Get()
+        {
+            return Value;
+        }
 
         public virtual void Set(T value)
         {
-            OnValueChanged?.Invoke(value);
+            Value = value;
+            OnValueChanged?.Invoke();
         }
 
-        public event Action<T> OnValueChanged;
+        public event Action OnValueChanged;
     }
 }

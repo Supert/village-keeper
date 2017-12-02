@@ -5,26 +5,17 @@ namespace VillageKeeper.Data
 {
     public class IntDataField : DataField<Int32>
     {
-        private string id;
-        protected override string Id { get { return id; } }
-
-        public IntDataField(string id, int defaultValue = default(int))
+        protected override Int32 GetDefaultValue()
         {
-            this.id = id;
-            DefaultValue = defaultValue;
-        }
-
-        public override Int32 Get()
-        {
-            if (PlayerPrefs.HasKey(id))
-                return PlayerPrefs.GetInt(id);
+            if (PlayerPrefs.HasKey(Id))
+                return PlayerPrefs.GetInt(Id);
             else
-                return DefaultValue;
+                return default(Int32);
         }
 
         public override void Set(Int32 value)
         {
-            PlayerPrefs.SetInt(id, value);
+            PlayerPrefs.SetInt(Id, value);
             base.Set(value);
         }
     }

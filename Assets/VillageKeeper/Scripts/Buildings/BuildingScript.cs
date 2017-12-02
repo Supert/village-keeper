@@ -65,7 +65,7 @@ namespace VillageKeeper.Game
                     var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
                     var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
                     var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.Data.Gold.Get() >= GoldCost)
+                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.CommonData.Gold.Get() >= GoldCost)
                     {
                         buildingsArea.BuyBuilding(this, closestCell);
                     }

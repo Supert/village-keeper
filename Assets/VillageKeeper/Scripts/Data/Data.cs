@@ -1,44 +1,44 @@
-﻿using UnityEngine;
-using System.Collections;
-using Soomla.Store;
-using System.Runtime.Serialization;
-namespace VillageKeeper
-{
-    public class Shop
-    {
-        public void OnItemPurchased(PurchasableVirtualItem pvi, string payload)
-        {
-            if (pvi.ItemId == EconomyAssets.THOUSAND_COINS.ItemId)
-                CoreScript.Instance.Data.Gold.Set(CoreScript.Instance.Data.Gold.Get() + 1000);
-            if (pvi.ItemId == EconomyAssets.TEN_THOUSAND_COINS.ItemId)
-                CoreScript.Instance.Data.Gold.Set(CoreScript.Instance.Data.Gold.Get() + 10000);
-            CoreScript.Instance.Data.HasPremium.Set(true);
-        }
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using System;
 
-        public void Init()
-        {
-            StoreEvents.OnItemPurchased += OnItemPurchased;
-        }
-    }
-}
 namespace VillageKeeper.Data
 {
-    public class Data : MonoBehaviour
+    public abstract class Data
     {
-        public BuildingsDataField Buildings { get; } = new BuildingsDataField("Buildings", new SerializableBuildingsList());
+        public virtual void InitDataFields(string prefix)
+        {
+            foreach (var p in GetType().GetProperties())
+            {
+                Type type = p.PropertyType;
+                while (type != typeof(object))
+                {
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(DataField<>))
+                    {
+                        MethodInfo init = p.PropertyType.GetMethod("Init", new Type[1] { typeof(string) });
+                        object value = p.PropertyType.GetConstructor(new Type[0]).Invoke(new object[0]);
+                        init.Invoke(value, new object[1] { p.Name });
+                        p.SetValue(this, value);
+                        break;
+                    }
+                    type = type.BaseType;
+                }
+            }
+        }
 
-        public IntDataField VillageLevel { get; } = new IntDataField("VillageLevel");
-        public IntDataField Gold { get; } = new IntDataField("Gold");
-
-        public BoolDataField HasPremium { get; } = new BoolDataField("HasPremium");
-
-        public BoolDataField WasBuildTipShown { get; } = new BoolDataField("WasBuildTipShow");
-        public BoolDataField WasBattleTipShown { get; } = new BoolDataField("WasBattleTipShown");
-
-
-        public IntDataField MonstersDefeated { get; } = new IntDataField("MonstersDefeated");
-
-        public BoolDataField IsSoundEffectsEnabled { get; } = new BoolDataField("IsSoundEffectsEnabled");
-        public BoolDataField IsMusicEnabled { get; } = new BoolDataField("IsMusicEnabled");
+        public static bool CheckIfPropertyIsDataField(PropertyInfo property)
+        {
+            Type type = property.PropertyType;
+            while (type != typeof(object))
+            {
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(DataField<>))
+                {
+                    return true;
+                }
+                type = type.BaseType;
+            }
+            return false;
+        }
     }
 }

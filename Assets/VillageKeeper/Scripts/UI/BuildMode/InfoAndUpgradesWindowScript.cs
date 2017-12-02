@@ -6,8 +6,6 @@ namespace VillageKeeper.UI
 {
     public class InfoAndUpgradesWindowScript : MonoBehaviour
     {
-        public BreadToGoldLabelScript currentBreadToGold;
-        public BreadToGoldLabelScript upgradeBreadToGold;
         public GameObject castleUpgradeWindow;
         public Sprite firstCastleUpgradeSprite;
         public Sprite secondCastleUpgradeSprite;
@@ -18,7 +16,7 @@ namespace VillageKeeper.UI
 
         void SetUpgradeButton()
         {
-            if (CoreScript.Instance.Data.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
+            if (CoreScript.Instance.CommonData.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
                 upgradeButton.interactable = true;
             else
                 upgradeButton.interactable = false;
@@ -36,9 +34,7 @@ namespace VillageKeeper.UI
 
         public void SetValues()
         {
-            int villageLevel = CoreScript.Instance.Data.VillageLevel.Get();
-            currentBreadToGold.goldText.text = CoreScript.Instance.Balance.GetBreadToGoldMultiplier().ToString();
-            upgradeBreadToGold.goldText.text = CoreScript.Instance.Balance.GetBreadToGoldMultiplier(villageLevel + 1).ToString();
+            int villageLevel = CoreScript.Instance.CommonData.VillageLevel.Get();
             upgradePriceText.text = CoreScript.Instance.Balance.GetCastleUpgradeCost().ToString();
             switch (villageLevel)
             {
@@ -63,14 +59,14 @@ namespace VillageKeeper.UI
         void Init()
         {
             offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            CoreScript.Instance.Data.Gold.OnValueChanged += (i) => SetUpgradeButton();
-            CoreScript.Instance.Data.VillageLevel.OnValueChanged += (i) => SetValues();
+            CoreScript.Instance.CommonData.Gold.OnValueChanged += () => SetUpgradeButton();
+            CoreScript.Instance.CommonData.VillageLevel.OnValueChanged += () => SetValues();
             upgradeButton.onClick.AddListener(() =>
             {
-                if (CoreScript.Instance.Data.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
+                if (CoreScript.Instance.CommonData.Gold.Get() >= CoreScript.Instance.Balance.GetCastleUpgradeCost())
                 {
-                    CoreScript.Instance.Data.Gold.Set(CoreScript.Instance.Data.Gold.Get() - CoreScript.Instance.Balance.GetCastleUpgradeCost());
-                    CoreScript.Instance.Data.VillageLevel.Set(CoreScript.Instance.Data.VillageLevel.Get() + 1);
+                    CoreScript.Instance.CommonData.Gold.Set(CoreScript.Instance.CommonData.Gold.Get() - CoreScript.Instance.Balance.GetCastleUpgradeCost());
+                    CoreScript.Instance.CommonData.VillageLevel.Set(CoreScript.Instance.CommonData.VillageLevel.Get() + 1);
                     CoreScript.Instance.AudioManager.PlayClick();
                 }
             });

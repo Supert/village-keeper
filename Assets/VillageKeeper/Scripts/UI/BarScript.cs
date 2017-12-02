@@ -40,17 +40,8 @@ public class BarScript : MonoBehaviour
         }
         set
         {
-            if (value >= MaxValue)
-            {
-                currentValue = MaxValue;
-                barFillerImage.fillAmount = 1f;
-            }
-            else if (value <= minValue)
-            {
-                currentValue = minValue;
-                barFillerImage.fillAmount = 0f;
-            }
-            else if (MaxValue - minValue != 0)
+            currentValue = Mathf.Clamp(value, minValue, MaxValue);
+            if (MaxValue - minValue != 0)
             {
                 currentValue = value;
                 barFillerImage.fillAmount = RelativeCurrentValue;

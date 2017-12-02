@@ -7,24 +7,15 @@ namespace VillageKeeper.Data
 {
     public class BuildingsDataField : DataField<SerializableBuildingsList>
     {
-        private string id;
-        protected override string Id { get { return id; } }
-
-        public BuildingsDataField(string id, SerializableBuildingsList defaultValue = default(SerializableBuildingsList))
+        protected override SerializableBuildingsList GetDefaultValue()
         {
-            this.id = id;
-            DefaultValue = defaultValue;
-        }
-
-        public override SerializableBuildingsList Get()
-        {
-            if (PlayerPrefs.HasKey("Buildings"))
+            if (PlayerPrefs.HasKey(Id))
             {
                 var xsBuildings = new XmlSerializer(typeof(SerializableBuildingsList));
-                var textReader = new StringReader(PlayerPrefs.GetString("Buildings"));
+                var textReader = new StringReader(PlayerPrefs.GetString(Id));
                 return (SerializableBuildingsList)xsBuildings.Deserialize(textReader);
             }
-            return DefaultValue;
+            return new SerializableBuildingsList();
         }
 
         public override void Set(SerializableBuildingsList value)
@@ -32,7 +23,7 @@ namespace VillageKeeper.Data
             var xsBuildings = new XmlSerializer(typeof(SerializableBuildingsList));
             var s = new StringWriter();
             xsBuildings.Serialize(s, value);
-            PlayerPrefs.SetString("Buildings", s.ToString());
+            PlayerPrefs.SetString(Id, s.ToString());
             base.Set(value);
         }
     }

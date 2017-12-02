@@ -6,9 +6,7 @@ namespace VillageKeeper.UI
     {
         public WindScript Wind { get; private set; }
 
-        private CastleScript castle;
         private HelpMenuScript help;
-        private GoldLabelScript gold;
         private InfoAndUpgradesWindowScript castleInfoAndUpgrades;
         private MonsterHealthBarScript monsterHealthBar;
 
@@ -19,21 +17,18 @@ namespace VillageKeeper.UI
 
         public void OnBuildModeEntered()
         {
-            castle.SetSprite();
-            gold.SetText();
-
             castleInfoAndUpgrades.SetValues();
             castleInfoAndUpgrades.Show();
         }
 
         public void OnBuildHelpEntered()
         {
-            help.ShowBuild();
+            help.Show(HelpMenuScript.Modes.Build);
         }
 
         public void OnBattleHelpEntered()
         {
-            help.ShowBattle();
+            help.Show(HelpMenuScript.Modes.Battle);
         }
 
         public void OnBattleEntered()

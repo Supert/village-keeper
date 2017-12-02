@@ -5,26 +5,17 @@ namespace VillageKeeper.Data
 {
     public class BoolDataField : DataField<Boolean>
     {
-        private string id;
-        protected override string Id { get { return id; } }
-
-        public BoolDataField(string id, bool defaultValue = default(bool))
+        protected override bool GetDefaultValue()
         {
-            this.id = id;
-            DefaultValue = defaultValue;
-        }
-
-        public override bool Get()
-        {
-            if (PlayerPrefs.HasKey(id))
-                return PlayerPrefs.GetInt(id) != 0;
+            if (PlayerPrefs.HasKey(Id))
+                return PlayerPrefs.GetInt(Id) != 0;
             else
-                return DefaultValue;
+                return default(Boolean);
         }
 
         public override void Set(bool value)
         {
-            PlayerPrefs.SetInt(id, value ? 1 : 0);
+            PlayerPrefs.SetInt(Id, value ? 1 : 0);
             base.Set(value);
         }
     }

@@ -77,12 +77,13 @@ namespace VillageKeeper.UI
                 buildingsPrepared[type] = bs;
         }
 
-        void Awake()
+        void Start()
         {
             foreach (BuildingTypes v in Enum.GetValues(typeof(BuildingTypes)))
             {
                 PrepareBuildingOfType(v);
             }
+
             previousButton.onClick.AddListener(() =>
             {
                 var n = Enum.GetNames(typeof(BuildingTypes)).Length;
@@ -98,7 +99,7 @@ namespace VillageKeeper.UI
             CurrentBuildingType = BuildingTypes.Farm;
         }
 
-        void Start()
+        void Awake()
         {
             var offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
             //CoreScript.Instance.GameStateChanged += (sender, e) =>
@@ -122,7 +123,7 @@ namespace VillageKeeper.UI
             if (CoreScript.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && CoreScript.Instance.Data.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
+                && CoreScript.Instance.CommonData.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

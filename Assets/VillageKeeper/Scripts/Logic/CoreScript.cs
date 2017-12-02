@@ -5,6 +5,8 @@ using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
 using VillageKeeper.Locale;
+using System.Collections.Generic;
+using VillageKeeper.Data;
 
 namespace VillageKeeper
 {
@@ -25,21 +27,24 @@ namespace VillageKeeper
         public UiManager UiManager { get; private set; }
         public GameController GameManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
-        
+
         public MonsterScript Monster { get; private set; }
 
         public ArcherScript Archer { get; private set; }
-        
+
         public ControlsScript Controls { get; private set; }
 
         public MainMenuScript MainMenu { get; private set; }
 
-        public Data.Data Data { get; private set; }
+        public CommonData CommonData { get { return (CommonData) Data["Common"]; } }
+
+
         public Balance Balance { get; private set; }
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
 
-        
+        public Dictionary<string, Data.Data> Data { get; private set; }
+
         public Specials TodaySpecial { get; private set; }
 
         //Day and Month matter only
@@ -83,7 +88,11 @@ namespace VillageKeeper
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
 
-            Data = GetComponent<Data.Data>();
+            Data = new Dictionary<string, Data.Data>()
+            {
+                ["Common"] = new CommonData("Common"),
+            };
+
             Balance = new Balance();
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();

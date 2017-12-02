@@ -18,7 +18,7 @@ namespace VillageKeeper.UI
 
         void SetButtons()
         {
-            if (CoreScript.Instance.Data.IsSoundEffectsEnabled.Get())
+            if (CoreScript.Instance.CommonData.IsSoundEffectsEnabled.Get())
             {
                 SoundsButton.image.sprite = SoundsOnSprite;
                 var s = SoundsButton.spriteState;
@@ -32,7 +32,7 @@ namespace VillageKeeper.UI
                 s.pressedSprite = SoundsOffPressedSprite;
                 SoundsButton.spriteState = s;
             }
-            if (CoreScript.Instance.Data.IsMusicEnabled.Get())
+            if (CoreScript.Instance.CommonData.IsMusicEnabled.Get())
             {
                 MusicButton.image.sprite = MusicOnSprite;
                 var s = MusicButton.spriteState;
@@ -50,18 +50,18 @@ namespace VillageKeeper.UI
 
         void Init()
         {
-            CoreScript.Instance.Data.IsSoundEffectsEnabled.OnValueChanged += (b) => SetButtons();
-            CoreScript.Instance.Data.IsMusicEnabled.OnValueChanged += (b) => SetButtons();
+            CoreScript.Instance.CommonData.IsSoundEffectsEnabled.OnValueChanged += SetButtons;
+            CoreScript.Instance.CommonData.IsMusicEnabled.OnValueChanged += SetButtons;
 
             MusicButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.Data.IsMusicEnabled.Set(!CoreScript.Instance.Data.IsMusicEnabled.Get());
+                CoreScript.Instance.CommonData.IsMusicEnabled.Set(!CoreScript.Instance.CommonData.IsMusicEnabled.Get());
                 CoreScript.Instance.AudioManager.PlayClick();
             });
 
             SoundsButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.Data.IsSoundEffectsEnabled.Set(!CoreScript.Instance.Data.IsSoundEffectsEnabled.Get());
+                CoreScript.Instance.CommonData.IsSoundEffectsEnabled.Set(!CoreScript.Instance.CommonData.IsSoundEffectsEnabled.Get());
                 CoreScript.Instance.AudioManager.PlayClick();
             });
         }
