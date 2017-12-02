@@ -1,31 +1,49 @@
-﻿using System.Linq;
-using VillageKeeper.Game;
+﻿using VillageKeeper.Game;
 using VillageKeeper.Data;
 using System;
 
-namespace VillageKeeper
+namespace VillageKeeper.Balance
 {
-    public class Balance
+    public static class Balance
     {
-        public int GetMonsterBonusGold()
+        public static int MonsterBonusGold { get; } = 20;
+        public static int MaxVillageLevel { get; } = 2;
+        public static int FoodPerFarm { get; } = 1;
+        public static int FoodPerWindMillMultiplier { get; } = 1;
+
+        public static int GetCastleUpgradeCost(int currentLevel)
         {
-            return 20;
+            if (currentLevel == 0)
+                return 600;
+            if (currentLevel == 1)
+                return 6000;
+            return 0;
         }
 
-        public int GetFarmsFood()
+        public static int GetBreadToGoldMultiplier(int villageLevel)
         {
-            return CoreScript.Instance.BuildingsArea.buildings.Where(x => x.Type == BuildingTypes.Farm).Count();
+            return villageLevel + 1;
         }
 
-        public int GetWindmillBonusFood()
+        public static int CalculateFarmsFood(int farms)
         {
-            int result = 0;
-            foreach (WindmillScript w in CoreScript.Instance.BuildingsArea.buildings.Where(x => x.Type == BuildingTypes.Windmill))
-                result += w.WindmillBonus;
+            return farms * FoodPerFarm;
+        }
+
+        public static int CalculateWindmillsFood(int windmills, int farms)
+        {
+            return windmills * farms * FoodPerWindMillMultiplier;
+        }
+
+        public static int CalculateRoundFinishedBonusGold(int villageLevel, int farms, int windmills)
+        {
+            int result = MonsterBonusGold;
+            int food = CalculateFarmsFood(farms) + CalculateWindmillsFood(windmills, farms);
+            result += food * GetBreadToGoldMultiplier(villageLevel);
             return result;
         }
 
-        internal float GetBuildingMaxHealth(BuildingTypes type)
+        public static float GetBuildingMaxHealth(BuildingTypes type)
         {
             switch (type)
             {
@@ -46,7 +64,7 @@ namespace VillageKeeper
             }
         }
 
-        internal int GetBuildingBoldCost(BuildingTypes type)
+        public static int GetBuildingGoldCost(BuildingTypes type)
         {
             switch (type)
             {
@@ -65,33 +83,6 @@ namespace VillageKeeper
                 default:
                     return 0;
             }
-        }
-
-        public int GetBreadToGoldMultiplier()
-        {
-            return GetBreadToGoldMultiplier(CoreScript.Instance.CommonData.VillageLevel.Get());
-        }
-
-        public int GetBreadToGoldMultiplier(int villageLevel)
-        {
-            return villageLevel + 1;
-        }
-
-        public int GetRoundFinishedBonusGold()
-        {
-            int result = GetMonsterBonusGold();
-            int food = GetFarmsFood() + GetWindmillBonusFood();
-            result += food * GetBreadToGoldMultiplier();
-            return result;
-        }
-
-        public int GetCastleUpgradeCost()
-        {
-            if (CoreScript.Instance.CommonData.VillageLevel.Get() == 0)
-                return 600;
-            if (CoreScript.Instance.CommonData.VillageLevel.Get() == 1)
-                return 6000;
-            return 0;
         }
     }
 }

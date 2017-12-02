@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using VillageKeeper.Data;
+using VillageKeeper.Balance;
 
 namespace VillageKeeper.Game
 {
@@ -17,9 +18,9 @@ namespace VillageKeeper.Game
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth { get { return CoreScript.Instance.Balance.GetBuildingMaxHealth(Type); } }
+        public float MaxHealth { get { return Balance.Balance.GetBuildingMaxHealth(Type); } }
 
-        public int GoldCost { get { return CoreScript.Instance.Balance.GetBuildingBoldCost(Type); } }
+        public int GoldCost { get { return Balance.Balance.GetBuildingGoldCost(Type); } }
 
         public string HumanFriendlyName { get { return CoreScript.Instance.Localization.GetBuildingName(Type); } }
 

@@ -5,7 +5,7 @@ using System;
 
 namespace VillageKeeper.Data
 {
-    public abstract class Data
+    public abstract class BindedData
     {
         public virtual void InitDataFields(string prefix)
         {

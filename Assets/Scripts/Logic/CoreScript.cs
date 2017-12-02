@@ -7,6 +7,7 @@ using VillageKeeper.Audio;
 using VillageKeeper.Locale;
 using System.Collections.Generic;
 using VillageKeeper.Data;
+using VillageKeeper.Balance;
 
 namespace VillageKeeper
 {
@@ -36,14 +37,13 @@ namespace VillageKeeper
 
         public MainMenuScript MainMenu { get; private set; }
 
-        public CommonData CommonData { get { return (CommonData) Data["Common"]; } }
+        public CommonData CommonData { get { return (CommonData)Data["Common"]; } }
 
-
-        public Balance Balance { get; private set; }
+        public BalanceData BalanceData { get { return (BalanceData)Data["Balance"]; } }
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
 
-        public Dictionary<string, Data.Data> Data { get; private set; }
+        public Dictionary<string, BindedData> Data { get; private set; }
 
         public Specials TodaySpecial { get; private set; }
 
@@ -88,12 +88,9 @@ namespace VillageKeeper
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
 
-            Data = new Dictionary<string, Data.Data>()
-            {
-                ["Common"] = new CommonData("Common"),
-            };
-
-            Balance = new Balance();
+            Data = new Dictionary<string, BindedData>();
+            Data["Common"] = new CommonData("Common");
+            Data["Balance"] = new BalanceData("Balance");
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
             TodaySpecial = GetTodaySpecial();

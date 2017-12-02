@@ -33,7 +33,7 @@ namespace VillageKeeper.UI
             if (dataFieldProperty == null)
                 throw new ArgumentException(string.Format("No property {0} is found in data with prefix {1}", dataFieldName, dataPrefix), "dataFieldName");
 
-            if (!Data.Data.CheckIfPropertyIsDataField(dataFieldProperty))
+            if (!Data.BindedData.CheckIfPropertyIsDataField(dataFieldProperty))
                 throw new ArgumentException(string.Format("Property {0} in data with prefix {1} is not DataField.", dataFieldName, dataPrefix), "DataFieldName");
 
             dataField = dataFieldProperty.GetValue(CoreScript.Instance.Data[dataPrefix]);

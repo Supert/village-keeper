@@ -6,7 +6,7 @@ namespace VillageKeeper.UI
         {
             get
             {
-                return resourcePath + "/" + CoreScript.Instance.TodaySpecial + " /" + GetValue();
+                return resourcePath + "/" + CoreScript.Instance.TodaySpecial + "/" + GetValue();
             }
         }
     }

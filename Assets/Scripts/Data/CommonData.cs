@@ -1,6 +1,6 @@
 ﻿namespace VillageKeeper.Data
 {
-    public class CommonData : Data
+    public class CommonData : BindedData
     {
         public BuildingsDataField Buildings { get; private set; }
 
