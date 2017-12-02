@@ -14,7 +14,10 @@ namespace VillageKeeper.Data
             Value = GetDefaultValue();
         }
 
-        protected abstract T GetDefaultValue();
+        protected virtual T GetDefaultValue()
+        {
+            return (default(T));
+        }
 
         public T Get()
         {

@@ -5,18 +5,15 @@ namespace VillageKeeper.Balance
 {
     public class BalanceData : BindedData
     {
-        public BalanceField<string> MonsterBonusGold { get; private set; }
-        public BalanceField<string> MaxVillageLevel { get; private set; }
+        public DataField<string> MonsterBonusGold { get; private set; }
+        public DataField<string> MaxVillageLevel { get; private set; }
 
-        //public BalanceField<string> FarmsFood { get; private set; }
-        //public BalanceField<string> WindmillBonusFood { get; private set; }
+        public DataField<string> TotalFood { get; private set; }
 
-        public BalanceField<string> TotalFood { get; private set; }
-
-        public BalanceField<string> CurrentBreadToGoldMultiplier { get; private set; }
-        public BalanceField<string> NextBreadToGoldMultiplier { get; private set; }
-        public BalanceField<string> RoundFinishedBonusGold { get; private set; }
-        public BalanceField<string> CastleUpgradeCost { get; private set; }
+        public DataField<string> CurrentBreadToGoldMultiplier { get; private set; }
+        public DataField<string> NextBreadToGoldMultiplier { get; private set; }
+        public DataField<string> RoundFinishedBonusGold { get; private set; }
+        public DataField<string> CastleUpgradeCost { get; private set; }
 
         public override void InitDataFields(string prefix)
         {
