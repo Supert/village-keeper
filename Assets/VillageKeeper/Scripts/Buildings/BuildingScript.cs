@@ -17,127 +17,30 @@ namespace VillageKeeper.Game
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case BuildingTypes.Farm:
-                        return 2;
-                    case BuildingTypes.WallStone:
-                        return 6;
-                    case BuildingTypes.WallWooden:
-                        return 3;
-                    case BuildingTypes.WatchtowerStone:
-                        return 4;
-                    case BuildingTypes.WatchtowerWooden:
-                        return 3;
-                    case BuildingTypes.Windmill:
-                        return 6;
-                    default:
-                        return 0;
-                }
-            }
-        }
+        public float MaxHealth { get { return CoreScript.Instance.Balance.GetBuildingMaxHealth(Type); } }
 
-        public int GoldCost
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case BuildingTypes.Farm:
-                        return 2;
-                    case BuildingTypes.WallStone:
-                        return 25;
-                    case BuildingTypes.WallWooden:
-                        return 2;
-                    case BuildingTypes.WatchtowerStone:
-                        return 50;
-                    case BuildingTypes.WatchtowerWooden:
-                        return 10;
-                    case BuildingTypes.Windmill:
-                        return 100;
-                    default:
-                        return 0;
-                }
-            }
-        }
+        public int GoldCost { get { return CoreScript.Instance.Balance.GetBuildingBoldCost(Type); } }
 
-        public string HumanFriendlyName
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case BuildingTypes.Farm:
-                        return "Farm";
-                    case BuildingTypes.WallStone:
-                        return "Stone Wall";
-                    case BuildingTypes.WallWooden:
-                        return "Wooden Wall";
-                    case BuildingTypes.WatchtowerStone:
-                        return "Stone Tower";
-                    case BuildingTypes.WatchtowerWooden:
-                        return "Watchtower";
-                    case BuildingTypes.Windmill:
-                        return "Windmill";
-                    default:
-                        return "";
-                }
-            }
-        }
+        public string HumanFriendlyName { get { return CoreScript.Instance.Localization.GetBuildingName(Type); } }
 
-        public string Description
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case BuildingTypes.Farm:
-                        return "Provides one point of food. Food converts to gold each round.";
-                    case BuildingTypes.WallStone:
-                        return "Steady stone wall.";
-                    case BuildingTypes.WallWooden:
-                        return "Cheap stockade can take few hits";
-                    case BuildingTypes.WatchtowerStone:
-                        return "Harder better faster stronger watchtower.";
-                    case BuildingTypes.WatchtowerWooden:
-                        return "Shoots at monster if it came close.";
-                    case BuildingTypes.Windmill:
-                        return "Provides extra food for each adjacent Farm at end of the round";
-                    default:
-                        return "";
-                }
-            }
-        }
+        public string Description { get { return CoreScript.Instance.Localization.GetBuildingDescription(Type); } }
+        
+        public float Health { get; protected set; }
 
-        private float? _health;
-        public float Health
+        protected virtual void Init()
         {
-            get
-            {
-                if (_health == null)
-                {
-                    _health = (float?)MaxHealth;
-                }
-                return (float)_health;
-            }
-            private set
-            {
-                _health = (float?)value;
-                if (_health == 0)
-                {
-                    DestroySelf();
-                }
-            }
+            Health = MaxHealth;
         }
 
         public void Damage()
         {
-            Health--;
             CoreScript.Instance.AudioManager.PlayBuildingHit();
+
+            Health--;
+            if (Health == 0)
+            {
+                DestroySelf();
+            }
         }
 
         protected virtual void DestroySelf()

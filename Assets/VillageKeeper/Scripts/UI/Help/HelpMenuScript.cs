@@ -6,7 +6,7 @@ namespace VillageKeeper.UI
 {
     public class HelpMenuScript : MonoBehaviour
     {
-        private enum Modes
+        public enum Modes
         {
             Build,
             Battle,
@@ -61,20 +61,6 @@ namespace VillageKeeper.UI
         }
 
         private string[] currentTips;
-        private string[] inBuildModeTips = new string[] {
-        "Welcome to Village Keeper, Keeper! We just settled down here, in beautiful Unknown.",
-        "Drag and drop farm to build it. Build defenses, too.",
-        "One or two wooden watchtowers behind stockade would be enough at first.",
-        "Note that enemies always come from right side.",
-        "Click red button at top to read these tips again. Good luck, Keeper!"
-    };
-
-        private string[] inBattleTips = new string[] {
-        "Whoa! This monster is huge! Well, the bigger it is, the harder it fall.",
-        "Do you see me standing at cliff? Swipe there to the left to draw a bow, then click at monster to shoot.",
-        "Don't hesitate to shoot as fast as you can. We are not short of arrows.",
-        "Click red button at top to read these tips again. To arms, Keeper!"
-    };
 
         void Start()
         {
@@ -112,15 +98,7 @@ namespace VillageKeeper.UI
         private void Show(Modes mode)
         {
             this.mode = mode;
-            switch (mode)
-            {
-                case Modes.Build:
-                    currentTips = inBuildModeTips;
-                    break;
-                case Modes.Battle:
-                    currentTips = inBattleTips;
-                    break;
-            }
+            currentTips = CoreScript.Instance.Localization.GetHelpTips(mode);
             CurrentTipNumber = 0;
             offscreen.Show();
         }

@@ -4,6 +4,7 @@ using VillageKeeper.FSM;
 using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
+using VillageKeeper.Locale;
 
 namespace VillageKeeper
 {
@@ -18,6 +19,8 @@ namespace VillageKeeper
         public static CoreScript Instance { get; private set; }
 
         public StateMachine FSM { get; private set; }
+
+        public Localization Localization { get; private set; }
 
         public UiManager UiManager { get; private set; }
         public GameController GameManager { get; private set; }
@@ -68,7 +71,11 @@ namespace VillageKeeper
         void Awake()
         {
             Instance = this;
+
             FSM = new StateMachine();
+
+            Localization = new Localization();
+
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             Monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
