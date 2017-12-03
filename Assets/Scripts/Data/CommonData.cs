@@ -1,4 +1,5 @@
 ﻿using System;
+using VillageKeeper.Balance;
 
 namespace VillageKeeper.Data
 {
@@ -11,11 +12,20 @@ namespace VillageKeeper.Data
         }
 
         public BindableField<Specials> Special { get; private set; }
-        
+
+        public BindableField<int> MonsterBonusGold { get; private set; }
+        public BindableField<int> MaxVillageLevel { get; private set; }
+
+        public BindableField<float> Wind { get; private set; }
+
         public CommonData(string prefix)
         {
             Register(prefix);
+
             Special.Set(GetTodaySpecial());
+
+            MonsterBonusGold.Set(BalanceData.MonsterBonusGold);
+            MaxVillageLevel.Set(BalanceData.MaxVillageLevel);
         }
 
         private Specials GetTodaySpecial()

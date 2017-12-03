@@ -13,7 +13,7 @@ namespace VillageKeeper.FSM
 
         public override States Event(StateMachineEvents type, params object[] args)
         {
-            if (type == StateMachineEvents.GoToBattle)
+            if (type == StateMachineEvents.HideHelp)
                 return States.Battle;
             return base.Event(type, args);
         }

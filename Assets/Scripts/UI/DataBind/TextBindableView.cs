@@ -19,7 +19,7 @@ namespace VillageKeeper.UI
 
         protected override void OnValueChanged()
         {
-            text.text = string.Format(format, Fields.Select(f => f.GetValue()));
+            text.text = string.Format(format, Fields.Select(f => f.GetValue()).ToArray());
         }
     }
 }

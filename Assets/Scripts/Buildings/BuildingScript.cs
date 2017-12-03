@@ -18,9 +18,9 @@ namespace VillageKeeper.Game
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth { get { return Balance.Balance.GetBuildingMaxHealth(Type); } }
+        public float MaxHealth { get { return Balance.BalanceData.GetBuildingMaxHealth(Type); } }
 
-        public int GoldCost { get { return Balance.Balance.GetBuildingGoldCost(Type); } }
+        public int GoldCost { get { return Balance.BalanceData.GetBuildingGoldCost(Type); } }
 
         public string HumanFriendlyName { get { return CoreScript.Instance.Localization.GetBuildingName(Type); } }
 

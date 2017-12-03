@@ -28,7 +28,7 @@ namespace VillageKeeper
                 {
                     if (t.phase == TouchPhase.Began)
                     {
-                        if (CoreScript.Instance.Archer.IsLoaded)
+                        if (CoreScript.Instance.GameData.IsArrowForceOverThreshold.Get())
                         {
                             CoreScript.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
                             bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = null;

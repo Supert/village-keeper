@@ -11,7 +11,7 @@ namespace VillageKeeper.FSM
             base.Enter();
             if (!CoreScript.Instance.SavedData.WasBuildTipShown.Get())
             {
-                CoreScript.Instance.FSM.Event(StateMachineEvents.ShowBuildHelp);
+                CoreScript.Instance.FSM.Event(StateMachineEvents.ShowHelp);
                 CoreScript.Instance.SavedData.WasBuildTipShown.Set(true);
             }
         }
@@ -20,7 +20,7 @@ namespace VillageKeeper.FSM
         {
             if (type == StateMachineEvents.GoToMenu)
                 return States.Menu;
-            if (type == StateMachineEvents.ShowBuildHelp)
+            if (type == StateMachineEvents.ShowHelp)
                 return States.BuildHelp;
             if (type == StateMachineEvents.GoToBattle)
                 return States.Battle;

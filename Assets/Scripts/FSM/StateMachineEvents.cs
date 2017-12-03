@@ -11,12 +11,11 @@
             
             GoToMenu,
             
-            //Build
-            ShowBuildHelp,
-            GoToBattle,
+            ShowHelp,
+            HideHelp,
 
-            //Battle
-            ShowBattleHelp,
+            GoToBattle,
+            
             Pause,
             RoundFinished,
         }

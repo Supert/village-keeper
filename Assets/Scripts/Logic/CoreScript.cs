@@ -18,7 +18,7 @@ namespace VillageKeeper
         public StateMachine FSM { get; private set; }
 
         public Localization Localization { get; private set; }
-
+        
         public ResourceData ResourceData { get; private set; }
         public SavedData SavedData { get; private set; }
         public CommonData CommonData { get; private set; }

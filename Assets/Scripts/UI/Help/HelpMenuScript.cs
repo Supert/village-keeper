@@ -6,83 +6,53 @@ namespace VillageKeeper.UI
 {
     public class HelpMenuScript : MonoBehaviour
     {
-        public enum Modes
-        {
-            Build,
-            Battle,
-        }
-
-        private Modes mode;
-
-        protected void OnCloseClick()
-        {
-            switch (mode)
-            {
-                case Modes.Build:
-                    CoreScript.Instance.FSM.Event(StateMachineEvents.GoToBuild);
-                    break;
-                case Modes.Battle:
-                    CoreScript.Instance.FSM.Event(StateMachineEvents.GoToBattle);
-                    break;
-            }
-        }
-
         public Text tipText;
         public Text tipCounterText;
         public Button closeButton;
         public Button previousButton;
         public Button nextButton;
 
-        private int currentTipNumber;
-        public int CurrentTipNumber
-        {
-            get
-            {
-                return currentTipNumber;
-            }
-            private set
-            {
-                currentTipNumber = value;
-
-                previousButton.gameObject.SetActive(currentTipNumber > 0);
-                nextButton.gameObject.SetActive(currentTipNumber < currentTips.Length - 1);
-
-                tipText.text = currentTips[currentTipNumber];
-                tipCounterText.text = "Tip " + (currentTipNumber + 1).ToString() + "/" + currentTips.Length;
-            }
-        }
-
         private string[] currentTips;
 
-        void Start()
+        private void Start()
         {
             nextButton.onClick.AddListener(() =>
             {
-                CurrentTipNumber++;
+                CoreScript.Instance.GameData.CurrentHelpTip.Set(CoreScript.Instance.GameData.CurrentHelpTip.Get() + 1);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
-                CurrentTipNumber--;
+                CoreScript.Instance.GameData.CurrentHelpTip.Set(CoreScript.Instance.GameData.CurrentHelpTip.Get() - 1);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
 
-            closeButton.onClick.AddListener(() =>
+            CoreScript.Instance.GameData.CurrentHelpTip.OnValueChanged += () =>
             {
-                OnCloseClick();
-                CoreScript.Instance.AudioManager.PlayClick();
-            });
+                tipText.text = currentTips[CoreScript.Instance.GameData.CurrentHelpTip.Get()];
+                tipCounterText.text = "Tip " + (CoreScript.Instance.GameData.CurrentHelpTip.Get() + 1).ToString() + "/" + currentTips.Length;
+            };
 
-            CoreScript.Instance.FSM.SubscribeToEnter(States.BattleHelp, () => Show(Modes.Battle));
-            CoreScript.Instance.FSM.SubscribeToEnter(States.BuildHelp, () => Show(Modes.Build));
+            CoreScript.Instance.FSM.SubscribeToEnter(States.BattleHelp, ShowBattle);
+            CoreScript.Instance.FSM.SubscribeToEnter(States.BuildHelp, ShowBuild);
         }
 
-        public void Show(Modes mode)
+        private void ShowBattle()
         {
-            this.mode = mode;
-            currentTips = CoreScript.Instance.Localization.GetHelpTips(mode);
-            CurrentTipNumber = 0;
+            currentTips = CoreScript.Instance.Localization.GetBattleHelpTips();
+            Show();
+        }
+
+        private void ShowBuild()
+        {
+            currentTips = CoreScript.Instance.Localization.GetBuildHelpTips();
+            Show();
+        }
+
+        private void Show()
+        {
+            CoreScript.Instance.GameData.CurrentHelpTip.Set(0);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace VillageKeeper.Game
 
             if (oldStrength != Strength)
             {
-                CoreScript.Instance.GameData.Wind.Set(Strength);
+                CoreScript.Instance.CommonData.Wind.Set(Strength);
             }
         }
     }

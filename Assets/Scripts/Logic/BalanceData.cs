@@ -1,11 +1,10 @@
-﻿using VillageKeeper.Game;
-using VillageKeeper.Data;
-using System;
+﻿using VillageKeeper.Data;
 
 namespace VillageKeeper.Balance
 {
-    public static class Balance
+    public static class BalanceData
     {
+        public static float ArrowForceThreshold { get; } = 0.8f;
         public static int MonsterBonusGold { get; } = 20;
         public static int MaxVillageLevel { get; } = 2;
         public static int FoodPerFarm { get; } = 1;

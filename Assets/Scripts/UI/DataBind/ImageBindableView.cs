@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace VillageKeeper.UI
@@ -7,6 +8,11 @@ namespace VillageKeeper.UI
     public class ImageBindableView : ResourceBindableView<Sprite>
     {
         private Image image;
+
+        public override Sprite GetResource()
+        {
+            return ResourceMock.GetSprite(FullResourcePath);
+        }
 
         protected void Awake()
         {

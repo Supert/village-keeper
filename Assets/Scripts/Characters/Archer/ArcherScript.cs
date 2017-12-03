@@ -16,21 +16,10 @@ namespace VillageKeeper.Game
             AimingUp,
         }
 
-        public Image hat;
         private Animator animator;
-        public ArrowLoadBarScript arrowBar;
-        private RectTransform _rect;
+        private RectTransform rect;
 
-        private bool _isLoaded;
-        public bool IsLoaded
-        {
-            get
-            {
-                if (arrowBar.RelativeCurrentValue == 1)
-                    return true;
-                else return false;
-            }
-        }
+        public bool IsLoaded { get { return CoreScript.Instance.GameData.IsArrowForceOverThreshold.Get(); } }
 
         private ArcherAimingValues state = 0;
         public ArcherAimingValues State
@@ -43,16 +32,6 @@ namespace VillageKeeper.Game
             {
                 state = value;
                 animator.SetInteger("CurrentState", (int)value);
-                Debug.Log("FIX");
-                //switch (CoreScript.Instance.TodaySpecial)
-                //{
-                //    case CoreScript.Specials.None:
-                //        hat.gameObject.SetActive(false);
-                //        break;
-                //    case CoreScript.Specials.Winter:
-                //        hat.gameObject.SetActive(true);
-                //        break;
-                //}
             }
         }
 
@@ -64,7 +43,7 @@ namespace VillageKeeper.Game
         void Start()
         {
             animator = GetComponent<Animator>() as Animator;
-            _rect = GetComponent<RectTransform>() as RectTransform;
+            rect = GetComponent<RectTransform>() as RectTransform;
         }
 
         void Update()
@@ -103,10 +82,10 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
-                var _targetPosition = targetPosition;
+                var tp = targetPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
-                var initialPosition = (Vector2)transform.position + (Vector2)_rect.TransformVector(new Vector2(_rect.rect.width / 2, _rect.rect.height * 0.6f));
-                arrow.Init(initialPosition, _targetPosition, GetAimingAngleInRads());
+                var initialPosition = (Vector2)transform.position + (Vector2)rect.TransformVector(new Vector2(rect.rect.width / 2, rect.rect.height * 0.6f));
+                arrow.Init(initialPosition, tp, GetAimingAngleInRads());
                 CoreScript.Instance.AudioManager.PlayArrowShot();
             }
         }

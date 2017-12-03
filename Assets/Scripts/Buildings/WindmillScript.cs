@@ -6,7 +6,6 @@ namespace VillageKeeper.Game
 {
     public class WindmillScript : BuildingScript
     {
-
         public override BuildingTypes Type
         {
             get

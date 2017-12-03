@@ -46,28 +46,24 @@ namespace VillageKeeper.Locale
             }
         }
 
-        public string[] GetHelpTips(UI.HelpMenuScript.Modes mode)
+        public string[] GetBuildHelpTips()
         {
-            switch (mode)
-            {
-                case UI.HelpMenuScript.Modes.Build:
-                    return new string[] {
-                        "Welcome to Village Keeper, Keeper! We just settled down here, in beautiful Unknown.",
-                        "Drag and drop farm to build it. Build defenses, too.",
-                        "One or two wooden watchtowers behind stockade would be enough at first.",
-                        "Note that enemies always come from right side.",
-                        "Click red button at top to read these tips again. Good luck, Keeper!"
-                    };
-                case UI.HelpMenuScript.Modes.Battle:
-                    return new string[] {
-                        "Whoa! This monster is huge! Well, the bigger it is, the harder it fall.",
-                        "Do you see me standing at cliff? Swipe there to the left to draw a bow, then click at monster to shoot.",
-                        "Don't hesitate to shoot as fast as you can. We are not short of arrows.",
-                        "Click red button at top to read these tips again. To arms, Keeper!"
-                    };
-                default:
-                    throw new System.NotImplementedException("New help mode is added but no tips were found");
-            }
+            return new string[] {
+                "Welcome to Village Keeper, Keeper! We just settled down here, in beautiful Unknown.",
+                "Drag and drop farm to build it. Build defenses, too.",
+                "One or two wooden watchtowers behind stockade would be enough at first.",
+                "Note that enemies always come from right side.",
+                "Click red button at top to read these tips again. Good luck, Keeper!"
+            };
+        }
+        public string[] GetBattleHelpTips()
+        {
+            return new string[] {
+                "Whoa! This monster is huge! Well, the bigger it is, the harder it fall.",
+                "Do you see me standing at cliff? Swipe there to the left to draw a bow, then click at monster to shoot.",
+                "Don't hesitate to shoot as fast as you can. We are not short of arrows.",
+                "Click red button at top to read these tips again. To arms, Keeper!"
+            };
         }
     }
 }

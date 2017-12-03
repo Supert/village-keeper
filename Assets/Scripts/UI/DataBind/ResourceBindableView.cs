@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace VillageKeeper.UI
 {
-    public abstract class ResourceBindableView<T> : BindableView where T : Object
+    public abstract class ResourceBindableView<T> : BindableView
     {
         [SerializeField, Header("Resource Path Entry")]
         protected BindableIds resourceDataIds;
@@ -18,10 +18,7 @@ namespace VillageKeeper.UI
             }
         }
 
-        public T GetResource()
-        {
-            return Resources.Load<T>(FullResourcePath);
-        }
+        public abstract T GetResource();
 
         protected override void Start()
         {
