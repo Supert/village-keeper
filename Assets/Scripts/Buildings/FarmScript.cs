@@ -12,8 +12,9 @@ namespace VillageKeeper.Game
 
         protected void Start()
         {
-            if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
-                cropsSR.sprite = winterSpecialCropsSprite;
+            Debug.Log("FIX");
+            //if (CoreScript.Instance.TodaySpecial == CoreScript.Specials.Winter)
+            //    cropsSR.sprite = winterSpecialCropsSprite;
         }
     }
 }

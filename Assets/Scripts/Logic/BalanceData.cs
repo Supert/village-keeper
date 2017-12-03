@@ -3,35 +3,35 @@ using VillageKeeper.Data;
 
 namespace VillageKeeper.Balance
 {
-    public class BalanceData : BindedData
+    public class UiBalanceData : BindedData
     {
-        public DataField<string> MonsterBonusGold { get; private set; }
-        public DataField<string> MaxVillageLevel { get; private set; }
+        public BindableField<string> MonsterBonusGold { get; private set; }
+        public BindableField<string> MaxVillageLevel { get; private set; }
 
-        public DataField<string> TotalFood { get; private set; }
+        public BindableField<string> TotalFood { get; private set; }
 
-        public DataField<string> CurrentBreadToGoldMultiplier { get; private set; }
-        public DataField<string> NextBreadToGoldMultiplier { get; private set; }
-        public DataField<string> RoundFinishedBonusGold { get; private set; }
-        public DataField<string> CastleUpgradeCost { get; private set; }
+        public BindableField<string> CurrentBreadToGoldMultiplier { get; private set; }
+        public BindableField<string> NextBreadToGoldMultiplier { get; private set; }
+        public BindableField<string> RoundFinishedBonusGold { get; private set; }
+        public BindableField<string> CastleUpgradeCost { get; private set; }
 
-        public override void InitDataFields(string prefix)
+        public override void Register(string prefix)
         {
-            base.InitDataFields(prefix);
+            base.Register(prefix);
 
             CalculateEconomy();
 
             MonsterBonusGold.Set(Balance.MonsterBonusGold.ToString());
             MaxVillageLevel.Set(Balance.MonsterBonusGold.ToString());
 
-            CoreScript.Instance.CommonData.VillageLevel.OnValueChanged += CalculateEconomy;
+            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
             CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
         }
 
         public void CalculateEconomy()
         {
-            int villageLevel = CoreScript.Instance.CommonData.VillageLevel.Get();
-            var buildings = CoreScript.Instance.CommonData.Buildings.Get();
+            int villageLevel = CoreScript.Instance.SavedData.VillageLevel.Get();
+            var buildings = CoreScript.Instance.SavedData.Buildings.Get();
             int farms = buildings.list.Count(c => c.Type == BuildingTypes.Farm);
             int windmills = buildings.list.Count(c => c.Type == BuildingTypes.Windmill);
 
@@ -44,9 +44,9 @@ namespace VillageKeeper.Balance
             TotalFood.Set((Balance.CalculateFarmsFood(farms) + Balance.CalculateWindmillsFood(windmills, farms)).ToString());
         }
 
-        public BalanceData(string prefix)
+        public UiBalanceData(string prefix)
         {
-            InitDataFields(prefix);
+            Register(prefix);
         }
     }
 }

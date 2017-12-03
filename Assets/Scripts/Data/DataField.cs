@@ -1,35 +1,13 @@
-﻿using System;
-
-namespace VillageKeeper.Data
+﻿namespace VillageKeeper.Data
 {
-    public abstract class DataField<T>
+    public abstract class DataField<TValue> : BindableField<TValue>
     {
-        protected T Value { get; private set; }
-
         protected string Id { get; private set; }
 
-        public void Init(string dataFieldId)
+        public override void Init(string dataId, string fieldId)
         {
-            Id = dataFieldId;
-            Value = GetDefaultValue();
+            base.Init(dataId, fieldId);
+            Id = dataId + "." + fieldId;
         }
-
-        protected virtual T GetDefaultValue()
-        {
-            return (default(T));
-        }
-
-        public T Get()
-        {
-            return Value;
-        }
-
-        public virtual void Set(T value)
-        {
-            Value = value;
-            OnValueChanged?.Invoke();
-        }
-
-        public event Action OnValueChanged;
     }
 }

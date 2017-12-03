@@ -15,7 +15,7 @@ namespace VillageKeeper.UI
 
         void SetScores()
         {
-            var monstersDefeated = CoreScript.Instance.CommonData.MonstersDefeated.Get();
+            var monstersDefeated = CoreScript.Instance.SavedData.MonstersDefeated.Get();
             if (monstersDefeated == 0)
                 monstersDefeatedText.text = "No monsters defeated yet";
             else
@@ -29,7 +29,7 @@ namespace VillageKeeper.UI
 
         private void SetFurniture()
         {
-            if (CoreScript.Instance.CommonData.HasPremium.Get())
+            if (CoreScript.Instance.SavedData.HasPremium.Get())
             {
                 if (roomFurniture.sprite != premiumFurniture)
                     roomFurniture.sprite = premiumFurniture;
@@ -75,7 +75,7 @@ namespace VillageKeeper.UI
                 CoreScript.Instance.FSM.Event(StateMachineEvents.GoToMenu);
             });
 
-            CoreScript.Instance.CommonData.HasPremium.OnValueChanged += SetFurniture;
+            CoreScript.Instance.SavedData.HasPremium.OnValueChanged += SetFurniture;
         }
     }
 }

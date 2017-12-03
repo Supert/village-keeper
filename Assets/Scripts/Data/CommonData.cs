@@ -1,26 +1,47 @@
-﻿namespace VillageKeeper.Data
+﻿using System;
+
+namespace VillageKeeper.Data
 {
     public class CommonData : BindedData
     {
-        public BuildingsDataField Buildings { get; private set; }
+        public enum Specials
+        {
+            None,
+            Winter,
+        }
 
-        public IntDataField VillageLevel { get; private set; }
-        public IntDataField Gold { get; private set; }
-
-        public BoolDataField HasPremium { get; private set; }
-
-        public BoolDataField WasBuildTipShown { get; private set; }
-        public BoolDataField WasBattleTipShown { get; private set; }
-
-
-        public IntDataField MonstersDefeated { get; private set; }
-
-        public BoolDataField IsSoundEffectsEnabled { get; private set; }
-        public BoolDataField IsMusicEnabled { get; private set; }
-
+        public BindableField<Specials> Special { get; private set; }
+        
         public CommonData(string prefix)
         {
-            InitDataFields(prefix);
+            Register(prefix);
+            Special.Set(GetTodaySpecial());
+        }
+
+        private Specials GetTodaySpecial()
+        {
+            var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
+            var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
+            if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
+                return Specials.Winter;
+            else
+                return Specials.None;
+        }
+
+        //Day and Month
+        private bool CheckIfDateIsInPeriodOfYear(DateTime date, DateTime beginning, DateTime end)
+        {
+            var testDate = new DateTime(2012, date.Month, date.Day);
+            var testBeginning = new DateTime(2012, beginning.Month, beginning.Day);
+            var testEnd = new DateTime(2012, end.Month, end.Day);
+            if (testBeginning > testEnd)
+                testEnd = testEnd.AddYears(1);
+            if (testDate >= testBeginning && testDate <= testEnd)
+                return true;
+            testDate = testDate.AddYears(1);
+            if (testDate >= testBeginning && testDate <= testEnd)
+                return true;
+            return false;
         }
     }
 }

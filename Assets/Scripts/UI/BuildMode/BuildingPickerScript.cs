@@ -123,7 +123,7 @@ namespace VillageKeeper.UI
             if (CoreScript.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && CoreScript.Instance.CommonData.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
+                && CoreScript.Instance.SavedData.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

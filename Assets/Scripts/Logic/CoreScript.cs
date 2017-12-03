@@ -13,17 +13,16 @@ namespace VillageKeeper
 {
     public class CoreScript : MonoBehaviour
     {
-        public enum Specials
-        {
-            None,
-            Winter,
-        }
-
         public static CoreScript Instance { get; private set; }
 
         public StateMachine FSM { get; private set; }
 
         public Localization Localization { get; private set; }
+
+        public ResourceData ResourceData { get; private set; }
+        public SavedData SavedData { get; private set; }
+        public CommonData CommonData { get; private set; }
+        public UiBalanceData BalanceData { get; private set; }
 
         public UiManager UiManager { get; private set; }
         public GameController GameManager { get; private set; }
@@ -37,41 +36,9 @@ namespace VillageKeeper
 
         public MainMenuScript MainMenu { get; private set; }
 
-        public CommonData CommonData { get { return (CommonData)Data["Common"]; } }
 
-        public BalanceData BalanceData { get { return (BalanceData)Data["Balance"]; } }
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
-
-        public Dictionary<string, BindedData> Data { get; private set; }
-
-        public Specials TodaySpecial { get; private set; }
-
-        //Day and Month matter only
-        private bool CheckIfDateIsInPeriodOfYear(DateTime date, DateTime beginning, DateTime end)
-        {
-            var testDate = new DateTime(2012, date.Month, date.Day);
-            var testBeginning = new DateTime(2012, beginning.Month, beginning.Day);
-            var testEnd = new DateTime(2012, end.Month, end.Day);
-            if (testBeginning > testEnd)
-                testEnd = testEnd.AddYears(1);
-            if (testDate >= testBeginning && testDate <= testEnd)
-                return true;
-            testDate = testDate.AddYears(1);
-            if (testDate >= testBeginning && testDate <= testEnd)
-                return true;
-            return false;
-        }
-
-        private Specials GetTodaySpecial()
-        {
-            var winterSpecialBeginning = new DateTime(2012, 12, 24); //December 24th
-            var winterSpecialEnd = new DateTime(2012, 1, 14); // January 14th
-            if (CheckIfDateIsInPeriodOfYear(DateTime.Today, winterSpecialBeginning, winterSpecialEnd))
-                return Specials.Winter;
-            else
-                return Specials.None;
-        }
 
         void Awake()
         {
@@ -88,14 +55,14 @@ namespace VillageKeeper
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
 
-            Data = new Dictionary<string, BindedData>();
-            Data["Common"] = new CommonData("Common");
-            Data["Balance"] = new BalanceData("Balance");
-
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
-            TodaySpecial = GetTodaySpecial();
 
-            GameManager = transform.Find("Game").GetComponent<global::GameController>();
+            ResourceData = new ResourceData("Resources");
+            SavedData = new SavedData("Saved");
+            CommonData = new CommonData("Common");
+            BalanceData = new UiBalanceData("Balance");
+
+            GameManager = transform.Find("Game").GetComponent<GameController>();
             UiManager = transform.Find("Ui").GetComponent<UiManager>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
 

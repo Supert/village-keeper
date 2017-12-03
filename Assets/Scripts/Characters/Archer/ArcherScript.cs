@@ -17,7 +17,7 @@ namespace VillageKeeper.Game
         }
 
         public Image hat;
-        private Animator _animator;
+        private Animator animator;
         public ArrowLoadBarScript arrowBar;
         private RectTransform _rect;
 
@@ -32,26 +32,27 @@ namespace VillageKeeper.Game
             }
         }
 
-        private ArcherAimingValues _state = 0;
+        private ArcherAimingValues state = 0;
         public ArcherAimingValues State
         {
             get
             {
-                return _state;
+                return state;
             }
             private set
             {
-                _state = value;
-                _animator.SetInteger("CurrentState", (int)value);
-                switch (CoreScript.Instance.TodaySpecial)
-                {
-                    case CoreScript.Specials.None:
-                        hat.gameObject.SetActive(false);
-                        break;
-                    case CoreScript.Specials.Winter:
-                        hat.gameObject.SetActive(true);
-                        break;
-                }
+                state = value;
+                animator.SetInteger("CurrentState", (int)value);
+                Debug.Log("FIX");
+                //switch (CoreScript.Instance.TodaySpecial)
+                //{
+                //    case CoreScript.Specials.None:
+                //        hat.gameObject.SetActive(false);
+                //        break;
+                //    case CoreScript.Specials.Winter:
+                //        hat.gameObject.SetActive(true);
+                //        break;
+                //}
             }
         }
 
@@ -62,7 +63,7 @@ namespace VillageKeeper.Game
 
         void Start()
         {
-            _animator = GetComponent<Animator>() as Animator;
+            animator = GetComponent<Animator>() as Animator;
             _rect = GetComponent<RectTransform>() as RectTransform;
         }
 

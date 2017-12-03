@@ -12,7 +12,7 @@ namespace VillageKeeper.UI
 
         void SetUpgradeButton()
         {
-            upgradeButton.interactable = CoreScript.Instance.CommonData.Gold.Get() >= Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.CommonData.VillageLevel.Get());
+            upgradeButton.interactable = CoreScript.Instance.SavedData.Gold.Get() >= Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get());
         }
 
         public void Show()
@@ -27,7 +27,7 @@ namespace VillageKeeper.UI
 
         public void SetValues()
         {
-            int villageLevel = CoreScript.Instance.CommonData.VillageLevel.Get();
+            int villageLevel = CoreScript.Instance.SavedData.VillageLevel.Get();
             castleUpgradeWindow.SetActive(villageLevel < Balance.Balance.MaxVillageLevel);
             SetUpgradeButton();
         }
@@ -35,14 +35,14 @@ namespace VillageKeeper.UI
         void Init()
         {
             offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            CoreScript.Instance.CommonData.Gold.OnValueChanged += () => SetUpgradeButton();
-            CoreScript.Instance.CommonData.VillageLevel.OnValueChanged += () => SetValues();
+            CoreScript.Instance.SavedData.Gold.OnValueChanged += () => SetUpgradeButton();
+            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += () => SetValues();
             upgradeButton.onClick.AddListener(() =>
             {
-                if (CoreScript.Instance.CommonData.Gold.Get() >= Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.CommonData.VillageLevel.Get()))
+                if (CoreScript.Instance.SavedData.Gold.Get() >= Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get()))
                 {
-                    CoreScript.Instance.CommonData.Gold.Set(CoreScript.Instance.CommonData.Gold.Get() - Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.CommonData.VillageLevel.Get()));
-                    CoreScript.Instance.CommonData.VillageLevel.Set(CoreScript.Instance.CommonData.VillageLevel.Get() + 1);
+                    CoreScript.Instance.SavedData.Gold.Set(CoreScript.Instance.SavedData.Gold.Get() - Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get()));
+                    CoreScript.Instance.SavedData.VillageLevel.Set(CoreScript.Instance.SavedData.VillageLevel.Get() + 1);
                     CoreScript.Instance.AudioManager.PlayClick();
                 }
             });
