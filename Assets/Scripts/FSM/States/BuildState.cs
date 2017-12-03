@@ -23,7 +23,10 @@ namespace VillageKeeper.FSM
             if (type == StateMachineEvents.ShowHelp)
                 return States.BuildHelp;
             if (type == StateMachineEvents.GoToBattle)
+            {
+                Core.Instance.Monster.Init();
                 return States.Battle;
+            }
             return base.Event(type, args);
         }
 

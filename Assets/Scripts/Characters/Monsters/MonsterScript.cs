@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DeenGames.Utils.AStarPathFinder;
 using DeenGames.Utils;
+using System;
 
 namespace VillageKeeper.Game
 {
@@ -38,7 +39,7 @@ namespace VillageKeeper.Game
             private set
             {
                 health--;
-                Core.Instance.GameData.ClampedMonsterHealth.Set(health / (float) maxHealth);
+                Core.Instance.GameData.ClampedMonsterHealth.Set(health / (float)maxHealth);
                 if (health == 0)
                     Kill();
             }
@@ -117,17 +118,17 @@ namespace VillageKeeper.Game
             }
         }
 
-        private List<PathFinderNode> _waypointsInGrid = new List<PathFinderNode>();
+        private List<PathFinderNode> waypointsInGrid = new List<PathFinderNode>();
 
         private Vector2? Waypoint
         {
             get
             {
                 var buildingsArea = Core.Instance.BuildingsArea;
-                if (_waypointsInGrid.Count > 0 && (Vector2)transform.localPosition == (buildingsArea.GetWorldPositionByGridPosition(_waypointsInGrid[0].X, _waypointsInGrid[0].Y)) + GridToWorldOffset)
-                    _waypointsInGrid.RemoveAt(0);
-                if (_waypointsInGrid.Count > 0)
-                    return (Vector2?)buildingsArea.GetWorldPositionByGridPosition(_waypointsInGrid[0].X, _waypointsInGrid[0].Y) + GridToWorldOffset;
+                if (waypointsInGrid.Count > 0 && (Vector2)transform.localPosition == (buildingsArea.GetWorldPositionByGridPosition(waypointsInGrid[0].X, waypointsInGrid[0].Y)) + GridToWorldOffset)
+                    waypointsInGrid.RemoveAt(0);
+                if (waypointsInGrid.Count > 0)
+                    return (Vector2?)buildingsArea.GetWorldPositionByGridPosition(waypointsInGrid[0].X, waypointsInGrid[0].Y) + GridToWorldOffset;
                 return null;
             }
         }
@@ -249,7 +250,7 @@ namespace VillageKeeper.Game
 
         private void SetWaypoints(List<PathFinderNode> waypoints)
         {
-            _waypointsInGrid = waypoints;
+            waypointsInGrid = waypoints;
             TargetPosition = Core.Instance.BuildingsArea.GetWorldPositionByGridPosition(waypoints.Last().X, waypoints.Last().Y) + GridToWorldOffset;
             var scale = transform.localScale;
             if (((Vector2)transform.localPosition - TargetPosition).x >= 0)
@@ -320,35 +321,40 @@ namespace VillageKeeper.Game
             var ls = transform.localScale;
             ls *= (Core.Instance.BuildingsArea.CellWorldSize.y * 2) / (sprite.bounds.size.y);
             transform.localScale = ls;
-            //CoreScript.Instance.GameStateChanged += (sender, e) =>
-            //{
-            //    if (e.NewState == CoreScript.GameStates.InBuildMode)
-            //    {
-            //        transform.localPosition = HiddenPosition;
-            //        gameObject.SetActive(false);
-            //    }
-            //    if (e.NewState == CoreScript.GameStates.InBattle)
-            //    {
-            //        _animator.speed = 1f;
-            //        if (!(e.PreviousState == CoreScript.GameStates.Paused || e.PreviousState == CoreScript.GameStates.InHelp))
-            //        {
-            //            _shadow.color = Color.white;
-            //            sprite.color = Color.white;
 
-            //            SetMaxHealthAndAgressiveness();
-            //            Health = maxHealth;
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, OnBuildEnter);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, OnBattleEnter);
+            Core.Instance.FSM.SubscribeToExit(FSM.States.Battle, OnBattleExit);
+        }
 
-            //            _waypointsInGrid.Clear();
-            //            transform.localPosition = TargetPosition = HiddenPosition;
+        private void OnBattleExit()
+        {
+            animator.speed = 0f;
+        }
 
-            //            gameObject.SetActive(true);
-            //        }
-            //    }
-            //    if (e.NewState == CoreScript.GameStates.RoundFinished || e.NewState == CoreScript.GameStates.Paused || e.NewState == CoreScript.GameStates.InHelp)
-            //    {
-            //        _animator.speed = 0f;
-            //    }
-            //};
+        public void Init()
+        {
+            shadow.color = Color.white;
+            sprite.color = Color.white;
+
+            SetMaxHealthAndAgressiveness();
+            Health = maxHealth;
+
+            waypointsInGrid.Clear();
+            transform.localPosition = TargetPosition = HiddenPosition;
+
+            gameObject.SetActive(true);
+        }
+
+        private void OnBattleEnter()
+        {
+            animator.speed = 1f;
+        }
+
+        private void OnBuildEnter()
+        {
+            transform.localPosition = HiddenPosition;
+            gameObject.SetActive(false);
         }
 
         void Update()
