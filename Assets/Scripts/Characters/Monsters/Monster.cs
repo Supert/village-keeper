@@ -11,7 +11,7 @@ namespace VillageKeeper.Game
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Collider2D))]
-    public class MonsterScript : MonoBehaviour
+    public class Monster : MonoBehaviour
     {
         public enum SectorValues
         {

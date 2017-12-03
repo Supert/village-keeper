@@ -50,11 +50,11 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
-                if (Core.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
+                if (Core.Instance.Monster.Sector == Monster.SectorValues.Close)
                     State = ArcherAimingValues.AimingDown;
                 else
                 {
-                    if (Core.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
+                    if (Core.Instance.Monster.Sector == Monster.SectorValues.Middle)
                         State = ArcherAimingValues.AimingStraight;
                     else
                         State = ArcherAimingValues.AimingUp;

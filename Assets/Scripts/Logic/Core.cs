@@ -25,7 +25,7 @@ namespace VillageKeeper
         public GameController GameManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
 
-        public MonsterScript Monster { get; private set; }
+        public Monster Monster { get; private set; }
 
         public ArcherScript Archer { get; private set; }
 
@@ -47,7 +47,7 @@ namespace VillageKeeper
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-            Monster = FindObjectOfType(typeof(MonsterScript)) as MonsterScript;
+            Monster = FindObjectOfType(typeof(Monster)) as Monster;
             Archer = FindObjectOfType(typeof(ArcherScript)) as ArcherScript;
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
