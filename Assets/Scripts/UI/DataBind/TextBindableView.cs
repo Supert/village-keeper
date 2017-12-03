@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace VillageKeeper.UI
 {
+
     [RequireComponent(typeof(Text))]
     public class TextBindableView : BindableView
     {
