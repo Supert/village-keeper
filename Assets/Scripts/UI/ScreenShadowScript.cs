@@ -5,7 +5,6 @@ namespace VillageKeeper.UI
 {
     public class ScreenShadowScript : StateVisibleView
     {
-        private bool isShown;
         private Button button;
         private Image image;
         
