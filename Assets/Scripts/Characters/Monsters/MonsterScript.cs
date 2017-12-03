@@ -38,7 +38,7 @@ namespace VillageKeeper.Game
             private set
             {
                 health--;
-                CoreScript.Instance.GameData.ClampedMonsterHealth.Set(health / (float) maxHealth);
+                Core.Instance.GameData.ClampedMonsterHealth.Set(health / (float) maxHealth);
                 if (health == 0)
                     Kill();
             }
@@ -75,7 +75,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                var buildingsArea = CoreScript.Instance.BuildingsArea;
+                var buildingsArea = Core.Instance.BuildingsArea;
                 return buildingsArea.GetWorldPositionByGridPosition(new Vector2(0, 0)) + GridToWorldOffset;
             }
         }
@@ -84,7 +84,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                var buildingsArea = CoreScript.Instance.BuildingsArea;
+                var buildingsArea = Core.Instance.BuildingsArea;
                 return buildingsArea.GetWorldPositionByGridPosition(new Vector2(buildingsArea.numberOfColumns, buildingsArea.numberOfRows - 1)) + GridToWorldOffset;
             }
         }
@@ -104,14 +104,14 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return new Vector2(CoreScript.Instance.BuildingsArea.CellWorldSize.x / 2, Size.y / 3);
+                return new Vector2(Core.Instance.BuildingsArea.CellWorldSize.x / 2, Size.y / 3);
             }
         }
         public Vector2 GridPosition
         {
             get
             {
-                var buildingsArea = CoreScript.Instance.BuildingsArea;
+                var buildingsArea = Core.Instance.BuildingsArea;
                 var result = buildingsArea.GetClosestGridPositionIgnoringGridLimits(new Vector2(transform.localPosition.x, transform.localPosition.y) - GridToWorldOffset);
                 return result;
             }
@@ -123,7 +123,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                var buildingsArea = CoreScript.Instance.BuildingsArea;
+                var buildingsArea = Core.Instance.BuildingsArea;
                 if (_waypointsInGrid.Count > 0 && (Vector2)transform.localPosition == (buildingsArea.GetWorldPositionByGridPosition(_waypointsInGrid[0].X, _waypointsInGrid[0].Y)) + GridToWorldOffset)
                     _waypointsInGrid.RemoveAt(0);
                 if (_waypointsInGrid.Count > 0)
@@ -136,7 +136,7 @@ namespace VillageKeeper.Game
         {
             byte[,] pathGrid = new byte[16, 16];
             List<Point> possibleTargets = new List<Point>();
-            var buildingsArea = CoreScript.Instance.BuildingsArea;
+            var buildingsArea = Core.Instance.BuildingsArea;
             for (int i = 0; i < buildingsArea.numberOfColumns; i++)
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
                 {
@@ -205,7 +205,7 @@ namespace VillageKeeper.Game
         {
             Health--;
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            CoreScript.Instance.AudioManager.PlayMonsterHit();
+            Core.Instance.AudioManager.PlayMonsterHit();
         }
 
         public void Kill()
@@ -213,7 +213,7 @@ namespace VillageKeeper.Game
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
             var ghost = (GameObject)Instantiate(Resources.Load("Ghost"));
             ghost.transform.localPosition = transform.localPosition;
-            CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
+            Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
 
         void MoveTowardsColor(Color targetColor, float animationDuration)
@@ -224,7 +224,7 @@ namespace VillageKeeper.Game
 
         private Vector2? GetAdjacentBuildingCell()
         {
-            var buildingsArea = CoreScript.Instance.BuildingsArea;
+            var buildingsArea = Core.Instance.BuildingsArea;
             if (GridPosition.x - 1 >= buildingsArea.numberOfColumns || GridPosition.x - 1 < 0)
                 return null;
             if (!buildingsArea.IsCellFree(GridPosition - new Vector2(1, 0)))
@@ -238,7 +238,7 @@ namespace VillageKeeper.Game
             var scale = transform.localScale;
             scale.x = Mathf.Abs(scale.x);
             transform.localScale = scale;
-            CoreScript.Instance.BuildingsArea.DamageCell(buildingCell);
+            Core.Instance.BuildingsArea.DamageCell(buildingCell);
             ChooseNewBehaviour();
         }
 
@@ -250,7 +250,7 @@ namespace VillageKeeper.Game
         private void SetWaypoints(List<PathFinderNode> waypoints)
         {
             _waypointsInGrid = waypoints;
-            TargetPosition = CoreScript.Instance.BuildingsArea.GetWorldPositionByGridPosition(waypoints.Last().X, waypoints.Last().Y) + GridToWorldOffset;
+            TargetPosition = Core.Instance.BuildingsArea.GetWorldPositionByGridPosition(waypoints.Last().X, waypoints.Last().Y) + GridToWorldOffset;
             var scale = transform.localScale;
             if (((Vector2)transform.localPosition - TargetPosition).x >= 0)
             {
@@ -279,12 +279,12 @@ namespace VillageKeeper.Game
         {
             float buildingsHealth = 0;
             float buildingsCost = 0;
-            foreach (var b in CoreScript.Instance.BuildingsArea.buildings)
+            foreach (var b in Core.Instance.BuildingsArea.buildings)
             {
                 buildingsHealth += b.MaxHealth;
                 buildingsCost += b.GoldCost;
             }
-            float pointsPool = buildingsHealth / 2 * (1 + CoreScript.Instance.SavedData.VillageLevel.Get() * 0.25f);
+            float pointsPool = buildingsHealth / 2 * (1 + Core.Instance.SavedData.VillageLevel.Get() * 0.25f);
             float minHealthPossible = 10 * (3 * buildingsCost / 800 + 1);
             float maxHealthPossible = 100;
             if (pointsPool < minHealthPossible)
@@ -318,7 +318,7 @@ namespace VillageKeeper.Game
         void Start()
         {
             var ls = transform.localScale;
-            ls *= (CoreScript.Instance.BuildingsArea.CellWorldSize.y * 2) / (sprite.bounds.size.y);
+            ls *= (Core.Instance.BuildingsArea.CellWorldSize.y * 2) / (sprite.bounds.size.y);
             transform.localScale = ls;
             //CoreScript.Instance.GameStateChanged += (sender, e) =>
             //{
@@ -353,7 +353,7 @@ namespace VillageKeeper.Game
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
+            if (Core.Instance.FSM.Current == FSM.States.Battle)
             {
                 MoveTowardsColor(Color.white, 0.200f);
 
@@ -385,7 +385,7 @@ namespace VillageKeeper.Game
                     }
                 }
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.RoundFinished)
+            else if (Core.Instance.FSM.Current == FSM.States.RoundFinished)
             {
                 MoveTowardsColor(new Color(1, 1, 1, 0), 1f);
             }

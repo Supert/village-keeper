@@ -88,23 +88,23 @@ namespace VillageKeeper.UI
             {
                 var n = Enum.GetNames(typeof(BuildingTypes)).Length;
                 CurrentBuildingType = (BuildingTypes)(((byte)CurrentBuildingType - 1 + n) % n);
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.AudioManager.PlayClick();
             });
             nextButton.onClick.AddListener(() =>
             {
                 var n = Enum.GetNames(typeof(BuildingTypes)).Length;
                 CurrentBuildingType = (BuildingTypes)(((byte)CurrentBuildingType + 1 + n) % n);
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.AudioManager.PlayClick();
             });
             CurrentBuildingType = BuildingTypes.Farm;
         }
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == FSM.States.Build
+            if (Core.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && CoreScript.Instance.SavedData.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
+                && Core.Instance.SavedData.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

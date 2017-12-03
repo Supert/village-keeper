@@ -15,13 +15,13 @@ namespace VillageKeeper.UI
             thounsandButton.onClick.AddListener(() =>
             {
                 SoomlaStore.BuyMarketItem(EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.AudioManager.PlayClick();
             });
 
             tenThousandButton.onClick.AddListener(() =>
             {
                 SoomlaStore.BuyMarketItem(EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.AudioManager.PlayClick();
             });
         }
     }

@@ -149,9 +149,9 @@ namespace VillageKeeper.Game
 
         public void BuyBuilding(BuildingScript building, Vector2 gridPosition)
         {
-            if (IsCellFree(gridPosition) && CoreScript.Instance.SavedData.Gold.Get() >= building.GoldCost)
+            if (IsCellFree(gridPosition) && Core.Instance.SavedData.Gold.Get() >= building.GoldCost)
             {
-                CoreScript.Instance.SavedData.Gold.Set(CoreScript.Instance.SavedData.Gold.Get() - building.GoldCost);
+                Core.Instance.SavedData.Gold.Set(Core.Instance.SavedData.Gold.Get() - building.GoldCost);
                 PlaceBuilding(building, gridPosition);
                 SaveBuildings();
             }
@@ -174,12 +174,12 @@ namespace VillageKeeper.Game
                 var y = (int)b.Tile.gridY;
                 list.list.Add(new Data.SerializableBuilding(b.Type, x, y));
             }
-            CoreScript.Instance.SavedData.Buildings.Set(list);
+            Core.Instance.SavedData.Buildings.Set(list);
         }
 
         public void LoadBuildings()
         {
-            var list = CoreScript.Instance.SavedData.Buildings.Get();
+            var list = Core.Instance.SavedData.Buildings.Get();
             foreach (var b in list.list)
             {
                 if (_buildingsGrid[b.X, b.Y].Building == null)

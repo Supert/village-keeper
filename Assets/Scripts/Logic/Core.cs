@@ -1,19 +1,17 @@
 using UnityEngine;
-using System;
 using VillageKeeper.FSM;
 using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
 using VillageKeeper.Locale;
-using System.Collections.Generic;
 using VillageKeeper.Data;
 using VillageKeeper.Balance;
 
 namespace VillageKeeper
 {
-    public class CoreScript : MonoBehaviour
+    public class Core : MonoBehaviour
     {
-        public static CoreScript Instance { get; private set; }
+        public static Core Instance { get; private set; }
 
         public StateMachine FSM { get; private set; }
 

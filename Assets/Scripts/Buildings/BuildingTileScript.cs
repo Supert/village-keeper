@@ -54,16 +54,16 @@ namespace VillageKeeper.Game
 
         void Start()
         {
-            transform.localScale *= CoreScript.Instance.BuildingsArea.CellWorldSize.x / spriteRenderer.bounds.size.x * 0.9f;
+            transform.localScale *= Core.Instance.BuildingsArea.CellWorldSize.x / spriteRenderer.bounds.size.x * 0.9f;
         }
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == FSM.States.Build)
+            if (Core.Instance.FSM.Current == FSM.States.Build)
             {
                 spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
+            else if (Core.Instance.FSM.Current == FSM.States.Battle)
             {
                 spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 0.25f);
             }

@@ -9,10 +9,10 @@ namespace VillageKeeper.FSM
         public override void Enter()
         {
             base.Enter();
-            if (!CoreScript.Instance.SavedData.WasBuildTipShown.Get())
+            if (!Core.Instance.SavedData.WasBuildTipShown.Get())
             {
-                CoreScript.Instance.FSM.Event(StateMachineEvents.ShowHelp);
-                CoreScript.Instance.SavedData.WasBuildTipShown.Set(true);
+                Core.Instance.FSM.Event(StateMachineEvents.ShowHelp);
+                Core.Instance.SavedData.WasBuildTipShown.Set(true);
             }
         }
 

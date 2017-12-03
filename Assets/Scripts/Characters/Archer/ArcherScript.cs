@@ -19,7 +19,7 @@ namespace VillageKeeper.Game
         private Animator animator;
         private RectTransform rect;
 
-        public bool IsLoaded { get { return CoreScript.Instance.GameData.IsArrowForceOverThreshold.Get(); } }
+        public bool IsLoaded { get { return Core.Instance.GameData.IsArrowForceOverThreshold.Get(); } }
 
         private ArcherAimingValues state = 0;
         public ArcherAimingValues State
@@ -50,11 +50,11 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
-                if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
+                if (Core.Instance.Monster.Sector == MonsterScript.SectorValues.Close)
                     State = ArcherAimingValues.AimingDown;
                 else
                 {
-                    if (CoreScript.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
+                    if (Core.Instance.Monster.Sector == MonsterScript.SectorValues.Middle)
                         State = ArcherAimingValues.AimingStraight;
                     else
                         State = ArcherAimingValues.AimingUp;
@@ -86,7 +86,7 @@ namespace VillageKeeper.Game
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position + (Vector2)rect.TransformVector(new Vector2(rect.rect.width / 2, rect.rect.height * 0.6f));
                 arrow.Init(initialPosition, tp, GetAimingAngleInRads());
-                CoreScript.Instance.AudioManager.PlayArrowShot();
+                Core.Instance.AudioManager.PlayArrowShot();
             }
         }
     }

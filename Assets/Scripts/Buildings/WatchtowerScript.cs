@@ -23,10 +23,10 @@ namespace VillageKeeper.Game
         {
             if (isLoaded)
             {
-                var _targetPosition = CoreScript.Instance.Monster.transform.localPosition;
+                var _targetPosition = Core.Instance.Monster.transform.localPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position;
-                var vectorToCalcAngle = (Vector2)_targetPosition + new Vector2(0, CoreScript.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
+                var vectorToCalcAngle = (Vector2)_targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
                 var angle = Mathf.Atan2(vectorToCalcAngle.y, vectorToCalcAngle.x);
                 arrow.Init(initialPosition, _targetPosition, angle);
                 isLoaded = false;
@@ -46,9 +46,9 @@ namespace VillageKeeper.Game
         protected override void Update()
         {
             base.Update();
-            if (CoreScript.Instance.FSM.Current == FSM.States.Battle
+            if (Core.Instance.FSM.Current == FSM.States.Battle
                 && isLoaded
-                && Vector2.Distance(transform.position, CoreScript.Instance.Monster.transform.localPosition) < CoreScript.Instance.BuildingsArea.CellWorldSize.x * 4)
+                && Vector2.Distance(transform.position, Core.Instance.Monster.transform.localPosition) < Core.Instance.BuildingsArea.CellWorldSize.x * 4)
             {
                 Shoot();
             }

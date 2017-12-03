@@ -79,7 +79,7 @@ namespace VillageKeeper.Game
             {
                 Destroy();
             }
-            if (CoreScript.Instance.Monster.CheckHitByPosition(transform.position))
+            if (Core.Instance.Monster.CheckHitByPosition(transform.position))
             {
                 gameObject.SetActive(false);
                 Destroy();

@@ -22,9 +22,9 @@ namespace VillageKeeper.Game
 
         public int GoldCost { get { return Balance.BalanceData.GetBuildingGoldCost(Type); } }
 
-        public string HumanFriendlyName { get { return CoreScript.Instance.Localization.GetBuildingName(Type); } }
+        public string HumanFriendlyName { get { return Core.Instance.Localization.GetBuildingName(Type); } }
 
-        public string Description { get { return CoreScript.Instance.Localization.GetBuildingDescription(Type); } }
+        public string Description { get { return Core.Instance.Localization.GetBuildingDescription(Type); } }
         
         public float Health { get; protected set; }
 
@@ -35,7 +35,7 @@ namespace VillageKeeper.Game
 
         public void Damage()
         {
-            CoreScript.Instance.AudioManager.PlayBuildingHit();
+            Core.Instance.AudioManager.PlayBuildingHit();
 
             Health--;
             if (Health == 0)
@@ -46,7 +46,7 @@ namespace VillageKeeper.Game
 
         protected virtual void DestroySelf()
         {
-            CoreScript.Instance.BuildingsArea.RemoveBuilding(this);
+            Core.Instance.BuildingsArea.RemoveBuilding(this);
             Destroy(gameObject);
         }
 
@@ -62,11 +62,11 @@ namespace VillageKeeper.Game
                 }
                 if (Input.GetMouseButtonUp(0))
                 {
-                    var buildingsArea = CoreScript.Instance.BuildingsArea;
+                    var buildingsArea = Core.Instance.BuildingsArea;
                     var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
                     var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
                     var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && CoreScript.Instance.SavedData.Gold.Get() >= GoldCost)
+                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Core.Instance.SavedData.Gold.Get() >= GoldCost)
                     {
                         buildingsArea.BuyBuilding(this, closestCell);
                     }

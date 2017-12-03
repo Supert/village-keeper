@@ -30,23 +30,23 @@ namespace VillageKeeper.UI
                 switch (mode)
                 {
                     case Modes.Pause:
-                        CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBattle);
+                        Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToBattle);
                         break;
                     case Modes.RoundFinished:
-                        CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
+                        Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToBuild);
                         break;
                 }
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.AudioManager.PlayClick();
             });
 
             homeButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
+                Core.Instance.AudioManager.PlayClick();
             });
 
-            CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.Pause, ShowPause);
-            CoreScript.Instance.FSM.SubscribeToExit(FSM.States.RoundFinished, ShowRoundFinished);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Pause, ShowPause);
+            Core.Instance.FSM.SubscribeToExit(FSM.States.RoundFinished, ShowRoundFinished);
         }
 
         public void ShowPause()
@@ -61,9 +61,9 @@ namespace VillageKeeper.UI
             mode = Modes.RoundFinished;
             title.text = "Victory!";
             roundFinishedText.SetActive(true);
-            WeCollectedFoodText.text = "We collected " + (CoreScript.Instance.GameData.TotalFood.Get());
-            WithMonsterBonusText.text = "With " + CoreScript.Instance.CommonData.MonsterBonusGold.Get().ToString();
-            YouGainGoldText.text = "you gain " + CoreScript.Instance.GameData.RoundFinishedBonusGold.Get().ToString();
+            WeCollectedFoodText.text = "We collected " + (Core.Instance.GameData.TotalFood.Get());
+            WithMonsterBonusText.text = "With " + Core.Instance.CommonData.MonsterBonusGold.Get().ToString();
+            YouGainGoldText.text = "you gain " + Core.Instance.GameData.RoundFinishedBonusGold.Get().ToString();
         }
     }
 }

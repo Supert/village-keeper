@@ -11,9 +11,9 @@ namespace VillageKeeper.UI
             AdRequest adRequest = new AdRequest.Builder().Build();
             bannerView.LoadAd(adRequest);
 
-            CoreScript.Instance.SavedData.HasPremium.OnValueChanged += () =>
+            Core.Instance.SavedData.HasPremium.OnValueChanged += () =>
             {
-                if (CoreScript.Instance.SavedData.HasPremium.Get())
+                if (Core.Instance.SavedData.HasPremium.Get())
                     bannerView.Hide();
             };
 

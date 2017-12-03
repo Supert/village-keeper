@@ -14,7 +14,7 @@ namespace VillageKeeper.UI
 
         void SetScores()
         {
-            var monstersDefeated = CoreScript.Instance.SavedData.MonstersDefeated.Get();
+            var monstersDefeated = Core.Instance.SavedData.MonstersDefeated.Get();
             if (monstersDefeated == 0)
                 monstersDefeatedText.text = "No monsters defeated yet";
             else
@@ -28,7 +28,7 @@ namespace VillageKeeper.UI
 
         private void SetFurniture()
         {
-            if (CoreScript.Instance.SavedData.HasPremium.Get())
+            if (Core.Instance.SavedData.HasPremium.Get())
             {
                 if (roomFurniture.sprite != premiumFurniture)
                     roomFurniture.sprite = premiumFurniture;
@@ -62,11 +62,11 @@ namespace VillageKeeper.UI
             SetFurniture();
             shopShadow.ShadowButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.FSM.Event(StateMachineEvents.GoToMenu);
+                Core.Instance.FSM.Event(StateMachineEvents.GoToMenu);
             });
 
-            CoreScript.Instance.SavedData.MonstersDefeated.OnValueChanged += SetScores;
-            CoreScript.Instance.SavedData.HasPremium.OnValueChanged += SetFurniture;
+            Core.Instance.SavedData.MonstersDefeated.OnValueChanged += SetScores;
+            Core.Instance.SavedData.HasPremium.OnValueChanged += SetFurniture;
         }
     }
 }

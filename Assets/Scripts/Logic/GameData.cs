@@ -26,15 +26,15 @@ namespace VillageKeeper.Balance
 
             CalculateEconomy();
 
-            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
-            CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
+            Core.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
             ClampedArrowForce.OnValueChanged += () => IsArrowForceOverThreshold.Set(ClampedArrowForce.Get() >= BalanceData.ArrowForceThreshold);
         }
 
         public void CalculateEconomy()
         {
-            int villageLevel = CoreScript.Instance.SavedData.VillageLevel.Get();
-            var buildings = CoreScript.Instance.SavedData.Buildings.Get();
+            int villageLevel = Core.Instance.SavedData.VillageLevel.Get();
+            var buildings = Core.Instance.SavedData.Buildings.Get();
             int farms = buildings.list.Count(c => c.Type == BuildingTypes.Farm);
             int windmills = buildings.list.Count(c => c.Type == BuildingTypes.Windmill);
 

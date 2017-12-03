@@ -18,7 +18,7 @@ namespace VillageKeeper.UI
 
         void SetButtons()
         {
-            if (CoreScript.Instance.SavedData.IsSoundEffectsEnabled.Get())
+            if (Core.Instance.SavedData.IsSoundEffectsEnabled.Get())
             {
                 SoundsButton.image.sprite = SoundsOnSprite;
                 var s = SoundsButton.spriteState;
@@ -32,7 +32,7 @@ namespace VillageKeeper.UI
                 s.pressedSprite = SoundsOffPressedSprite;
                 SoundsButton.spriteState = s;
             }
-            if (CoreScript.Instance.SavedData.IsMusicEnabled.Get())
+            if (Core.Instance.SavedData.IsMusicEnabled.Get())
             {
                 MusicButton.image.sprite = MusicOnSprite;
                 var s = MusicButton.spriteState;
@@ -50,19 +50,19 @@ namespace VillageKeeper.UI
 
         void Init()
         {
-            CoreScript.Instance.SavedData.IsSoundEffectsEnabled.OnValueChanged += SetButtons;
-            CoreScript.Instance.SavedData.IsMusicEnabled.OnValueChanged += SetButtons;
+            Core.Instance.SavedData.IsSoundEffectsEnabled.OnValueChanged += SetButtons;
+            Core.Instance.SavedData.IsMusicEnabled.OnValueChanged += SetButtons;
 
             MusicButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.SavedData.IsMusicEnabled.Set(!CoreScript.Instance.SavedData.IsMusicEnabled.Get());
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.SavedData.IsMusicEnabled.Set(!Core.Instance.SavedData.IsMusicEnabled.Get());
+                Core.Instance.AudioManager.PlayClick();
             });
 
             SoundsButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.SavedData.IsSoundEffectsEnabled.Set(!CoreScript.Instance.SavedData.IsSoundEffectsEnabled.Get());
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.SavedData.IsSoundEffectsEnabled.Set(!Core.Instance.SavedData.IsSoundEffectsEnabled.Get());
+                Core.Instance.AudioManager.PlayClick();
             });
         }
     }

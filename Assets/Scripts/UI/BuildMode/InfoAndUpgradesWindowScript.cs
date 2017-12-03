@@ -11,30 +11,30 @@ namespace VillageKeeper.UI
 
         void SetUpgradeButton()
         {
-            upgradeButton.interactable = CoreScript.Instance.SavedData.Gold.Get() >= Balance.BalanceData.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get());
+            upgradeButton.interactable = Core.Instance.SavedData.Gold.Get() >= Balance.BalanceData.GetCastleUpgradeCost(Core.Instance.SavedData.VillageLevel.Get());
         }
 
         public void Show()
         {
-            int villageLevel = CoreScript.Instance.SavedData.VillageLevel.Get();
+            int villageLevel = Core.Instance.SavedData.VillageLevel.Get();
             castleUpgradeWindow.SetActive(villageLevel < Balance.BalanceData.MaxVillageLevel);
             SetUpgradeButton();
         }
 
         void Start()
         {
-            CoreScript.Instance.SavedData.Gold.OnValueChanged += () => SetUpgradeButton();
-            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += () => Show();
+            Core.Instance.SavedData.Gold.OnValueChanged += () => SetUpgradeButton();
+            Core.Instance.SavedData.VillageLevel.OnValueChanged += () => Show();
             upgradeButton.onClick.AddListener(() =>
             {
-                if (CoreScript.Instance.SavedData.Gold.Get() >= Balance.BalanceData.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get()))
+                if (Core.Instance.SavedData.Gold.Get() >= Balance.BalanceData.GetCastleUpgradeCost(Core.Instance.SavedData.VillageLevel.Get()))
                 {
-                    CoreScript.Instance.SavedData.Gold.Set(CoreScript.Instance.SavedData.Gold.Get() - Balance.BalanceData.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get()));
-                    CoreScript.Instance.SavedData.VillageLevel.Set(CoreScript.Instance.SavedData.VillageLevel.Get() + 1);
-                    CoreScript.Instance.AudioManager.PlayClick();
+                    Core.Instance.SavedData.Gold.Set(Core.Instance.SavedData.Gold.Get() - Balance.BalanceData.GetCastleUpgradeCost(Core.Instance.SavedData.VillageLevel.Get()));
+                    Core.Instance.SavedData.VillageLevel.Set(Core.Instance.SavedData.VillageLevel.Get() + 1);
+                    Core.Instance.AudioManager.PlayClick();
                 }
             });
-            CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.Build, Show);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, Show);
         }
     }
 }

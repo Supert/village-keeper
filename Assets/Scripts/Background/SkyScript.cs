@@ -26,12 +26,12 @@ namespace VillageKeeper.UI
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == FSM.States.Build || CoreScript.Instance.FSM.Current == FSM.States.Battle)
+            if (Core.Instance.FSM.Current == FSM.States.Build || Core.Instance.FSM.Current == FSM.States.Battle)
             {
                 foreach (var c in _cloudsList)
                 {
                     var ap = c.anchoredPosition;
-                    ap.x += CoreScript.Instance.CommonData.Wind.Get() * Time.deltaTime * 10;
+                    ap.x += Core.Instance.CommonData.Wind.Get() * Time.deltaTime * 10;
                     if (ap.x < -c.rect.width)
                         ap.x += c.rect.width * 2;
                     if (ap.x > c.rect.width)

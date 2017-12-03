@@ -44,8 +44,8 @@ namespace VillageKeeper.UI
         {
             foreach (var state in showAtStates)
             {
-                CoreScript.Instance.FSM.SubscribeToEnter(state, Show);
-                CoreScript.Instance.FSM.SubscribeToExit(state, Hide);
+                Core.Instance.FSM.SubscribeToEnter(state, Show);
+                Core.Instance.FSM.SubscribeToExit(state, Hide);
             }
             IsShown = isShownAtStart;
         }

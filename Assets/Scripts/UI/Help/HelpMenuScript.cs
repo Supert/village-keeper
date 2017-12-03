@@ -18,44 +18,44 @@ namespace VillageKeeper.UI
         {
             nextButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.GameData.CurrentHelpTip.Set(CoreScript.Instance.GameData.CurrentHelpTip.Get() + 1);
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.GameData.CurrentHelpTip.Set(Core.Instance.GameData.CurrentHelpTip.Get() + 1);
+                Core.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
-                CoreScript.Instance.GameData.CurrentHelpTip.Set(CoreScript.Instance.GameData.CurrentHelpTip.Get() - 1);
-                CoreScript.Instance.AudioManager.PlayClick();
+                Core.Instance.GameData.CurrentHelpTip.Set(Core.Instance.GameData.CurrentHelpTip.Get() - 1);
+                Core.Instance.AudioManager.PlayClick();
             });
 
-            CoreScript.Instance.GameData.CurrentHelpTip.OnValueChanged += () =>
+            Core.Instance.GameData.CurrentHelpTip.OnValueChanged += () =>
             {
-                int tip = CoreScript.Instance.GameData.CurrentHelpTip.Get();
+                int tip = Core.Instance.GameData.CurrentHelpTip.Get();
                 
-                tipText.text = currentTips[CoreScript.Instance.GameData.CurrentHelpTip.Get() - 1];
+                tipText.text = currentTips[Core.Instance.GameData.CurrentHelpTip.Get() - 1];
                 tipCounterText.text = "Tip " + tip.ToString() + "/" + currentTips.Length;
             };
 
-            CoreScript.Instance.FSM.SubscribeToEnter(States.BattleHelp, ShowBattle);
-            CoreScript.Instance.FSM.SubscribeToEnter(States.BuildHelp, ShowBuild);
+            Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, ShowBattle);
+            Core.Instance.FSM.SubscribeToEnter(States.BuildHelp, ShowBuild);
         }
 
         private void ShowBattle()
         {
-            currentTips = CoreScript.Instance.Localization.GetBattleHelpTips();
+            currentTips = Core.Instance.Localization.GetBattleHelpTips();
             Show();
         }
 
         private void ShowBuild()
         {
-            currentTips = CoreScript.Instance.Localization.GetBuildHelpTips();
+            currentTips = Core.Instance.Localization.GetBuildHelpTips();
             Show();
         }
 
         private void Show()
         {
-            CoreScript.Instance.GameData.HelpTipsCount.Set(currentTips.Length);
-            CoreScript.Instance.GameData.CurrentHelpTip.Set(1);
+            Core.Instance.GameData.HelpTipsCount.Set(currentTips.Length);
+            Core.Instance.GameData.CurrentHelpTip.Set(1);
         }
     }
 }

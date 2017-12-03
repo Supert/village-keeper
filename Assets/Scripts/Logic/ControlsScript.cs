@@ -28,9 +28,9 @@ namespace VillageKeeper
                 {
                     if (t.phase == TouchPhase.Began)
                     {
-                        if (CoreScript.Instance.GameData.IsArrowForceOverThreshold.Get())
+                        if (Core.Instance.GameData.IsArrowForceOverThreshold.Get())
                         {
-                            CoreScript.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
+                            Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
                             bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = null;
                         }
                     }
@@ -53,7 +53,7 @@ namespace VillageKeeper
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    CoreScript.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                    Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                     bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = null;
                 }
             }
@@ -68,7 +68,7 @@ namespace VillageKeeper
 
         void Update()
         {
-            if (CoreScript.Instance.FSM.Current == FSM.States.Battle)
+            if (Core.Instance.FSM.Current == FSM.States.Battle)
             {
 #if UNITY_EDITOR
                 SimulateTouchesInUnity();
@@ -76,32 +76,32 @@ namespace VillageKeeper
 			    CheckForTouches ();
 #endif
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.Pause);
+                    Core.Instance.FSM.Event(FSM.StateMachineEvents.Pause);
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.Pause)
+            else if (Core.Instance.FSM.Current == FSM.States.Pause)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
+                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.RoundFinished)
+            else if (Core.Instance.FSM.Current == FSM.States.RoundFinished)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
+                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.Shop)
+            else if (Core.Instance.FSM.Current == FSM.States.Shop)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
+                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.Menu)
+            else if (Core.Instance.FSM.Current == FSM.States.Menu)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
                     Application.Quit();
             }
-            else if (CoreScript.Instance.FSM.Current == FSM.States.Build)
+            else if (Core.Instance.FSM.Current == FSM.States.Build)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
-                    CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
+                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
             }
         }
     }
