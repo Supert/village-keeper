@@ -8,7 +8,6 @@ namespace VillageKeeper.UI
     {
         public Text monstersDefeatedText;
         public ScreenShadowScript shopShadow;
-        OffScreenMenuScript offScreenMenu;
         public Image roomFurniture;
         public Sprite freeFurniture;
         public Sprite premiumFurniture;
@@ -45,18 +44,10 @@ namespace VillageKeeper.UI
         {
             SetFurniture();
             SetScores();
-            offScreenMenu.Show();
-        }
-
-        public void HideMenu()
-        {
-            offScreenMenu.Hide();
         }
 
         public void ShowShop()
         {
-            ShowMenu();
-            offScreenMenu.Show();
             shopShadow.Show();
         }
 
@@ -67,7 +58,6 @@ namespace VillageKeeper.UI
 
         void Init()
         {
-            offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
             SetScores();
             SetFurniture();
             shopShadow.ShadowButton.onClick.AddListener(() =>
@@ -75,6 +65,7 @@ namespace VillageKeeper.UI
                 CoreScript.Instance.FSM.Event(StateMachineEvents.GoToMenu);
             });
 
+            CoreScript.Instance.SavedData.MonstersDefeated.OnValueChanged += SetScores;
             CoreScript.Instance.SavedData.HasPremium.OnValueChanged += SetFurniture;
         }
     }

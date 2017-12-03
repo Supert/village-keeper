@@ -8,7 +8,6 @@ namespace VillageKeeper.UI
     {
         public GameObject castleUpgradeWindow;
         public Button upgradeButton;
-        private OffScreenMenuScript offscreen;
 
         void SetUpgradeButton()
         {
@@ -17,26 +16,15 @@ namespace VillageKeeper.UI
 
         public void Show()
         {
-            offscreen.Show();
-        }
-
-        public void Hide()
-        {
-            offscreen.Hide();
-        }
-
-        public void SetValues()
-        {
             int villageLevel = CoreScript.Instance.SavedData.VillageLevel.Get();
             castleUpgradeWindow.SetActive(villageLevel < Balance.Balance.MaxVillageLevel);
             SetUpgradeButton();
         }
 
-        void Init()
+        void Start()
         {
-            offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
             CoreScript.Instance.SavedData.Gold.OnValueChanged += () => SetUpgradeButton();
-            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += () => SetValues();
+            CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += () => Show();
             upgradeButton.onClick.AddListener(() =>
             {
                 if (CoreScript.Instance.SavedData.Gold.Get() >= Balance.Balance.GetCastleUpgradeCost(CoreScript.Instance.SavedData.VillageLevel.Get()))
@@ -46,6 +34,7 @@ namespace VillageKeeper.UI
                     CoreScript.Instance.AudioManager.PlayClick();
                 }
             });
+            CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.Build, Show);
         }
     }
 }

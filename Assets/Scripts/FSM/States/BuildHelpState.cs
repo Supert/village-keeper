@@ -9,7 +9,6 @@ namespace VillageKeeper.FSM
         public override void Enter()
         {
             base.Enter();
-            CoreScript.Instance.UiManager.OnBuildHelpEntered();
         }
 
         public override States Event(StateMachineEvents type, params object[] args)

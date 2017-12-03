@@ -1,45 +1,59 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(DelayerScript))]
-public class WindScript : MonoBehaviour
+namespace VillageKeeper.Game
 {
-    public float Strength { get; private set; }
-    public float TargetStrength { get; private set; }
-    public float maxStrength;
-    public float strengthAcceleration;
-    public float minTimeBeforeChange;
-    public float maxTimeBeforeChange;
-    private DelayerScript delayer;
-
-    void Start()
+    [RequireComponent(typeof(DelayerScript))]
+    public class WindScript : MonoBehaviour
     {
-        delayer = GetComponent<DelayerScript>() as DelayerScript;
-        Strength = (Random.value - 0.5f) * 2 * maxStrength;
-        TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
-    }
+        public float Strength { get; private set; }
+        public float TargetStrength { get; private set; }
 
-    void SelectNewTargetStrength()
-    {
-        delayer.RunUniqueWithRandomDelay(minTimeBeforeChange, maxTimeBeforeChange, () =>
+        public float maxStrength;
+        public float strengthAcceleration;
+        public float minTimeBeforeChange;
+        public float maxTimeBeforeChange;
+        private DelayerScript delayer;
+
+        private void Awake()
         {
-            TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
-        });
-
-    }
-
-    void Update()
-    {
-        if (Mathf.Abs(Strength - TargetStrength) * Time.deltaTime >= strengthAcceleration * Time.deltaTime)
-        {
-            if (Strength > TargetStrength)
-                Strength -= strengthAcceleration * Time.deltaTime;
-            else
-                Strength += strengthAcceleration * Time.deltaTime;
+            delayer = GetComponent<DelayerScript>() as DelayerScript;
         }
-        else
+
+        void Start()
         {
-            Strength = TargetStrength;
-            SelectNewTargetStrength();
+            Strength = (Random.value - 0.5f) * 2 * maxStrength;
+            TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
+        }
+
+        void SelectNewTargetStrength()
+        {
+            delayer.RunUniqueWithRandomDelay(minTimeBeforeChange, maxTimeBeforeChange, () =>
+            {
+                TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
+            });
+
+        }
+
+        void Update()
+        {
+            float oldStrength = Strength;
+            if (Mathf.Abs(Strength - TargetStrength) * Time.deltaTime >= strengthAcceleration * Time.deltaTime)
+            {
+                if (Strength > TargetStrength)
+                    Strength -= strengthAcceleration * Time.deltaTime;
+                else
+                    Strength += strengthAcceleration * Time.deltaTime;
+            }
+            else
+            {
+                Strength = TargetStrength;
+                SelectNewTargetStrength();
+            }
+
+            if (oldStrength != Strength)
+            {
+                CoreScript.Instance.GameData.Wind.Set(Strength);
+            }
         }
     }
 }

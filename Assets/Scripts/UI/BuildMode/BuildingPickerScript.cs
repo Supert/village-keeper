@@ -99,25 +99,6 @@ namespace VillageKeeper.UI
             CurrentBuildingType = BuildingTypes.Farm;
         }
 
-        void Awake()
-        {
-            var offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-            //CoreScript.Instance.GameStateChanged += (sender, e) =>
-            //{
-            //    switch (e.NewState)
-            //    {
-            //        case CoreScript.GameStates.InBuildMode:
-            //            offscreen.Show();
-            //            break;
-            //        case CoreScript.GameStates.InHelp:
-            //            break;
-            //        default:
-            //            offscreen.Hide();
-            //            break;
-            //    }
-            //};
-        }
-
         void Update()
         {
             if (CoreScript.Instance.FSM.Current == FSM.States.Build

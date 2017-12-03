@@ -5,13 +5,6 @@ namespace VillageKeeper.UI
 {
     public class StartBattleButtonScript : MonoBehaviour
     {
-        private OffScreenMenuScript offScreenMenu;
-
-        void Awake()
-        {
-            offScreenMenu = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-        }
-
         void Start()
         {
             var button = GetComponent<Button>() as Button;
@@ -20,11 +13,6 @@ namespace VillageKeeper.UI
                 CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToBattle);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
-        }
-
-        public void Show()
-        {
-            offScreenMenu.Show();
         }
     }
 }

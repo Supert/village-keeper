@@ -31,7 +31,7 @@ namespace VillageKeeper.UI
                 foreach (var c in _cloudsList)
                 {
                     var ap = c.anchoredPosition;
-                    ap.x += CoreScript.Instance.UiManager.Wind.Strength * Time.deltaTime * 10;
+                    ap.x += CoreScript.Instance.GameData.Wind.Get() * Time.deltaTime * 10;
                     if (ap.x < -c.rect.width)
                         ap.x += c.rect.width * 2;
                     if (ap.x > c.rect.width)

@@ -21,31 +21,26 @@ namespace VillageKeeper.Game
 
         public int maxHealth;
 
-        private Animator _animator;
+        private Animator animator;
         private SpriteRenderer sprite;
-        private SpriteRenderer _shadow;
-        private Collider2D _collider;
+        private SpriteRenderer shadow;
+        private Collider2D collider;
 
         private float _agressiveness;
 
-        private int? _health = null;
+        private int health;
         public int Health
         {
             get
             {
-                if (_health == null)
-                {
-                    _health = (int?)maxHealth;
-                }
-                return (int)_health;
+                return health;
             }
             private set
             {
-                _health = (int?)value;
-                if (_health == 0)
-                {
+                health--;
+                CoreScript.Instance.GameData.ClampedMonsterHealth.Set(health / (float) maxHealth);
+                if (health == 0)
                     Kill();
-                }
             }
         }
 
@@ -195,7 +190,7 @@ namespace VillageKeeper.Game
 
         public bool CheckHitByPosition(Vector3 projectilePosition)
         {
-            if (_collider.OverlapPoint((Vector2)projectilePosition))
+            if (collider.OverlapPoint((Vector2)projectilePosition))
             {
                 if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= sprite.bounds.extents.y)
                 {
@@ -239,7 +234,7 @@ namespace VillageKeeper.Game
 
         private void Attack(Vector2 buildingCell)
         {
-            _animator.SetTrigger("Attack");
+            animator.SetTrigger("Attack");
             var scale = transform.localScale;
             scale.x = Mathf.Abs(scale.x);
             transform.localScale = scale;
@@ -315,9 +310,9 @@ namespace VillageKeeper.Game
         void Awake()
         {
             sprite = GetComponent<SpriteRenderer>() as SpriteRenderer;
-            _collider = GetComponent<Collider2D>() as Collider2D;
-            _animator = GetComponent<Animator>() as Animator;
-            _shadow = transform.GetChild(transform.childCount - 1).GetComponent<SpriteRenderer>() as SpriteRenderer;
+            collider = GetComponent<Collider2D>() as Collider2D;
+            animator = GetComponent<Animator>() as Animator;
+            shadow = transform.GetChild(transform.childCount - 1).GetComponent<SpriteRenderer>() as SpriteRenderer;
         }
 
         void Start()
@@ -362,7 +357,7 @@ namespace VillageKeeper.Game
             {
                 MoveTowardsColor(Color.white, 0.200f);
 
-                if (_animator.GetCurrentAnimatorStateInfo(0).IsName("GorillaWandering"))
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("GorillaWandering"))
                 {
                     if ((Vector2)transform.localPosition == TargetPosition)
                     {

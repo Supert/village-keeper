@@ -22,9 +22,8 @@ namespace VillageKeeper
         public ResourceData ResourceData { get; private set; }
         public SavedData SavedData { get; private set; }
         public CommonData CommonData { get; private set; }
-        public UiBalanceData BalanceData { get; private set; }
-
-        public UiManager UiManager { get; private set; }
+        public GameData GameData { get; private set; }
+        
         public GameController GameManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
 
@@ -60,14 +59,12 @@ namespace VillageKeeper
             ResourceData = new ResourceData("Resources");
             SavedData = new SavedData("Saved");
             CommonData = new CommonData("Common");
-            BalanceData = new UiBalanceData("Balance");
+            GameData = new GameData("Game");
 
             GameManager = transform.Find("Game").GetComponent<GameController>();
-            UiManager = transform.Find("Ui").GetComponent<UiManager>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
 
             GameManager.Init();
-            UiManager.Init();
             AudioManager.Init();
 
             FSM.Event(StateMachineEvents.GameInitialized);

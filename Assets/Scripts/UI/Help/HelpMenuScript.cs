@@ -25,10 +25,7 @@ namespace VillageKeeper.UI
                     CoreScript.Instance.FSM.Event(StateMachineEvents.GoToBattle);
                     break;
             }
-
         }
-
-        private OffScreenMenuScript offscreen;
 
         public Text tipText;
         public Text tipCounterText;
@@ -59,8 +56,6 @@ namespace VillageKeeper.UI
 
         void Start()
         {
-            offscreen = GetComponent<OffScreenMenuScript>() as OffScreenMenuScript;
-
             nextButton.onClick.AddListener(() =>
             {
                 CurrentTipNumber++;
@@ -78,6 +73,9 @@ namespace VillageKeeper.UI
                 OnCloseClick();
                 CoreScript.Instance.AudioManager.PlayClick();
             });
+
+            CoreScript.Instance.FSM.SubscribeToEnter(States.BattleHelp, () => Show(Modes.Battle));
+            CoreScript.Instance.FSM.SubscribeToEnter(States.BuildHelp, () => Show(Modes.Build));
         }
 
         public void Show(Modes mode)
@@ -85,12 +83,6 @@ namespace VillageKeeper.UI
             this.mode = mode;
             currentTips = CoreScript.Instance.Localization.GetHelpTips(mode);
             CurrentTipNumber = 0;
-            offscreen.Show();
-        }
-
-        public void Hide()
-        {
-            offscreen.Hide();
         }
     }
 }

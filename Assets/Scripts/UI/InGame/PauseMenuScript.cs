@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
 namespace VillageKeeper.UI
@@ -45,12 +44,14 @@ namespace VillageKeeper.UI
                 CoreScript.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
                 CoreScript.Instance.AudioManager.PlayClick();
             });
+
+            CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.Pause, ShowPause);
+            CoreScript.Instance.FSM.SubscribeToExit(FSM.States.RoundFinished, ShowRoundFinished);
         }
 
         public void ShowPause()
         {
             mode = Modes.Pause;
-            Show();
             title.text = "Pause";
             roundFinishedText.SetActive(false);
         }
@@ -58,12 +59,11 @@ namespace VillageKeeper.UI
         public void ShowRoundFinished()
         {
             mode = Modes.RoundFinished;
-            Show();
             title.text = "Victory!";
             roundFinishedText.SetActive(true);
-            WeCollectedFoodText.text = "We collected " + (CoreScript.Instance.BalanceData.TotalFood.Get());
-            WithMonsterBonusText.text = "With " + CoreScript.Instance.BalanceData.MonsterBonusGold.Get().ToString();
-            YouGainGoldText.text = "you gain " + CoreScript.Instance.BalanceData.RoundFinishedBonusGold.Get().ToString();
+            WeCollectedFoodText.text = "We collected " + (CoreScript.Instance.GameData.TotalFood.Get());
+            WithMonsterBonusText.text = "With " + CoreScript.Instance.GameData.MonsterBonusGold.Get().ToString();
+            YouGainGoldText.text = "you gain " + CoreScript.Instance.GameData.RoundFinishedBonusGold.Get().ToString();
         }
     }
 }

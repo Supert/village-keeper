@@ -8,7 +8,6 @@ namespace VillageKeeper.FSM
 
         public override void Enter()
         {
-            CoreScript.Instance.UiManager.OnBattleHelpEntered();
             base.Enter();
         }
 

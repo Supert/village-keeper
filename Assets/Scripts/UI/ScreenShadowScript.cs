@@ -1,69 +1,46 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ScreenShadowScript : MonoBehaviour
+namespace VillageKeeper.UI
 {
-    public float animationTime;
-
-    private bool isShown;
-    private Button button;
-    private Image image;
-
-
-    public bool IsShown
+    public class ScreenShadowScript : StateVisibleView
     {
-        get
+        private bool isShown;
+        private Button button;
+        private Image image;
+        
+        public Button ShadowButton
         {
-            return isShown;
-        }
-        private set
-        {
-            if (value)
-                gameObject.SetActive(true);
-            isShown = value;
-        }
-    }
-
-    public void Show()
-    {
-        IsShown = true;
-    }
-
-    public void Hide()
-    {
-        IsShown = false;
-    }
-
-    public Button ShadowButton
-    {
-        get
-        {
-            if (button == null)
-                button = GetComponent<Button>() as Button;
-            return button;
-        }
-    }
-
-    protected virtual void Start()
-    {
-        image = GetComponent<Image>() as Image;
-    }
-
-    protected virtual void Update()
-    {
-        if (IsShown)
-        {
-            if (image.color != Color.white)
+            get
             {
-                image.color = Vector4.MoveTowards(image.color, Color.white, animationTime == 0 ? 1 : Time.deltaTime / animationTime);
+                if (button == null)
+                    button = GetComponent<Button>() as Button;
+                return button;
             }
         }
-        else
+
+        protected override void Start()
         {
-            if (image.color == new Color(1f, 1f, 1f, 0f))
-                gameObject.SetActive(false);
+            base.Start();
+            image = GetComponent<Image>() as Image;
+        }
+
+        protected override void AnimationUpdate()
+        {
+            if (IsShown)
+            {
+                if (image.color != Color.white)
+                {
+                    image.color = Vector4.MoveTowards(image.color, Color.white, animationTime == 0 ? 1 : Time.deltaTime / animationTime);
+                }
+            }
             else
-                image.color = Vector4.MoveTowards(image.color, new Color(1f, 1f, 1f, 0f), animationTime == 0 ? 1 : Time.deltaTime / animationTime);
+            {
+                if (image.color == new Color(1f, 1f, 1f, 0f))
+                    gameObject.SetActive(false);
+                else
+                    image.color = Vector4.MoveTowards(image.color, new Color(1f, 1f, 1f, 0f), animationTime == 0 ? 1 : Time.deltaTime / animationTime);
+            }
         }
     }
 }
