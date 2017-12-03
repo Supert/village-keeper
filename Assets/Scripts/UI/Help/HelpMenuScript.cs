@@ -30,8 +30,10 @@ namespace VillageKeeper.UI
 
             CoreScript.Instance.GameData.CurrentHelpTip.OnValueChanged += () =>
             {
-                tipText.text = currentTips[CoreScript.Instance.GameData.CurrentHelpTip.Get()];
-                tipCounterText.text = "Tip " + (CoreScript.Instance.GameData.CurrentHelpTip.Get() + 1).ToString() + "/" + currentTips.Length;
+                int tip = CoreScript.Instance.GameData.CurrentHelpTip.Get();
+                
+                tipText.text = currentTips[CoreScript.Instance.GameData.CurrentHelpTip.Get() - 1];
+                tipCounterText.text = "Tip " + tip.ToString() + "/" + currentTips.Length;
             };
 
             CoreScript.Instance.FSM.SubscribeToEnter(States.BattleHelp, ShowBattle);
@@ -52,7 +54,8 @@ namespace VillageKeeper.UI
 
         private void Show()
         {
-            CoreScript.Instance.GameData.CurrentHelpTip.Set(0);
+            CoreScript.Instance.GameData.HelpTipsCount.Set(currentTips.Length);
+            CoreScript.Instance.GameData.CurrentHelpTip.Set(1);
         }
     }
 }

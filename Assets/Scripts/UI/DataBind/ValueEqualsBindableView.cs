@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 namespace VillageKeeper.UI
 {
-    public class ActiveBindableView : BindableView
+    public class ValueEqualsBindableView : BindableView
     {
         [SerializeField]
         protected bool isInversed;

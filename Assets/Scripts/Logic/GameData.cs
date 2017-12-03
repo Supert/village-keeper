@@ -6,6 +6,7 @@ namespace VillageKeeper.Balance
     public class GameData : BindedData
     {
         public BindableField<int> CurrentHelpTip { get; private set; }
+        public BindableField<int> HelpTipsCount { get; private set; }
 
         public BindableField<int> TotalFood { get; private set; }
 
@@ -24,7 +25,7 @@ namespace VillageKeeper.Balance
             base.Register(prefix);
 
             CalculateEconomy();
-            
+
             CoreScript.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
             CoreScript.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
             ClampedArrowForce.OnValueChanged += () => IsArrowForceOverThreshold.Set(ClampedArrowForce.Get() >= BalanceData.ArrowForceThreshold);
