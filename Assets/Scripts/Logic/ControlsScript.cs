@@ -6,103 +6,87 @@ namespace VillageKeeper
     {
         public RectTransform MonsterArea;
         public RectTransform BowLoadingArea;
-        private Vector2? bowLoadingTouchStartingPosition;
-        private Vector2? bowLoadingTouchCurrentPosition;
 
-        public Vector2 TouchDeltaPosition
-        {
-            get
-            {
-                if (bowLoadingTouchStartingPosition != null && bowLoadingTouchCurrentPosition != null)
-                    return (Vector2)(bowLoadingTouchCurrentPosition - bowLoadingTouchStartingPosition);
-                else
-                    return new Vector2(0, 0);
-            }
-        }
+        private Vector2 bowLoadingTouchStartingPosition;
+        private Vector2 bowLoadingTouchCurrentPosition;
+        private bool isLoading;
 
         void CheckForTouches()
         {
+            bowLoadingTouchStartingPosition = Vector2.zero;
+            bowLoadingTouchCurrentPosition = Vector2.zero;
+            isLoading = false;
             foreach (var t in Input.touches)
             {
                 if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, t.position, Camera.current))
                 {
-                    if (t.phase == TouchPhase.Began)
+                    if (t.phase == TouchPhase.Began && Core.Instance.GameData.IsArrowForceOverThreshold.Get())
                     {
-                        if (Core.Instance.GameData.IsArrowForceOverThreshold.Get())
-                        {
-                            Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
-                            bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = null;
-                        }
+                        Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
                     }
                 }
                 else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, t.position, Camera.current))
                 {
                     if (t.phase == TouchPhase.Began)
                     {
+                        isLoading = true;
                         bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = t.position;
                     }
                     else if (t.phase == TouchPhase.Moved)
+                    {
+                        isLoading = true;
                         bowLoadingTouchCurrentPosition = t.position;
+                    }
                 }
             }
         }
 
-        void SimulateTouchesInUnity()
+        void CheckForMouse()
         {
+            isLoading = false;
             if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, Input.mousePosition, Camera.main))
             {
                 if (Input.GetMouseButtonDown(0))
                 {
                     Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                    bowLoadingTouchCurrentPosition = bowLoadingTouchStartingPosition = null;
                 }
             }
             else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, Input.mousePosition, Camera.main))
             {
                 if (Input.GetMouseButtonDown(0))
+                {
+                    isLoading = true;
                     bowLoadingTouchStartingPosition = Input.mousePosition;
+                }
                 else if (Input.GetMouseButton(0))
+                {
+                    isLoading = true;
                     bowLoadingTouchCurrentPosition = Input.mousePosition;
+                }
             }
+        }
+
+        void CheckArcherControls()
+        {
+            if (Application.isMobilePlatform)
+                CheckForTouches();
+            else
+                CheckForMouse();
+
+            if (Core.Instance.FSM.Current != FSM.States.Battle)
+                return;
+
+            if (isLoading)
+                Core.Instance.GameData.ClampedArrowForce.Set(Mathf.Clamp01(-(bowLoadingTouchCurrentPosition - bowLoadingTouchStartingPosition).x / 150f));
+
+            if (!isLoading && !Core.Instance.GameData.IsArrowForceOverThreshold.Get())
+                Core.Instance.GameData.ClampedArrowForce.Set(Mathf.Clamp01(Core.Instance.GameData.ClampedArrowForce.Get() - Time.deltaTime * 3f));
         }
 
         void Update()
         {
             if (Core.Instance.FSM.Current == FSM.States.Battle)
-            {
-#if UNITY_EDITOR
-                SimulateTouchesInUnity();
-#elif UNITY_ANDROID
-			    CheckForTouches ();
-#endif
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Core.Instance.FSM.Event(FSM.StateMachineEvents.Pause);
-            }
-            else if (Core.Instance.FSM.Current == FSM.States.Pause)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-            }
-            else if (Core.Instance.FSM.Current == FSM.States.RoundFinished)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-            }
-            else if (Core.Instance.FSM.Current == FSM.States.Shop)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-            }
-            else if (Core.Instance.FSM.Current == FSM.States.Menu)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Application.Quit();
-            }
-            else if (Core.Instance.FSM.Current == FSM.States.Build)
-            {
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Core.Instance.FSM.Event(FSM.StateMachineEvents.GoToMenu);
-            }
+                CheckArcherControls();
         }
     }
 }

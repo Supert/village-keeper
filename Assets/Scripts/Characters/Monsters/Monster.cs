@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
         private SpriteRenderer shadow;
         private Collider2D collider;
 
-        private float _agressiveness;
+        private float agressiveness;
 
         private int health;
         public int Health
@@ -38,7 +38,7 @@ namespace VillageKeeper.Game
             }
             private set
             {
-                health--;
+                health = value;
                 Core.Instance.GameData.ClampedMonsterHealth.Set(health / (float)maxHealth);
                 if (health == 0)
                     Kill();
@@ -191,7 +191,7 @@ namespace VillageKeeper.Game
 
         public bool CheckHitByPosition(Vector3 projectilePosition)
         {
-            if (collider.OverlapPoint((Vector2)projectilePosition))
+            if (collider.OverlapPoint(projectilePosition))
             {
                 if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= sprite.bounds.extents.y)
                 {
@@ -245,7 +245,7 @@ namespace VillageKeeper.Game
 
         private void ChooseNewBehaviour()
         {
-            IsAgressive = UnityEngine.Random.value < _agressiveness;
+            IsAgressive = UnityEngine.Random.value < agressiveness;
         }
 
         private void SetWaypoints(List<PathFinderNode> waypoints)
@@ -291,19 +291,19 @@ namespace VillageKeeper.Game
             if (pointsPool < minHealthPossible)
             {
                 maxHealth = (int)minHealthPossible;
-                _agressiveness = pointsPool / minHealthPossible;
+                agressiveness = pointsPool / minHealthPossible;
             }
             else
             {
                 if (pointsPool > maxHealthPossible)
                 {
                     maxHealth = (int)maxHealthPossible;
-                    _agressiveness = 1f;
+                    agressiveness = 1f;
                 }
                 else
                 {
-                    _agressiveness = UnityEngine.Random.Range(pointsPool / maxHealthPossible, 1);
-                    maxHealth = (int)(pointsPool / _agressiveness);
+                    agressiveness = UnityEngine.Random.Range(pointsPool / maxHealthPossible, 1);
+                    maxHealth = (int)(pointsPool / agressiveness);
                 }
             }
         }

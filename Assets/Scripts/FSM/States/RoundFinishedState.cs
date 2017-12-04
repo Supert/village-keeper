@@ -13,7 +13,7 @@ namespace VillageKeeper.FSM
 
         public override States Event(StateMachineEvents type, params object[] args)
         {
-            if (type == StateMachineEvents.GoToBuild)
+            if (type == StateMachineEvents.PauseMenuContinue)
                 return States.Build;
             if (type == StateMachineEvents.GoToMenu)
                 return States.Menu;

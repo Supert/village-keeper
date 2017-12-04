@@ -3,20 +3,22 @@
     public enum StateMachineEvents
         {
             //Init
-            GameInitialized,
+            GameInitialized = 0,
 
             //Menu
-            GoToShop,
-            GoToBuild,
+            GoToShop = 1,
+            GoToBuild = 2,
             
-            GoToMenu,
+            GoToMenu = 3,
             
-            ShowHelp,
-            HideHelp,
+            ShowHelp = 4,
+            HideHelp = 5,
 
-            GoToBattle,
+            GoToBattle = 6,
             
-            Pause,
-            RoundFinished,
+            Pause = 7,
+            RoundFinished = 8,
+
+            PauseMenuContinue = 9,
         }
 }
