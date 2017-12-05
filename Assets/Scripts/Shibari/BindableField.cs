@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VillageKeeper.Data
+namespace Shibari
 {
     public class BindableField<TValue>
     {

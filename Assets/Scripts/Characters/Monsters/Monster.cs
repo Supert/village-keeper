@@ -186,7 +186,7 @@ namespace VillageKeeper.Game
             }
             if (paths == null || paths.Count == 0)
                 return null;
-            return paths[(int)UnityEngine.Random.Range(0, paths.Count)];
+            return paths[UnityEngine.Random.Range(0, paths.Count)];
         }
 
         public bool CheckHitByPosition(Vector3 projectilePosition)

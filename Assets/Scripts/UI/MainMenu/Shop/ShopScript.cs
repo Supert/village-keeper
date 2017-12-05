@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using Soomla.Store;
 
 namespace VillageKeeper.UI
 {
@@ -14,13 +12,13 @@ namespace VillageKeeper.UI
         {
             thounsandButton.onClick.AddListener(() =>
             {
-                SoomlaStore.BuyMarketItem(EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
+                //SoomlaStore.BuyMarketItem(EconomyAssets.THOUSAND_COINS.ItemId, "thousand");
                 Core.Instance.AudioManager.PlayClick();
             });
 
             tenThousandButton.onClick.AddListener(() =>
             {
-                SoomlaStore.BuyMarketItem(EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
+                //SoomlaStore.BuyMarketItem(EconomyAssets.TEN_THOUSAND_COINS.ItemId, "ten thousand");
                 Core.Instance.AudioManager.PlayClick();
             });
         }
