@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace VillageKeeper.UI
+namespace Shibari.UI
 {
     [RequireComponent(typeof(Image))]
     public class ImageBindableView : ResourceBindableView<Sprite>

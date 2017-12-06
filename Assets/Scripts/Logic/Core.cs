@@ -6,6 +6,7 @@ using VillageKeeper.Audio;
 using VillageKeeper.Locale;
 using VillageKeeper.Data;
 using VillageKeeper.Balance;
+using Shibari;
 
 namespace VillageKeeper
 {
@@ -54,10 +55,12 @@ namespace VillageKeeper
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
 
-            ResourceData = new ResourceData("Resources");
-            SavedData = new SavedData("Saved");
-            CommonData = new CommonData("Common");
-            GameData = new GameData("Game");
+            Model.Init();
+
+            ResourceData = Model.Get<ResourceData>("Resources");
+            SavedData = Model.Get<SavedData>("Saved");
+            CommonData = Model.Get<CommonData>("Common");
+            GameData = Model.Get<GameData>("Game");
 
             GameManager = transform.Find("Game").GetComponent<GameController>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();

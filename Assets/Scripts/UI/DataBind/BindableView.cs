@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Reflection;
 using System;
-using VillageKeeper.Data;
+using Shibari;
 
-namespace VillageKeeper.UI
+namespace Shibari.UI
 {
     public abstract class BindableView : MonoBehaviour
     {
@@ -43,14 +43,14 @@ namespace VillageKeeper.UI
 
         protected FieldInfo GetField(BindableIds ids)
         {
-            BindedData data = BindedData.Get<BindedData>(ids.dataId);
+            var data = Model.Get<IBindableData>(ids.dataId);
 
             var dataFieldProperty = data.GetType().GetProperty(ids.fieldId);
 
             if (dataFieldProperty == null)
                 throw new ArgumentException(string.Format("No property {0} is found in data with prefix {1}", ids.fieldId, ids.dataId), "ids.fieldId");
 
-            if (!BindedData.CheckIfPropertyIsBindableField(dataFieldProperty))
+            if (!Model.IsBindableField(dataFieldProperty))
                 throw new ArgumentException(string.Format("Property {0} in data with prefix {1} is not BindableField.", ids.fieldId, ids.dataId), "ids.fieldId");
 
             FieldInfo result = new FieldInfo()

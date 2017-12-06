@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace VillageKeeper.Data
+namespace Shibari
 {
     public class BoolDataField : DataField<Boolean>
     {

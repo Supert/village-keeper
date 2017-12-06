@@ -1,10 +1,11 @@
 ﻿using System;
 using Shibari;
 using VillageKeeper.Balance;
+using Shibari;
 
 namespace VillageKeeper.Data
 {
-    public class CommonData : BindedData
+    public class CommonData : IBindableData
     {
         public enum Specials
         {
@@ -19,10 +20,8 @@ namespace VillageKeeper.Data
 
         public BindableField<float> Wind { get; private set; }
 
-        public CommonData(string prefix)
+        public void Init(string prefix)
         {
-            Register(prefix);
-
             Special.Set(GetTodaySpecial());
 
             MonsterBonusGold.Set(BalanceData.MonsterBonusGold);

@@ -1,16 +1,9 @@
 ﻿using UnityEngine;
+using Shibari;
 
 namespace VillageKeeper.Data
 {
-    public class LocalizationData : BindedData
-    {
-        public LocalizationData(string id)
-        {
-            Register(id);
-        }
-    }
-
-    public class SavedData : BindedData
+    public class SavedData : IBindableData
     {
         public BuildingsDataField Buildings { get; private set; }
 
@@ -28,9 +21,8 @@ namespace VillageKeeper.Data
         public BoolDataField IsSoundEffectsEnabled { get; private set; }
         public BoolDataField IsMusicEnabled { get; private set; }
 
-        public SavedData(string id)
+        public void Init(string id)
         {
-            Register(id);
             if (Buildings.Get() == null)
                 Buildings.Set(new SerializableBuildingsList());
         }

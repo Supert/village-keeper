@@ -2,7 +2,7 @@
 using UnityEditor;
 using VillageKeeper.UI;
 
-namespace VillageKeeper.Edit.UI
+namespace Shibari.Editor
 {
     [CustomPropertyDrawer(typeof(BindableIds))]
     public class BindableIdsDrawer : PropertyDrawer

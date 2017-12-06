@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Linq;
 
-namespace VillageKeeper.UI
+namespace Shibari.UI
 {
 
     [RequireComponent(typeof(Text))]

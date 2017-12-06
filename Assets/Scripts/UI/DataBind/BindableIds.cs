@@ -1,5 +1,5 @@
 ﻿using System;
-namespace VillageKeeper.UI
+namespace Shibari
 {
     [Serializable]
     public class BindableIds

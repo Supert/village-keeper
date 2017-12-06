@@ -1,4 +1,4 @@
-﻿namespace VillageKeeper.Data
+﻿namespace Shibari
 {
     public abstract class DataField<TValue> : BindableField<TValue>
     {

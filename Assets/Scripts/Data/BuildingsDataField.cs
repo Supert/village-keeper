@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Xml.Serialization;
 using System.IO;
-using VillageKeeper.Game;
+using Shibari;
 
 namespace VillageKeeper.Data
 {

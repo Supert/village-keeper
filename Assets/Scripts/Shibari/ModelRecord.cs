@@ -1,7 +1,9 @@
 ﻿using TypeReferences;
+using System;
 
 namespace Shibari
 {
+    [Serializable]
     public class ModelRecord
     {
         public string key;

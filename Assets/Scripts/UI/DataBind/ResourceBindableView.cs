@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-namespace VillageKeeper.UI
+namespace Shibari.UI
 {
     public abstract class ResourceBindableView<T> : BindableView
     {

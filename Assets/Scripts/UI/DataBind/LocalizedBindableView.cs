@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace VillageKeeper.UI
+namespace Shibari.UI
 {
     [RequireComponent(typeof(Text))]
     public class LocalizedBindableView : BindableView

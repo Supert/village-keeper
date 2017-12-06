@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using VillageKeeper.Data;
+using Shibari;
 
 namespace VillageKeeper.Balance
 {
-    public class GameData : BindedData
+    public class GameData : IBindableData
     {
         public BindableField<int> CurrentHelpTip { get; private set; }
         public BindableField<int> HelpTipsCount { get; private set; }
@@ -20,10 +21,8 @@ namespace VillageKeeper.Balance
 
         public BindableField<bool> IsArrowForceOverThreshold { get; private set; }
 
-        public override void Register(string prefix)
+        public void Init(string prefix)
         {
-            base.Register(prefix);
-
             CalculateEconomy();
 
             Core.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
@@ -45,11 +44,6 @@ namespace VillageKeeper.Balance
             CastleUpgradeCost.Set(BalanceData.GetCastleUpgradeCost(villageLevel));
 
             TotalFood.Set((BalanceData.CalculateFarmsFood(farms) + BalanceData.CalculateWindmillsFood(windmills, farms)));
-        }
-
-        public GameData(string prefix)
-        {
-            Register(prefix);
         }
     }
 }
