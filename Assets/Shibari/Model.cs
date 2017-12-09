@@ -3,65 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 using UnityEngine;
-using UnityEditor;
-using UnityEditor.Callbacks;
-
-namespace Shibari.Editor
-{
-    public class ShibariSettingsWindow : EditorWindow
-    {
-        [MenuItem("Shibari/Settings")]
-        static void Init()
-        {
-            // Get existing open window or if none, make a new one:
-            ShibariSettingsWindow window = (ShibariSettingsWindow)GetWindow(typeof(ShibariSettingsWindow));
-            window.Show();
-        }
-
-        void OnGUI()
-        {
-            GUILayout.Label("Shibari Settings", "BoldLabel");
-
-            ModelRecordList deserializedKludge = JsonUtility.FromJson<ModelRecordList>(PlayerPrefs.GetString(Model.PREFS_KEY));
-            if (deserializedKludge == null)
-                deserializedKludge = new ModelRecordList() { value = new ModelRecord[0] };
-
-            if (deserializedKludge.value == null)
-                deserializedKludge.value = new ModelRecord[0];
-
-            List<ModelRecord> deserialized = deserializedKludge.value.ToList();
-
-            var list = new UnityEditorInternal.ReorderableList(deserialized, typeof(ModelRecord));
-            list.DoLayoutList();
-            deserializedKludge.value = new ModelRecord[list.list.Count];
-            list.list.CopyTo(deserializedKludge.value, 0);
-            string serialized = JsonUtility.ToJson(deserializedKludge);
-            if (deserializedKludge.value.Length > 0)
-            {
-
-            }
-            PlayerPrefs.SetString(Model.PREFS_KEY, serialized);
-
-            Model.LoadRecords();
-        }
-    }
-}
 
 namespace Shibari
 {
-    public class LocalizationData : IBindableData
-    {
-        public DataField<string> Language { get; private set; }
-        public DataField<string> DefaultLanguage { get; private set; }
-
-        public void Init(string key)
-        {
-
-        }
-    }
-
-
-
     public static class Model
     {
         public const string PREFS_KEY = "SHIBARI_MODEL_RECORDS";
@@ -70,44 +14,36 @@ namespace Shibari
 
         private static Dictionary<Type, Tuple<string, Type>[]> modelTree;
 
-        private static ModelRecordList records;
+        private static ModelRecord[] records;
 
         public static void Init()
         {
             LoadRecords();
 
-            foreach (var record in records.value)
+            foreach (var record in records)
             {
                 Register(record.key, (IBindableData)record.type.Type.GetConstructor(new Type[0]).Invoke(new object[0]));
             }
         }
 
-        [DidReloadScripts]
-        private static void OnDidReloadScripts()
-        {
-            LoadRecords();
-        }
-
         public static void LoadRecords()
         {
-            string serialized = PlayerPrefs.GetString(PREFS_KEY);
+            ShibariSettings settings = Resources.Load<ShibariSettings>("ShibariSettings");
 
-            records = JsonUtility.FromJson<ModelRecordList>(serialized);
+            if (settings == null)
+                Debug.LogError("Could not find container prefab for Shibari Settings.");
 
-            if (records == null)
-                records = new ModelRecordList() { value = new ModelRecord[0] };
+            if (settings.values == null)
+                settings.values = new ModelRecord[0];
 
-            if (records.value == null)
-                records.value = new ModelRecord[0];
-
-            var groups = records.value.GroupBy(r => r.key);
+            var groups = settings.values.Where(r => r != null).GroupBy(r => r.key);
             foreach (var group in groups)
             {
                 var record = group.First();
                 if (group.Take(2).Count() == 2)
-                    Debug.LogErrorFormat("Found multiple datas with id {0}, using first.", record.key);
+                    Debug.LogErrorFormat("Found multiple datas with id {0}, ignoring duplicates.", record.key);
             }
-            records.value = groups.Select(g => g.First()).ToArray();
+            records = groups.Select(g => g.First()).ToArray();
 
             modelTree = new Dictionary<Type, Tuple<string, Type>[]>();
 
@@ -116,12 +52,6 @@ namespace Shibari
 
             foreach (var assembly in executingAssembly.GetReferencedAssemblies())
                 ProcessTypes(Assembly.Load(assembly).GetTypes());
-            Debug.Log("Types reloaded");
-        }
-
-        private static void SaveRecords()
-        {
-            PlayerPrefs.SetString(PREFS_KEY, JsonUtility.ToJson(records));
         }
 
         private static void ProcessTypes(Type[] types)

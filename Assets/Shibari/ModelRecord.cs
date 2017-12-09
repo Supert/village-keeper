@@ -1,5 +1,6 @@
 ﻿using TypeReferences;
 using System;
+using UnityEngine;
 
 namespace Shibari
 {
@@ -7,8 +8,10 @@ namespace Shibari
     public class ModelRecord
     {
         public string key;
+
         [ClassImplements(typeof(IBindableData))]
         public ClassTypeReference type;
+        
         public string defaultValuesPath;
     }
 }
