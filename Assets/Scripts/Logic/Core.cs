@@ -62,6 +62,8 @@ namespace VillageKeeper
             CommonData = Model.Get<CommonData>("Common");
             GameData = Model.Get<GameData>("Game");
 
+            Model.DeserializeData("Saved", Resources.Load<TextAsset>("Data/VillageKeeper.Balance.GameData").text);
+
             GameManager = transform.Find("Game").GetComponent<GameController>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
 

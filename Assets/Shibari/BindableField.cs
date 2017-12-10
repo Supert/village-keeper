@@ -5,12 +5,7 @@ namespace Shibari
     public class BindableField<TValue>
     {
         protected TValue Value { get; private set; }
-
-        public virtual void Init(string dataId, string fieldId)
-        {
-
-        }
-
+        
         public TValue Get()
         {
             return Value;
@@ -20,11 +15,6 @@ namespace Shibari
         {
             Value = value;
             OnValueChanged?.Invoke();
-        }
-
-        protected virtual TValue GetDefaultValue()
-        {
-            return (default(TValue));
         }
 
         public event Action OnValueChanged;

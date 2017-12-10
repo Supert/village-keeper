@@ -5,21 +5,21 @@ namespace VillageKeeper.Data
 {
     public class SavedData : BindableData
     {
-        public BuildingsDataField Buildings { get; private set; }
+        public SerializableField<SerializableBuildingsList> Buildings { get; private set; }
 
-        public IntDataField VillageLevel { get; private set; }
-        public IntDataField Gold { get; private set; }
+        public SerializableField<int> VillageLevel { get; private set; }
+        public SerializableField<int> Gold { get; private set; }
 
-        public BoolDataField HasPremium { get; private set; }
+        public SerializableField<bool> HasPremium { get; private set; }
 
-        public BoolDataField WasBuildTipShown { get; private set; }
-        public BoolDataField WasBattleTipShown { get; private set; }
+        public SerializableField<bool> WasBuildTipShown { get; private set; }
+        public SerializableField<bool> WasBattleTipShown { get; private set; }
 
 
-        public IntDataField MonstersDefeated { get; private set; }
+        public SerializableField<int> MonstersDefeated { get; private set; }
 
-        public BoolDataField IsSoundEffectsEnabled { get; private set; }
-        public BoolDataField IsMusicEnabled { get; private set; }
+        public SerializableField<bool> IsSoundEffectsEnabled { get; private set; }
+        public SerializableField<bool> IsMusicEnabled { get; private set; }
 
         public override void Init(string id)
         {

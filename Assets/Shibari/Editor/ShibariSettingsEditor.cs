@@ -19,11 +19,20 @@ namespace Shibari.Editor
                 EditorGUILayout.LabelField("Record type", GUILayout.Width(w * 0.65f + 2f));
                 //EditorGUILayout.LabelField("Resource path to serialized default values", GUILayout.Width(w * 0.4f));
                 EditorGUILayout.EndHorizontal();
-                EditorGUI.indentLevel--;
+
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("Refresh Templates"))
+                {
+                    Model.RefreshModel();
+                    Model.RefreshTemplates();
+                }
+
                 if (GUILayout.Button("Apply"))
                 {
-                    Shibari.Model.LoadRecords();
+                    Model.RefreshModel();
                 }
+                EditorGUILayout.EndHorizontal();
+                EditorGUI.indentLevel--;
             }
             else
             {

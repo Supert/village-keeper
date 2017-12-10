@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -9,11 +10,12 @@ namespace Shibari.Editor
     public class Model : UnityEditor.AssetModificationProcessor
     {
         public const string SETTINGS_PATH = "Assets/Shibari/Resources/ShibariSettings.prefab";
+        public const string SERIALIZATION_TEMPLATES = "Assets/Shibari/Templates/";
 
         static string[] OnWillSaveAssets(string[] paths)
         {
             if (paths.Any(p => p == SETTINGS_PATH))
-                Shibari.Model.LoadRecords();
+                RefreshModel();
             return paths;
         }
 
@@ -36,13 +38,29 @@ namespace Shibari.Editor
             if (prefabPath != SETTINGS_PATH)
                 Debug.Log($"Please, locate your shibari settings in \"{SETTINGS_PATH}\"");
 
-            Shibari.Model.LoadRecords();
+            RefreshModel();
         }
 
         [DidReloadScripts]
         private static void OnDidReloadScripts()
         {
+            RefreshModel();
+        }
+
+        public static void RefreshModel()
+        {
             Shibari.Model.LoadRecords();
+        }
+
+        public static void RefreshTemplates()
+        {
+            foreach (var model in Shibari.Model.ModelTree.Keys)
+            {
+                FileInfo file = new FileInfo($"{SERIALIZATION_TEMPLATES}{model.FullName}.txt");
+                file.Directory.Create();
+                File.WriteAllText(file.FullName, Shibari.Model.GenerateSerializationTemplate(model));
+                AssetDatabase.Refresh();
+            }
         }
     }
 }

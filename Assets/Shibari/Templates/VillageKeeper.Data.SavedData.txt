@@ -1,0 +1,9 @@
+Buildings:VillageKeeper.Data.SerializableBuildingsList:
+VillageLevel:System.Int32:{}
+Gold:System.Int32:{}
+HasPremium:System.Boolean:{}
+WasBuildTipShown:System.Boolean:{}
+WasBattleTipShown:System.Boolean:{}
+MonstersDefeated:System.Int32:{}
+IsSoundEffectsEnabled:System.Boolean:{}
+IsMusicEnabled:System.Boolean:{}

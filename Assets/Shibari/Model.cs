@@ -23,7 +23,7 @@ namespace Shibari
             foreach (var record in Records)
             {
                 object o = Activator.CreateInstance(record.type.Type);
-                Register(record.key, (BindableData) o);
+                Register(record.key, (BindableData)o);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Shibari
         {
             if (!registered.ContainsKey(id))
                 throw new ArgumentException(string.Format("Data with id {0} is not registered.", id), "id");
-            
+
             if (!typeof(T).IsAssignableFrom(registered[id].GetType()))
                 throw new Exception(string.Format("Can't cast data with id {0} to type {1}", id, typeof(T)));
             return (T)registered[id];
@@ -103,6 +103,15 @@ namespace Shibari
 
         public static void Register(string dataId, BindableData data)
         {
+            InitializeFields(data);
+
+            data.InitializeProperties();
+
+            Add(dataId, data);
+        }
+
+        private static void InitializeFields(BindableData data)
+        {
             foreach (var p in data.GetType().GetProperties())
             {
                 Type type = p.PropertyType;
@@ -112,29 +121,122 @@ namespace Shibari
                     {
                         MethodInfo init = p.PropertyType.GetMethod("Init", new Type[2] { typeof(string), typeof(string) });
                         object value = Activator.CreateInstance(p.PropertyType);
-                        init.Invoke(value, new object[2] { dataId, p.Name });
                         p.SetValue(data, value);
                         break;
                     }
                     type = type.BaseType;
                 }
             }
-
-            Add(dataId, data);
         }
 
         public static bool IsBindableField(PropertyInfo property)
         {
-            Type type = property.PropertyType;
+            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>));
+        }
+
+        public static bool IsSerializableField(PropertyInfo property)
+        {
+            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(SerializableField<>));
+        }
+
+        private static bool CheckTypeTreeByPredicate(Type type, Func<Type, bool> predicate)
+        {
             while (type != typeof(object))
             {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableField<>))
+                if (predicate(type))
                 {
                     return true;
                 }
                 type = type.BaseType;
             }
             return false;
+        }
+
+        public static void DeserializeData(string dataId, string serialized)
+        {
+            var record = Records.FirstOrDefault(r => r.key == dataId);
+
+            if (record == null)
+            {
+                Debug.LogError($"Model record with id {dataId} is not found.");
+                return;
+            }
+
+            var model = Get<BindableData>(dataId);
+
+            foreach (string s in serialized.Split(new string[1] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var splitted = s.Split(':');
+                if (splitted.Length < 3)
+                {
+                    Debug.LogError($"Error parsing line {s} in {dataId}");
+                    return;
+                }
+
+                splitted[2] = string.Join("", splitted.Skip(2).ToArray());
+                Array.Resize(ref splitted, 3);
+
+                if (!model.ReflectedProperties.ContainsKey(splitted[0]))
+                {
+                    Debug.LogError($"Could not find property with id {splitted[0]} in data with id {dataId}");
+                    return;
+                }
+
+                BindableFieldInfo field = model.ReflectedProperties[splitted[0]];
+
+                if (field.valueType.FullName != splitted[1])
+                {
+                    Debug.LogError($"Serialized property with id {splitted[0]} has type {splitted[1]} but type {field.valueType.FullName} expected.");
+                    return;
+                }
+
+                var property = field.property;
+
+                if (!IsSerializableField(property))
+                {
+                    Debug.LogError($"Property {splitted[0]} of model with id {dataId} is not SerializableField.");
+                }
+
+                try
+                {
+                    field.dataField.GetType().GetMethod("Deserialize", new Type[1] { typeof(string) }).Invoke(field.dataField, new object[1] { splitted[2] });
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Catched exception {e} while parsing {splitted[0]} in {dataId}");
+                    return;
+                }
+            }
+        }
+
+        public static string SerializeData(BindableData deserialized)
+        {
+            string[] result = deserialized.ReflectedProperties
+                .Where(fieldInfo => IsSerializableField(fieldInfo.Value.property))
+                .Select(fieldInfo =>
+                {
+                    Type propertyType = fieldInfo.Value.property.PropertyType;
+                    MethodInfo method = propertyType.GetMethod("Serialize", new Type[0]);
+                    string serializedValue = method.Invoke(fieldInfo.Value.dataField, new object[0]).ToString();
+                    return $"{fieldInfo.Key}:{fieldInfo.Value.valueType.FullName}:{serializedValue}";
+                })
+                .ToArray();
+            return string.Join("\n", result);
+        }
+
+        public static string GenerateSerializationTemplate(Type t)
+        {
+            if (!typeof(BindableData).IsAssignableFrom(t))
+                throw new ArgumentException("Type t should be child of BindableData", "t");
+
+            var def = Activator.CreateInstance(t);
+            ((BindableData)def).InitializeProperties();
+            return SerializeData(def as BindableData);
+        }
+
+        public static string GenerateSerializationTemplate<T>() where T : BindableData
+        {
+            return GenerateSerializationTemplate(typeof(T));
         }
     }
 }

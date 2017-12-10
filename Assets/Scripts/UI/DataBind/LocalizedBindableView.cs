@@ -12,7 +12,7 @@ namespace Shibari.UI
         [SerializeField, Header("Localized Format Entry")]
         protected BindableIds localizedFormatEntry;
 
-        protected FieldInfo LocalizedFormatField { get; private set; }
+        protected BindableFieldInfo LocalizedFormatField { get; private set; }
 
         protected override void OnValueChanged()
         {
