@@ -23,8 +23,6 @@ namespace Shibari.UI
         [SerializeField]
         private BindableIds[] dataEntries = new BindableIds[0];
 
-        public ModelRecord[] fuckyouunity = new ModelRecord[0];
-
         protected FieldInfo[] Fields { get; private set; }
 
         protected abstract void OnValueChanged();
@@ -45,7 +43,7 @@ namespace Shibari.UI
 
         protected FieldInfo GetField(BindableIds ids)
         {
-            var data = Model.Get<IBindableData>(ids.dataId);
+            var data = Model.Get<BindableData>(ids.dataId);
 
             var dataFieldProperty = data.GetType().GetProperty(ids.fieldId);
 

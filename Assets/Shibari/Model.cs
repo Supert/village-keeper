@@ -12,17 +12,18 @@ namespace Shibari
 
         public static LocalizationData Localization { get; private set; }
 
-        private static Dictionary<Type, Tuple<string, Type>[]> modelTree;
+        public static Dictionary<Type, Tuple<string, Type>[]> ModelTree { get; private set; }
 
-        private static ModelRecord[] records;
+        public static ModelRecord[] Records { get; private set; }
 
         public static void Init()
         {
             LoadRecords();
 
-            foreach (var record in records)
+            foreach (var record in Records)
             {
-                Register(record.key, (IBindableData)record.type.Type.GetConstructor(new Type[0]).Invoke(new object[0]));
+                object o = Activator.CreateInstance(record.type.Type);
+                Register(record.key, (BindableData) o);
             }
         }
 
@@ -43,9 +44,9 @@ namespace Shibari
                 if (group.Take(2).Count() == 2)
                     Debug.LogErrorFormat("Found multiple datas with id {0}, ignoring duplicates.", record.key);
             }
-            records = groups.Select(g => g.First()).ToArray();
+            Records = groups.Select(g => g.First()).ToArray();
 
-            modelTree = new Dictionary<Type, Tuple<string, Type>[]>();
+            ModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
 
             var executingAssembly = Assembly.GetExecutingAssembly();
             ProcessTypes(executingAssembly.GetTypes());
@@ -56,32 +57,41 @@ namespace Shibari
 
         private static void ProcessTypes(Type[] types)
         {
-            foreach (var type in types.Where(t => t.GetInterfaces().Contains(typeof(IBindableData))))
+            foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
             {
                 if (type.GetConstructor(new Type[0]) == null)
                     Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
 
-                modelTree[type] = type.GetProperties()
+                ModelTree[type] = type.GetProperties()
                     .Where(p => IsBindableField(p))
-                    .Select(p => new Tuple<string, Type>(p.Name, p.PropertyType))
+                    .Select(p =>
+                    {
+                        Type t = p.PropertyType;
+                        while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>)))
+                        {
+                            t = t.BaseType;
+                        }
+                        return new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]);
+                    })
                     .ToArray();
             }
         }
 
-        private static Dictionary<string, IBindableData> registered = new Dictionary<string, IBindableData>();
+        private static Dictionary<string, BindableData> registered = new Dictionary<string, BindableData>();
 
-        public static void Add(string id, IBindableData data)
+        public static void Add(string id, BindableData data)
         {
             if (registered.ContainsKey(id))
                 throw new ArgumentException(string.Format("Data with id {0} is already registered"));
             registered[id] = data;
         }
 
-        public static T Get<T>(string id) where T : IBindableData
+        public static T Get<T>(string id) where T : BindableData
         {
             if (!registered.ContainsKey(id))
                 throw new ArgumentException(string.Format("Data with id {0} is not registered.", id), "id");
-            if (typeof(T).IsAssignableFrom(registered[id].GetType()))
+            
+            if (!typeof(T).IsAssignableFrom(registered[id].GetType()))
                 throw new Exception(string.Format("Can't cast data with id {0} to type {1}", id, typeof(T)));
             return (T)registered[id];
         }
@@ -91,7 +101,7 @@ namespace Shibari
             registered.Remove(id);
         }
 
-        public static void Register(string dataId, IBindableData data)
+        public static void Register(string dataId, BindableData data)
         {
             foreach (var p in data.GetType().GetProperties())
             {
@@ -101,7 +111,7 @@ namespace Shibari
                     if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableField<>))
                     {
                         MethodInfo init = p.PropertyType.GetMethod("Init", new Type[2] { typeof(string), typeof(string) });
-                        object value = p.PropertyType.GetConstructor(new Type[0]).Invoke(new object[0]);
+                        object value = Activator.CreateInstance(p.PropertyType);
                         init.Invoke(value, new object[2] { dataId, p.Name });
                         p.SetValue(data, value);
                         break;

@@ -15,9 +15,9 @@ namespace Shibari.Editor
                 EditorGUI.indentLevel++;
                 EditorGUILayout.BeginHorizontal();
                 float w = Screen.width;
-                EditorGUILayout.LabelField("Record Name", GUILayout.Width(w * 0.2f - 22f));
-                EditorGUILayout.LabelField("Record Type", GUILayout.Width(w * 0.4f + 2f));
-                EditorGUILayout.LabelField("Resource Path To Serialized Default Values", GUILayout.Width(w * 0.4f));
+                EditorGUILayout.LabelField("Record name", GUILayout.Width(w * 0.35f - 22f));
+                EditorGUILayout.LabelField("Record type", GUILayout.Width(w * 0.65f + 2f));
+                //EditorGUILayout.LabelField("Resource path to serialized default values", GUILayout.Width(w * 0.4f));
                 EditorGUILayout.EndHorizontal();
                 EditorGUI.indentLevel--;
                 if (GUILayout.Button("Apply"))

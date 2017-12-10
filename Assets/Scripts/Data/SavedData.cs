@@ -3,7 +3,7 @@ using Shibari;
 
 namespace VillageKeeper.Data
 {
-    public class SavedData : IBindableData
+    public class SavedData : BindableData
     {
         public BuildingsDataField Buildings { get; private set; }
 
@@ -21,7 +21,7 @@ namespace VillageKeeper.Data
         public BoolDataField IsSoundEffectsEnabled { get; private set; }
         public BoolDataField IsMusicEnabled { get; private set; }
 
-        public void Init(string id)
+        public override void Init(string id)
         {
             if (Buildings.Get() == null)
                 Buildings.Set(new SerializableBuildingsList());

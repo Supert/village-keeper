@@ -2,7 +2,7 @@
 
 namespace VillageKeeper.Data
 {
-    public class ResourceData : IBindableData
+    public class ResourceData : BindableData
     {
         public BindableField<string> CastleBackground { get; private set; }
         public BindableField<string> MountainsBackground { get; private set; }
@@ -11,7 +11,7 @@ namespace VillageKeeper.Data
         public BindableField<string> CastleUpgradeIcon { get; private set; }
         public BindableField<string> ArrowBar { get; private set; }
 
-        public void Init(string id)
+        public override void Init(string id)
         {
             CastleBackground.Set("Background/Castle/{0}/{1}");
             MountainsBackground.Set("Background/Mountains/{0}");

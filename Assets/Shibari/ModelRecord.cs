@@ -9,9 +9,7 @@ namespace Shibari
     {
         public string key;
 
-        [ClassImplements(typeof(IBindableData))]
+        [ClassExtends(typeof(BindableData))]
         public ClassTypeReference type;
-        
-        public string defaultValuesPath;
     }
 }

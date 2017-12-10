@@ -4,7 +4,7 @@ using Shibari;
 
 namespace VillageKeeper.Balance
 {
-    public class GameData : IBindableData
+    public class GameData : BindableData
     {
         public BindableField<int> CurrentHelpTip { get; private set; }
         public BindableField<int> HelpTipsCount { get; private set; }
@@ -21,7 +21,7 @@ namespace VillageKeeper.Balance
 
         public BindableField<bool> IsArrowForceOverThreshold { get; private set; }
 
-        public void Init(string prefix)
+        public override void Init(string prefix)
         {
             CalculateEconomy();
 

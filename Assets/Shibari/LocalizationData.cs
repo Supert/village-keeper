@@ -1,13 +1,8 @@
 ﻿namespace Shibari
 {
-    public class LocalizationData : IBindableData
+    public abstract class LocalizationData : BindableData
     {
-        public DataField<string> Language { get; private set; }
-        public DataField<string> DefaultLanguage { get; private set; }
-
-        public void Init(string key)
-        {
-
-        }
+        public BindableField<string> Language { get; protected set; }
+        public BindableField<string> DefaultLanguage { get; protected set; }
     }
 }
