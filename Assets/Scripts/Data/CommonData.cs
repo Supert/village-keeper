@@ -23,8 +23,8 @@ namespace VillageKeeper.Data
         {
             Special.Set(GetTodaySpecial());
 
-            MonsterBonusGold.Set(BalanceData.MonsterBonusGold);
-            MaxVillageLevel.Set(BalanceData.MaxVillageLevel);
+            MonsterBonusGold.Set(Core.Instance.Balance.MonsterBonusGold.Get());
+            MaxVillageLevel.Set(Core.Instance.Balance.MaxVillageLevel.Get());
         }
 
         private Specials GetTodaySpecial()

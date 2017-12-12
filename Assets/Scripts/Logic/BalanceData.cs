@@ -1,87 +1,48 @@
-﻿using VillageKeeper.Data;
+﻿using System;
+using Shibari;
+using VillageKeeper.Data;
 
-namespace VillageKeeper.Balance
+namespace VillageKeeper.Data
 {
-    public static class BalanceData
+    public class BalanceData : BindableData
     {
-        public static float ArrowForceThreshold { get; } = 0.8f;
-        public static int MonsterBonusGold { get; } = 20;
-        public static int MaxVillageLevel { get; } = 2;
-        public static int FoodPerFarm { get; } = 1;
-        public static int FoodPerWindMillMultiplier { get; } = 1;
+        public SerializableField<float> ArrowForceThreshold { get; private set; }// = 0.8f;
+        public SerializableField<int> MonsterBonusGold { get; private set; }// = 20;
+        public SerializableField<int> MaxVillageLevel { get; private set; }// = 2;
+        public SerializableField<int> FoodPerFarm { get; private set; }// = 1;
+        public SerializableField<int> FoodPerWindMillMultiplier { get; private set; }// = 1;
 
-        public static int GetCastleUpgradeCost(int currentLevel)
-        {
-            if (currentLevel == 0)
-                return 600;
-            if (currentLevel == 1)
-                return 6000;
-            return 0;
-        }
+        public SerializableField<IntArray> CastleUpgradeCosts { get; private set; } // [600, 6000]
 
-        public static int GetBreadToGoldMultiplier(int villageLevel)
+        public SerializableField<FloatArray> BuildingMaxHealths { get; private set; } //[2, 3, 6, 3, 4, 6]
+        public SerializableField<IntArray> BuildingCosts { get; private set; } //       [2, 2, 25, 10, 50, 100]
+
+        public int GetBreadToGoldMultiplier(int villageLevel)
         {
             return villageLevel + 1;
         }
 
-        public static int CalculateFarmsFood(int farms)
+        public int CalculateFarmsFood(int farms)
         {
-            return farms * FoodPerFarm;
+            return farms * FoodPerFarm.Get();
         }
 
-        public static int CalculateWindmillsFood(int windmills, int farms)
+        public int CalculateWindmillsFood(int windmills, int farms)
         {
-            return windmills * farms * FoodPerWindMillMultiplier;
+            return windmills * farms * FoodPerWindMillMultiplier.Get();
         }
 
-        public static int CalculateRoundFinishedBonusGold(int villageLevel, int farms, int windmills)
+        public int CalculateRoundFinishedBonusGold(int villageLevel, int farms, int windmills)
         {
-            int result = MonsterBonusGold;
+            int result = MonsterBonusGold.Get();
             int food = CalculateFarmsFood(farms) + CalculateWindmillsFood(windmills, farms);
             result += food * GetBreadToGoldMultiplier(villageLevel);
             return result;
         }
 
-        public static float GetBuildingMaxHealth(BuildingTypes type)
+        public int GetCastleUpgradeCost(int villageLevel)
         {
-            switch (type)
-            {
-                case BuildingTypes.Farm:
-                    return 2f;
-                case BuildingTypes.WallStone:
-                    return 6f;
-                case BuildingTypes.WallWooden:
-                    return 3f;
-                case BuildingTypes.WatchtowerStone:
-                    return 4f;
-                case BuildingTypes.WatchtowerWooden:
-                    return 3f;
-                case BuildingTypes.Windmill:
-                    return 6f;
-                default:
-                    return 0;
-            }
-        }
-
-        public static int GetBuildingGoldCost(BuildingTypes type)
-        {
-            switch (type)
-            {
-                case BuildingTypes.Farm:
-                    return 2;
-                case BuildingTypes.WallStone:
-                    return 25;
-                case BuildingTypes.WallWooden:
-                    return 2;
-                case BuildingTypes.WatchtowerStone:
-                    return 50;
-                case BuildingTypes.WatchtowerWooden:
-                    return 10;
-                case BuildingTypes.Windmill:
-                    return 100;
-                default:
-                    return 0;
-            }
+            return CastleUpgradeCosts.Get()[villageLevel];
         }
     }
 }

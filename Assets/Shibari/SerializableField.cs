@@ -11,8 +11,12 @@ namespace Shibari
             Type type = typeof(TValue);
 
 
-            if (type == typeof(String)
-                || type == typeof(Boolean)
+            if (type == typeof(String))
+            {
+                return Get() as string;
+            }
+            else
+                if (type == typeof(Boolean)
                 || type == typeof(Byte)
                 || type == typeof(SByte)
                 || type == typeof(Int16)
@@ -73,7 +77,7 @@ namespace Shibari
             else if (type == typeof(DateTime))
                 Set((TValue)(object)Convert.ToDateTime(serialized));
             else if (type == typeof(System.String))
-                Set((TValue)(object)serialized);
+                Set((TValue)(object)(serialized ?? ""));
             else
             {
                 try
@@ -82,7 +86,7 @@ namespace Shibari
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError(e);
+                    Debug.LogError($"Tried to deserialize \"{serialized}\", catched exception {e}");
                 }
             }
         }

@@ -1,0 +1,5 @@
+TipFormat:System.String:
+BattleHelpTips:VillageKeeper.Data.StringArray:
+BuildHelpTips:VillageKeeper.Data.StringArray:
+BuildingDescriptions:VillageKeeper.Data.StringArray:
+BuildingNames:VillageKeeper.Data.StringArray:

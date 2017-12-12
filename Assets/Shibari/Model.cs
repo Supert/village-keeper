@@ -3,27 +3,57 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 using UnityEngine;
+using UnityEditor;
 
 namespace Shibari
 {
+    [InitializeOnLoad]
     public static class Model
     {
         public const string PREFS_KEY = "SHIBARI_MODEL_RECORDS";
 
-        public static LocalizationData Localization { get; private set; }
-
         public static Dictionary<Type, Tuple<string, Type>[]> ModelTree { get; private set; }
+
+        public static Dictionary<Type, BindableMapper> Mappers { get; private set; }
 
         public static ModelRecord[] Records { get; private set; }
 
-        public static void Init()
+
+        static Model()
         {
             LoadRecords();
+            LoadMappers();
+        }
 
+        public static void Init()
+        {
             foreach (var record in Records)
             {
                 object o = Activator.CreateInstance(record.type.Type);
                 Register(record.key, (BindableData)o);
+            }
+        }
+
+        private static void LoadMappers()
+        {
+            Mappers = new Dictionary<Type, BindableMapper>();
+
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            ProcessMapperTypes(executingAssembly.GetTypes());
+
+            foreach (var assembly in executingAssembly.GetReferencedAssemblies())
+                ProcessMapperTypes(Assembly.Load(assembly).GetTypes());
+        }
+
+        private static void ProcessMapperTypes(Type[] types)
+        {
+            foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableMapper).IsAssignableFrom(t)))
+            {
+                if (type.GetConstructor(new Type[0]) == null)
+                    Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
+
+                Mappers[type] = (BindableMapper)Activator.CreateInstance(type);
+                Mappers[type].InitializeMappings();
             }
         }
 
@@ -49,13 +79,13 @@ namespace Shibari
             ModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
 
             var executingAssembly = Assembly.GetExecutingAssembly();
-            ProcessTypes(executingAssembly.GetTypes());
+            ProcessBindableDataTypes(executingAssembly.GetTypes());
 
             foreach (var assembly in executingAssembly.GetReferencedAssemblies())
-                ProcessTypes(Assembly.Load(assembly).GetTypes());
+                ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
         }
-
-        private static void ProcessTypes(Type[] types)
+        
+        private static void ProcessBindableDataTypes(Type[] types)
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
             {
@@ -173,7 +203,7 @@ namespace Shibari
                     return;
                 }
 
-                splitted[2] = string.Join("", splitted.Skip(2).ToArray());
+                splitted[2] = string.Join(":", splitted.Skip(2).ToArray());
                 Array.Resize(ref splitted, 3);
 
                 if (!model.ReflectedProperties.ContainsKey(splitted[0]))
@@ -217,7 +247,7 @@ namespace Shibari
                 {
                     Type propertyType = fieldInfo.Value.property.PropertyType;
                     MethodInfo method = propertyType.GetMethod("Serialize", new Type[0]);
-                    string serializedValue = method.Invoke(fieldInfo.Value.dataField, new object[0]).ToString();
+                    string serializedValue = (string) method.Invoke(fieldInfo.Value.dataField, new object[0]);
                     return $"{fieldInfo.Key}:{fieldInfo.Value.valueType.FullName}:{serializedValue}";
                 })
                 .ToArray();

@@ -3,7 +3,6 @@ using VillageKeeper.FSM;
 using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
-using VillageKeeper.Locale;
 using VillageKeeper.Data;
 using VillageKeeper.Balance;
 using Shibari;
@@ -16,13 +15,14 @@ namespace VillageKeeper
 
         public StateMachine FSM { get; private set; }
 
-        public Localization Localization { get; private set; }
-        
+
+        public LocalizationData Localization { get; private set; }
         public ResourceData ResourceData { get; private set; }
         public SavedData SavedData { get; private set; }
         public CommonData CommonData { get; private set; }
         public GameData GameData { get; private set; }
-        
+        public BalanceData Balance { get; private set; }
+
         public GameController GameManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
 
@@ -44,7 +44,6 @@ namespace VillageKeeper
 
             FSM = new StateMachine();
 
-            Localization = new Localization();
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
@@ -61,8 +60,12 @@ namespace VillageKeeper
             SavedData = Model.Get<SavedData>("Saved");
             CommonData = Model.Get<CommonData>("Common");
             GameData = Model.Get<GameData>("Game");
+            Localization = Model.Get<LocalizationData>("Localization");
 
             Model.DeserializeData("Saved", Resources.Load<TextAsset>("Data/VillageKeeper.Balance.GameData").text);
+            Model.DeserializeData("Resources", Resources.Load<TextAsset>("Data/VillageKeeper.Data.ResourceData").text);
+            Model.DeserializeData("Localization", Resources.Load<TextAsset>("Data/VillageKeeper.Data.LocalizationData").text);
+            Model.DeserializeData("Balance", Resources.Load<TextAsset>("Data/VillageKeeper.Data.BalanceData").text);
 
             GameManager = transform.Find("Game").GetComponent<GameController>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();

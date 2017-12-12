@@ -27,7 +27,7 @@ namespace VillageKeeper.Balance
 
             Core.Instance.SavedData.VillageLevel.OnValueChanged += CalculateEconomy;
             Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
-            ClampedArrowForce.OnValueChanged += () => IsArrowForceOverThreshold.Set(ClampedArrowForce.Get() >= BalanceData.ArrowForceThreshold);
+            ClampedArrowForce.OnValueChanged += () => IsArrowForceOverThreshold.Set(ClampedArrowForce.Get() >= Core.Instance.Balance.ArrowForceThreshold.Get());
         }
 
         public void CalculateEconomy()
@@ -37,13 +37,13 @@ namespace VillageKeeper.Balance
             int farms = buildings.list.Count(c => c.Type == BuildingTypes.Farm);
             int windmills = buildings.list.Count(c => c.Type == BuildingTypes.Windmill);
 
-            CurrentBreadToGoldMultiplier.Set(BalanceData.GetBreadToGoldMultiplier(villageLevel));
-            if (villageLevel < BalanceData.MaxVillageLevel)
-                NextBreadToGoldMultiplier.Set(BalanceData.GetBreadToGoldMultiplier(villageLevel + 1));
-            RoundFinishedBonusGold.Set(BalanceData.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills));
-            CastleUpgradeCost.Set(BalanceData.GetCastleUpgradeCost(villageLevel));
+            CurrentBreadToGoldMultiplier.Set(Core.Instance.Balance.GetBreadToGoldMultiplier(villageLevel));
+            if (villageLevel < Core.Instance.Balance.MaxVillageLevel.Get())
+                NextBreadToGoldMultiplier.Set(Core.Instance.Balance.GetBreadToGoldMultiplier(villageLevel + 1));
+            RoundFinishedBonusGold.Set(Core.Instance.Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills));
+            CastleUpgradeCost.Set(Core.Instance.Balance.GetCastleUpgradeCost(villageLevel));
 
-            TotalFood.Set((BalanceData.CalculateFarmsFood(farms) + BalanceData.CalculateWindmillsFood(windmills, farms)));
+            TotalFood.Set((Core.Instance.Balance.CalculateFarmsFood(farms) + Core.Instance.Balance.CalculateWindmillsFood(windmills, farms)));
         }
     }
 }

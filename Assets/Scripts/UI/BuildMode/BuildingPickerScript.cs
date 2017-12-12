@@ -60,9 +60,9 @@ namespace VillageKeeper.UI
             set
             {
                 currentBuildingType = value;
-                nameText.text = CurrentPreparedBuilding.HumanFriendlyName;
-                priceText.text = CurrentPreparedBuilding.GoldCost.ToString();
-                descriptionText.text = CurrentPreparedBuilding.Description;
+ //               nameText.text = CurrentPreparedBuilding.HumanFriendlyName;
+  //              priceText.text = CurrentPreparedBuilding.GoldCost.ToString();
+   //             descriptionText.text = CurrentPreparedBuilding.Description;
                 iconImage.sprite = GetSpriteForIconByType(value);
             }
         }

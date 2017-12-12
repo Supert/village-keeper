@@ -33,23 +33,11 @@ namespace VillageKeeper.UI
                 int tip = Core.Instance.GameData.CurrentHelpTip.Get();
                 
                 tipText.text = currentTips[Core.Instance.GameData.CurrentHelpTip.Get() - 1];
-                tipCounterText.text = "Tip " + tip.ToString() + "/" + currentTips.Length;
+                tipCounterText.text = "Tip " + tip.ToString() + Core.Instance.GameData.CurrentHelpTip.Get() + "/" + currentTips.Length;
             };
 
-            Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, ShowBattle);
-            Core.Instance.FSM.SubscribeToEnter(States.BuildHelp, ShowBuild);
-        }
-
-        private void ShowBattle()
-        {
-            currentTips = Core.Instance.Localization.GetBattleHelpTips();
-            Show();
-        }
-
-        private void ShowBuild()
-        {
-            currentTips = Core.Instance.Localization.GetBuildHelpTips();
-            Show();
+            Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, Show);
+            Core.Instance.FSM.SubscribeToEnter(States.BuildHelp, Show);
         }
 
         private void Show()

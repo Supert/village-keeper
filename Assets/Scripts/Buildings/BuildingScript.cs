@@ -18,14 +18,12 @@ namespace VillageKeeper.Game
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth { get { return Balance.BalanceData.GetBuildingMaxHealth(Type); } }
+        public float MaxHealth { get { throw new NotImplementedException(); } }
+        //public float MaxHealth { get { return BalanceData.GetBuildingMaxHealth(Type); } }
 
-        public int GoldCost { get { return Balance.BalanceData.GetBuildingGoldCost(Type); } }
+        public int GoldCost { get { throw new NotImplementedException(); } }
+        //public int GoldCost { get { return BalanceData.GetBuildingGoldCost(Type); } }
 
-        public string HumanFriendlyName { get { return Core.Instance.Localization.GetBuildingName(Type); } }
-
-        public string Description { get { return Core.Instance.Localization.GetBuildingDescription(Type); } }
-        
         public float Health { get; protected set; }
 
         protected virtual void Init()

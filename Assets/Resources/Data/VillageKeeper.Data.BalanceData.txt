@@ -1,0 +1,8 @@
+ArrowForceThreshold:System.Single:0.8
+MonsterBonusGold:System.Int32:20
+MaxVillageLevel:System.Int32:2
+FoodPerFarm:System.Int32:1
+FoodPerWindMillMultiplier:System.Int32:1
+CastleUpgradeCosts:VillageKeeper.Data.IntArray:{"values":[600, 6000]}
+BuildingMaxHealths:VillageKeeper.Data.FloatArray:{"values":[2, 3, 6, 3, 4, 6]}
+BuildingCosts:VillageKeeper.Data.IntArray:{"values":[2, 2, 25, 10, 50, 100]}
