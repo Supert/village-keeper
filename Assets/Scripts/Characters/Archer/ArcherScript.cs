@@ -19,7 +19,7 @@ namespace VillageKeeper.Game
         private Animator animator;
         private RectTransform rect;
 
-        public bool IsLoaded { get { return Core.Instance.GameData.IsArrowForceOverThreshold.Get(); } }
+        public bool IsLoaded { get { return Core.Instance.Data.Game.IsArrowForceOverThreshold.Get(); } }
 
         private ArcherAimingValues state = 0;
         public ArcherAimingValues State
@@ -82,7 +82,7 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
-                Core.Instance.GameData.ClampedArrowForce.Set(0f);
+                Core.Instance.Data.Game.ClampedArrowForce.Set(0f);
                 var tp = targetPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position + (Vector2)rect.TransformVector(new Vector2(rect.rect.width / 2, rect.rect.height * 0.6f));

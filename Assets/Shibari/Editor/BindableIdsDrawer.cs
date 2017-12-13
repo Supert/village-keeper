@@ -8,8 +8,6 @@ namespace Shibari.Editor
     [CustomPropertyDrawer(typeof(BindableIds))]
     public class BindableIdsDrawer : PropertyDrawer
     {
-        private static readonly int s_ControlHint = typeof(BindableIdsDrawer).GetHashCode();
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             SerializedProperty dataId = property.FindPropertyRelative("dataId");
@@ -19,8 +17,6 @@ namespace Shibari.Editor
             int selectedModel = models.TakeWhile(m => m != dataId.stringValue).Count();
             if (selectedModel == models.Length)
                 selectedModel = -1;
-
-            string[] typeTips = Shibari.Model.Records.Select(r => r.type.ToString()).ToArray();
 
             Tuple<string, Type>[] fields = new Tuple<string, Type>[0];
             if (selectedModel >= 0)

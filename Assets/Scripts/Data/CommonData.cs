@@ -1,6 +1,5 @@
 ﻿using System;
 using Shibari;
-using VillageKeeper.Balance;
 
 namespace VillageKeeper.Data
 {
@@ -14,17 +13,11 @@ namespace VillageKeeper.Data
 
         public BindableField<Specials> Special { get; private set; }
 
-        public BindableField<int> MonsterBonusGold { get; private set; }
-        public BindableField<int> MaxVillageLevel { get; private set; }
-
         public BindableField<float> Wind { get; private set; }
 
         public override void Init(string prefix)
         {
             Special.Set(GetTodaySpecial());
-
-            MonsterBonusGold.Set(Core.Instance.Balance.MonsterBonusGold.Get());
-            MaxVillageLevel.Set(Core.Instance.Balance.MaxVillageLevel.Get());
         }
 
         private Specials GetTodaySpecial()

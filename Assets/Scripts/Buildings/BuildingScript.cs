@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using VillageKeeper.Data;
-using VillageKeeper.Balance;
 
 namespace VillageKeeper.Game
 {
@@ -64,7 +63,7 @@ namespace VillageKeeper.Game
                     var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
                     var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
                     var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Core.Instance.SavedData.Gold.Get() >= GoldCost)
+                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Core.Instance.Data.Saved.Gold.Get() >= GoldCost)
                     {
                         buildingsArea.BuyBuilding(this, closestCell);
                     }

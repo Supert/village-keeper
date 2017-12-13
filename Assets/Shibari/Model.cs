@@ -149,7 +149,6 @@ namespace Shibari
                 {
                     if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableField<>))
                     {
-                        MethodInfo init = p.PropertyType.GetMethod("Init", new Type[2] { typeof(string), typeof(string) });
                         object value = Activator.CreateInstance(p.PropertyType);
                         p.SetValue(data, value);
                         break;

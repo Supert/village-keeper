@@ -18,22 +18,22 @@ namespace VillageKeeper.UI
         {
             nextButton.onClick.AddListener(() =>
             {
-                Core.Instance.GameData.CurrentHelpTip.Set(Core.Instance.GameData.CurrentHelpTip.Get() + 1);
+                Core.Instance.Data.Game.CurrentHelpTip.Set(Core.Instance.Data.Game.CurrentHelpTip.Get() + 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
-                Core.Instance.GameData.CurrentHelpTip.Set(Core.Instance.GameData.CurrentHelpTip.Get() - 1);
+                Core.Instance.Data.Game.CurrentHelpTip.Set(Core.Instance.Data.Game.CurrentHelpTip.Get() - 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
-            Core.Instance.GameData.CurrentHelpTip.OnValueChanged += () =>
+            Core.Instance.Data.Game.CurrentHelpTip.OnValueChanged += () =>
             {
-                int tip = Core.Instance.GameData.CurrentHelpTip.Get();
+                int tip = Core.Instance.Data.Game.CurrentHelpTip.Get();
                 
-                tipText.text = currentTips[Core.Instance.GameData.CurrentHelpTip.Get() - 1];
-                tipCounterText.text = "Tip " + tip.ToString() + Core.Instance.GameData.CurrentHelpTip.Get() + "/" + currentTips.Length;
+                tipText.text = currentTips[Core.Instance.Data.Game.CurrentHelpTip.Get() - 1];
+                tipCounterText.text = "Tip " + tip.ToString() + Core.Instance.Data.Game.CurrentHelpTip.Get() + "/" + currentTips.Length;
             };
 
             Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, Show);
@@ -42,8 +42,8 @@ namespace VillageKeeper.UI
 
         private void Show()
         {
-            Core.Instance.GameData.HelpTipsCount.Set(currentTips.Length);
-            Core.Instance.GameData.CurrentHelpTip.Set(1);
+            Core.Instance.Data.Game.HelpTipsCount.Set(currentTips.Length);
+            Core.Instance.Data.Game.CurrentHelpTip.Set(1);
         }
     }
 }

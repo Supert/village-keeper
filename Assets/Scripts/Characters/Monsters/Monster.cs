@@ -39,7 +39,7 @@ namespace VillageKeeper.Game
             private set
             {
                 health = value;
-                Core.Instance.GameData.ClampedMonsterHealth.Set(health / (float)maxHealth);
+                Core.Instance.Data.Game.ClampedMonsterHealth.Set(health / (float)maxHealth);
                 if (health == 0)
                     Kill();
             }
@@ -285,7 +285,7 @@ namespace VillageKeeper.Game
                 buildingsHealth += b.MaxHealth;
                 buildingsCost += b.GoldCost;
             }
-            float pointsPool = buildingsHealth / 2 * (1 + Core.Instance.SavedData.VillageLevel.Get() * 0.25f);
+            float pointsPool = buildingsHealth / 2 * (1 + Core.Instance.Data.Saved.VillageLevel.Get() * 0.25f);
             float minHealthPossible = 10 * (3 * buildingsCost / 800 + 1);
             float maxHealthPossible = 100;
             if (pointsPool < minHealthPossible)
