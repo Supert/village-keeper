@@ -107,7 +107,7 @@ namespace VillageKeeper.Audio
             audioClips = new Dictionary<AudioClipNames, AudioClip>();
             foreach (AudioClipNames n in ns)
             {
-                audioClips.Add(n, Resources.Load<AudioClip>("Audio/" + Enum.GetName(typeof(AudioClipNames), n)) as AudioClip);
+                audioClips.Add(n, Resources.Load<AudioClip>(Core.Instance.Data.Audio.);
             }
 
             backgroundAS = GetNewAudioSource("Background Music");
@@ -140,39 +140,36 @@ namespace VillageKeeper.Audio
                 }
             };
 
-            //CoreScript.Instance.GameStateChanged += (sender, e) =>
-            //{
-            //    switch (e.NewState)
-            //    {
-            //        case CoreScript.GameStates.InBattle:
-            //            if (CoreScript.Instance.Data.IsMusicEnabled)
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, () =>
+            {
+                if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
+                {
+                    if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundBattle])
+                    {
+                        backgroundAS.clip = audioClips[AudioClipNames.BackgroundBattle];
+                        backgroundAS.volume = 0.3f;
+                        backgroundAS.Play();
+                    }
+                }
+                if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
+                    StartCoroutine(MonsterRandomSoundsCoroutine(1f));
+            });
+
+            //    case CoreScript.GameStates.Paused:
+            //    case CoreScript.GameStates.InHelp:
+            //        break;
+            //    default:
+            //        if (CoreScript.Instance.Data.IsMusicEnabled)
+            //        {
+            //            if (BackgroundAS.clip != AudioClips[AudioClipNames.BackgroundPeace])
             //            {
-            //                if (BackgroundAS.clip != AudioClips[AudioClipNames.BackgroundBattle])
-            //                {
-            //                    BackgroundAS.clip = AudioClips[AudioClipNames.BackgroundBattle];
-            //                    BackgroundAS.volume = 0.3f;
-            //                    BackgroundAS.Play();
-            //                }
+            //                BackgroundAS.clip = AudioClips[AudioClipNames.BackgroundPeace];
+            //                BackgroundAS.volume = 1f;
+            //                BackgroundAS.Play();
             //            }
-            //            if (CoreScript.Instance.Data.IsSoundEffectsEnabled)
-            //                StartCoroutine(MonsterRandomSoundsCoroutine(1f));
-            //            break;
-            //        case CoreScript.GameStates.Paused:
-            //        case CoreScript.GameStates.InHelp:
-            //            break;
-            //        default:
-            //            if (CoreScript.Instance.Data.IsMusicEnabled)
-            //            {
-            //                if (BackgroundAS.clip != AudioClips[AudioClipNames.BackgroundPeace])
-            //                {
-            //                    BackgroundAS.clip = AudioClips[AudioClipNames.BackgroundPeace];
-            //                    BackgroundAS.volume = 1f;
-            //                    BackgroundAS.Play();
-            //                }
-            //            }
-            //            break;
-            //    }
-            //};
+            //        }
+            //        break;
+            //}
 
             if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
             {
