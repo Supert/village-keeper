@@ -4,7 +4,7 @@ using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
-    public class WatchtowerScript : Building
+    public class Watchtower : Building
     {
         private bool isLoaded = true;
         public void Shoot()
@@ -14,7 +14,7 @@ namespace VillageKeeper.Game
                 var targetPosition = Core.Instance.Monster.transform.localPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position;
-                var vectorToCalcAngle = (Vector2)targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
+                var vectorToCalcAngle = (Vector2)targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - initialPosition;
                 var angle = Mathf.Atan2(vectorToCalcAngle.y, vectorToCalcAngle.x);
                 arrow.Init(initialPosition, targetPosition, angle);
                 isLoaded = false;

@@ -1,4 +1,4 @@
-Buildings:VillageKeeper.Data.SerializableBuildingsList:
+Buildings:VillageKeeper.Data.SerializableBuildingsArray:
 VillageLevel:System.Int32:0
 Gold:System.Int32:100
 HasPremium:System.Boolean:false

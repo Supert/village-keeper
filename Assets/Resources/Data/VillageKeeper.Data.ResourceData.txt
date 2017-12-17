@@ -5,3 +5,6 @@ Cliff:System.String:UI/BattleMode/Cliff/{0}
 CastleUpgradeIcon:System.String:UI/BuildMode/CastleUpgradeIcons/{0}
 ArrowBar:System.String:UI/BattleMode/ArrowBar/{0}
 BuildingPrefabs:System.String:Prefabs/Buildings/{0}
+FarmCrops:System.String:Buildings/FarmCrops/Crops_{0}
+BuildingTile:System.String:Prefabs/BuildingTile
+GhostPrefab:System.String:Prefabs/Characters/Monsters/Ghost/Ghost

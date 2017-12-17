@@ -4,16 +4,15 @@ using VillageKeeper.FSM;
 
 namespace VillageKeeper.UI
 {
-    public class HelpMenuScript : MonoBehaviour
+    public class HelpMenu : MonoBehaviour
     {
         public Text tipText;
         public Text tipCounterText;
-        public Button closeButton;
         public Button previousButton;
         public Button nextButton;
 
-        private string[] currentTips;
-
+        private string[] tips;
+        
         private void Start()
         {
             nextButton.onClick.AddListener(() =>
@@ -31,9 +30,9 @@ namespace VillageKeeper.UI
             Core.Instance.Data.Game.CurrentHelpTip.OnValueChanged += () =>
             {
                 int tip = Core.Instance.Data.Game.CurrentHelpTip.Get();
-                
-                tipText.text = currentTips[Core.Instance.Data.Game.CurrentHelpTip.Get() - 1];
-                tipCounterText.text = "Tip " + tip.ToString() + Core.Instance.Data.Game.CurrentHelpTip.Get() + "/" + currentTips.Length;
+
+                tipText.text = tips[Core.Instance.Data.Game.CurrentHelpTip.Get() - 1];
+                tipCounterText.text = string.Format(Core.Instance.Data.Localization.TipFormat.Get(), tip, tips.Length);
             };
 
             Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, Show);
@@ -42,7 +41,11 @@ namespace VillageKeeper.UI
 
         private void Show()
         {
-            Core.Instance.Data.Game.HelpTipsCount.Set(currentTips.Length);
+            if (Core.Instance.FSM.Current == States.BattleHelp)
+                tips = Core.Instance.Data.Localization.BattleHelpTips.Get().Values;
+            else if (Core.Instance.FSM.Current == States.BuildHelp)
+                tips = Core.Instance.Data.Localization.BuildHelpTips.Get().Values;
+            Core.Instance.Data.Game.HelpTipsCount.Set(tips.Length);
             Core.Instance.Data.Game.CurrentHelpTip.Set(1);
         }
     }

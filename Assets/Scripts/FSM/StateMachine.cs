@@ -55,6 +55,7 @@ namespace VillageKeeper.FSM
 
             states[Current].Exit();
             Current = result;
+            UnityEngine.Debug.Log(Current);
             states[Current].Enter();
         }
     }

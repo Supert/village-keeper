@@ -24,7 +24,7 @@ namespace VillageKeeper.Game
         private Animator animator;
         private SpriteRenderer sprite;
         private SpriteRenderer shadow;
-        private Collider2D collider;
+        private Collider2D col;
 
         private float agressiveness;
 
@@ -48,7 +48,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return (Vector2)sprite.bounds.size;
+                return sprite.bounds.size;
             }
         }
 
@@ -138,16 +138,18 @@ namespace VillageKeeper.Game
             List<Point> possibleTargets = new List<Point>();
             var buildingsArea = Core.Instance.BuildingsArea;
             for (int i = 0; i < buildingsArea.numberOfColumns; i++)
+            {
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
                 {
-                    if (buildingsArea.IsCellFree(new Vector2(i, j)) &&
-                        (i == (buildingsArea.numberOfColumns - 1) ? true : buildingsArea.IsCellFree(new Vector2(i + 1, j))))
+                    if (buildingsArea.IsCellFree(new Vector2(i, j)) 
+                        && (i == buildingsArea.numberOfColumns - 1 || buildingsArea.IsCellFree(new Vector2(i + 1, j))))
                     {
                         pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
                     }
                     else
                         pathGrid[i, j] = PathFinderHelper.BLOCKED_TILE;
                 }
+            }
             for (int j = 0; j < buildingsArea.numberOfRows; j++)
             {
                 string s = "";
@@ -190,7 +192,7 @@ namespace VillageKeeper.Game
 
         public bool CheckHitByPosition(Vector3 projectilePosition)
         {
-            if (collider.OverlapPoint(projectilePosition))
+            if (col.OverlapPoint(projectilePosition))
             {
                 if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= sprite.bounds.extents.y)
                 {
@@ -211,7 +213,7 @@ namespace VillageKeeper.Game
         public void Kill()
         {
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            var ghost = (GameObject)Instantiate(Resources.Load("Ghost"));
+            var ghost = Instantiate(ResourceMock.Get<Ghost>(Core.Instance.Data.Resources.GhostPrefab.Get()));
             ghost.transform.localPosition = transform.localPosition;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
@@ -310,7 +312,7 @@ namespace VillageKeeper.Game
         void Awake()
         {
             sprite = GetComponent<SpriteRenderer>() as SpriteRenderer;
-            collider = GetComponent<Collider2D>() as Collider2D;
+            col = GetComponent<Collider2D>() as Collider2D;
             animator = GetComponent<Animator>() as Animator;
             shadow = transform.GetChild(transform.childCount - 1).GetComponent<SpriteRenderer>() as SpriteRenderer;
         }

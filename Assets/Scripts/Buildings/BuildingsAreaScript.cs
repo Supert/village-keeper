@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    buildingsGrid[i, j] = Instantiate(Resources.Load<BuildingTileScript>("Buildings/BuildingTile")) as BuildingTileScript;
+                    buildingsGrid[i, j] = Instantiate(ResourceMock.Get<BuildingTileScript>(Core.Instance.Data.Resources.BuildingTile.Get()));
                     buildingsGrid[i, j].gridX = i;
                     buildingsGrid[i, j].gridY = j;
                     buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
@@ -37,18 +37,8 @@ namespace VillageKeeper.Game
                     buildingsGrid[i, j].transform.localPosition = lp;
                 }
             }
-            //CoreScript.Instance.GameStateChanged += (sender, e) =>
-            //{
-            //    switch (e.NewState)
-            //    {
-            //        case CoreScript.GameStates.InBuildMode:
-            //            LoadBuildings();
-            //            break;
-            //        case CoreScript.GameStates.RoundFinished:
-            //            SaveBuildings();
-            //            break;
-            //    }
-            //};
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, LoadBuildings);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, SaveBuildings);
         }
 
         public Vector2 CellWorldSize
@@ -69,7 +59,7 @@ namespace VillageKeeper.Game
 
         public Vector2 GetClosestGridPositionIgnoringGridLimits(Vector2 worldPosition)
         {
-            var point = (Vector2)worldPosition - GetWorldPositionByGridPosition(0, 0);
+            var point = worldPosition - GetWorldPositionByGridPosition(0, 0);
             var result = new Vector2(point.x / CellWorldSize.x, point.y / CellWorldSize.y);
             result.x = Mathf.RoundToInt(result.x);
             result.y = Mathf.RoundToInt(result.y);
@@ -79,14 +69,8 @@ namespace VillageKeeper.Game
         public Vector2 GetClosestGridPosition(Vector2 worldPosition)
         {
             var result = GetClosestGridPositionIgnoringGridLimits(worldPosition);
-            if (result.x < 0)
-                result.x = 0;
-            if (result.x >= numberOfColumns)
-                result.x = numberOfColumns - 1;
-            if (result.y < 0)
-                result.y = 0;
-            if (result.y >= numberOfRows)
-                result.y = numberOfRows - 1;
+            result.x = Mathf.Clamp(result.x, 0, numberOfColumns - 1);
+            result.y = Mathf.Clamp(result.y, 0, numberOfRows - 1);
             return result;
         }
 
@@ -94,7 +78,7 @@ namespace VillageKeeper.Game
         {
             var positionInLocal = new Vector2(CellLocalSize.x * (x + 0.5f), CellLocalSize.y * (y + 0.5f));
             var positionInLocalWithOffset = positionInLocal - (rect.rect.size / 2);
-            return (Vector2)rect.TransformPoint(positionInLocalWithOffset);
+            return rect.TransformPoint(positionInLocalWithOffset);
         }
 
         public Vector2 GetWorldPositionByGridPosition(Vector2 cellIndex)
@@ -118,18 +102,15 @@ namespace VillageKeeper.Game
 
         public bool IsCellsFree(List<Vector2> cellsIndexes)
         {
-            foreach (var c in cellsIndexes)
-                if (buildingsGrid[(int)c.x, (int)c.y].Building != null)
-                    return false;
-            return true;
+            return !cellsIndexes.Any(c => buildingsGrid[(int)c.x, (int)c.y].Building != null);
         }
 
         public void DamageCell(Vector2 gridPosition)
         {
-            if (!IsCellFree(gridPosition))
-            {
-                buildingsGrid[(int)gridPosition.x, (int)gridPosition.y].Building.Damage();
-            }
+            if (IsCellFree(gridPosition))
+                return;
+
+            buildingsGrid[(int)gridPosition.x, (int)gridPosition.y].Building.Damage();
         }
 
         public void PlaceBuilding(Building building, int x, int y)
@@ -173,12 +154,17 @@ namespace VillageKeeper.Game
             {
                 Values = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray()
             };
+
             Core.Instance.Data.Saved.Buildings.Set(list);
         }
 
         public void LoadBuildings()
         {
             var list = Core.Instance.Data.Saved.Buildings.Get();
+
+            if (list == null || list.Values == null)
+                return;
+
             foreach (var b in list.Values)
             {
                 if (buildingsGrid[b.x, b.y].Building == null)

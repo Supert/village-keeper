@@ -21,12 +21,6 @@ namespace VillageKeeper.Data
         public SerializableField<bool> IsSoundEffectsEnabled { get; private set; }
         public SerializableField<bool> IsMusicEnabled { get; private set; }
 
-        public override void Init(string id)
-        {
-            if (Buildings.Get() == null)
-                Buildings.Set(new SerializableBuildingsArray());
-        }
-
         public void SaveData()
         {
             PlayerPrefs.Save();

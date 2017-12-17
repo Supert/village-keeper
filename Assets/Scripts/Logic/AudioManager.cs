@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using VillageKeeper.Data;
 
 namespace VillageKeeper.Audio
 {
@@ -96,13 +97,12 @@ namespace VillageKeeper.Audio
             monsterAS = GetNewAudioSource("Monster");
             clickAS = GetNewAudioSource("Click");
             buildingAS = GetNewAudioSource("Building");
-
-            AudioClipNames[] ns = (AudioClipNames[])Enum.GetValues(typeof(AudioClipNames));
+            
             audioClips = new Dictionary<string, List<AudioClip>>();
             foreach (var field in Core.Instance.Data.Audio.ReflectedProperties)
             {
                 audioClips[field.Key] = new List<AudioClip>();
-                foreach (var path in (string[])field.Value.GetValue())
+                foreach (var path in (field.Value.GetValue() as StringArray).Values)
                     audioClips[field.Key].Add(Resources.Load<AudioClip>(path));
             }
 

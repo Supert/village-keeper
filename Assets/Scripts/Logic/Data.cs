@@ -23,11 +23,17 @@ namespace VillageKeeper.Data
             Balance = Model.Get<BalanceData>("Balance");
             Audio = Model.Get<AudioData>("Audio");
 
-            Model.DeserializeData("Saved", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.GameData").text);
+            Model.DeserializeData("Saved", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.SavedData").text);
             Model.DeserializeData("Resources", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.ResourceData").text);
             Model.DeserializeData("Localization", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.LocalizationData").text);
             Model.DeserializeData("Balance", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.BalanceData").text);
             Model.DeserializeData("Audio", UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.AudioData").text);
+        }
+
+        public void Init()
+        {
+            Common.Init();
+            Game.Init();
         }
     }
 }

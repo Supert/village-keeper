@@ -1,17 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
+using VillageKeeper.Game;
 
 namespace VillageKeeper.UI
 {
-    public class SkyScript : MonoBehaviour
+    public class Sky : MonoBehaviour
     {
-        public GameObject Clouds;
+        public Wind wind;
+
         private List<RectTransform> cloudsList = new List<RectTransform>();
 
-        void Start()
+        private void Awake()
         {
-            cloudsList.Add(Clouds.GetComponent<RectTransform>());
-            cloudsList.Add(Instantiate(Clouds).GetComponent<RectTransform>());
+            wind = new Wind(6f, 3f, 3f, 6f);
+        }
+
+        private void Start()
+        {
+            RectTransform clouds = transform.Find("Clouds").GetComponent<RectTransform>();
+            cloudsList.Add(clouds);
+            cloudsList.Add(Instantiate(clouds));
             for (int i = 0; i < cloudsList.Count; i++)
             {
                 cloudsList[i].SetParent(transform.parent, false);
@@ -21,14 +29,16 @@ namespace VillageKeeper.UI
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (Core.Instance.FSM.Current == FSM.States.Build || Core.Instance.FSM.Current == FSM.States.Battle)
             {
+                wind.Update();
+
                 foreach (var c in cloudsList)
                 {
                     var ap = c.anchoredPosition;
-                    ap.x += Core.Instance.Data.Common.Wind.Get() * Time.deltaTime * 10;
+                    ap.x += wind.Strength * Time.deltaTime * 10;
                     if (ap.x < -c.rect.width)
                         ap.x += c.rect.width * 2;
                     if (ap.x > c.rect.width)

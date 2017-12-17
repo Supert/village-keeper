@@ -1,7 +1,7 @@
 ArrowShots:VillageKeeper.Data.StringArray:
-BackgroundPeace:System.String:
-BackgroundBattle:System.String:
-BuildingHit:System.String:
-Click:System.String:
+BackgroundPeace:VillageKeeper.Data.StringArray:
+BackgroundBattle:VillageKeeper.Data.StringArray:
+BuildingHit:VillageKeeper.Data.StringArray:
+Click:VillageKeeper.Data.StringArray:
 MonsterSounds:VillageKeeper.Data.StringArray:
-MonsterHit:System.String:
+MonsterHit:VillageKeeper.Data.StringArray:

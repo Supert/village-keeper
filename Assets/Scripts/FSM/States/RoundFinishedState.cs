@@ -9,6 +9,7 @@ namespace VillageKeeper.FSM
         public override void Enter()
         {
             base.Enter();
+            Core.Instance.Data.Saved.Gold.Set(Core.Instance.Data.Saved.Gold.Get() + Core.Instance.Data.Game.RoundFinishedBonusGold.Get());
         }
 
         public override States Event(StateMachineEvents type, params object[] args)

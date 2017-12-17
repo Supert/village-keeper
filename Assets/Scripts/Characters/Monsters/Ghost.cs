@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GhostScript : MonoBehaviour
+public class Ghost : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
 

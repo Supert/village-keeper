@@ -59,7 +59,7 @@ namespace VillageKeeper.Game
 
         void Update()
         {
-            velocity.x -= 9.81f * Time.deltaTime;
+            velocity.y -= 9.81f * Time.deltaTime;
             var newPosition = transform.localPosition + ((Vector3)velocity * Time.deltaTime);
             if (!(float.IsNaN(newPosition.x) || float.IsNaN(newPosition.y) || float.IsNaN(newPosition.z)))
             {

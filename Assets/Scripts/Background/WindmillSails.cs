@@ -2,7 +2,7 @@
 
 namespace VillageKeeper.UI
 {
-    public class WindmillSailsScript : MonoBehaviour
+    public class WindmillSails : MonoBehaviour
     {
         void Update()
         {

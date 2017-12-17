@@ -7,8 +7,6 @@ namespace Shibari
     {
         public Dictionary<string, BindableFieldInfo> ReflectedProperties { get; protected set; }
 
-        public virtual void Init(string key) { }
-
         public void InitializeProperties()
         {
             ReflectedProperties = new Dictionary<string, BindableFieldInfo>();

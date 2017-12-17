@@ -5,7 +5,7 @@ using VillageKeeper.UI;
 namespace VillageKeeper.Game
 {
     [RequireComponent(typeof(Image))]
-    public class ArcherScript : MonoBehaviour
+    public class Archer : MonoBehaviour
     {
         public enum ArcherAimingValues
         {
@@ -33,11 +33,6 @@ namespace VillageKeeper.Game
                 animator.SetInteger("CurrentState", (int)value);
             }
         }
-
-        public Sprite archerUnloadedSprite;
-        public Sprite archerReadyAimingUpSprite;
-        public Sprite archerReadyAimingStraightSprite;
-        public Sprite archerReadyAimingDownSprite;
 
         void Start()
         {

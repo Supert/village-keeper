@@ -15,7 +15,7 @@ namespace VillageKeeper.Data
 
         public BindableField<float> Wind { get; private set; }
 
-        public override void Init(string prefix)
+        public void Init()
         {
             Special.Set(GetTodaySpecial());
         }

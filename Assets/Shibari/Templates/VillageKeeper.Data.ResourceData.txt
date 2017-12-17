@@ -4,3 +4,5 @@ VillageBackground:System.String:
 Cliff:System.String:
 CastleUpgradeIcon:System.String:
 ArrowBar:System.String:
+BuildingPrefabs:System.String:
+FarmCrops:System.String:
