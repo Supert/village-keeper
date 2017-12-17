@@ -66,7 +66,7 @@ namespace VillageKeeper
             }
         }
 
-        void CheckArcherControls()
+        private void CheckArcherControls()
         {
             if (Application.isMobilePlatform)
                 CheckForTouches();
@@ -83,10 +83,9 @@ namespace VillageKeeper
                 Core.Instance.Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(Core.Instance.Data.Game.ClampedArrowForce.Get() - Time.deltaTime * 3f));
         }
 
-        void Update()
+        private void Update()
         {
-            if (Core.Instance.FSM.Current == FSM.States.Battle)
-                CheckArcherControls();
+            CheckArcherControls();
         }
     }
 }

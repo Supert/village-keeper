@@ -5,7 +5,7 @@ namespace VillageKeeper.Data
 {
     public class SavedData : BindableData
     {
-        public SerializableField<SerializableBuildingsList> Buildings { get; private set; }
+        public SerializableField<SerializableBuildingsArray> Buildings { get; private set; }
 
         public SerializableField<int> VillageLevel { get; private set; }
         public SerializableField<int> Gold { get; private set; }
@@ -24,7 +24,7 @@ namespace VillageKeeper.Data
         public override void Init(string id)
         {
             if (Buildings.Get() == null)
-                Buildings.Set(new SerializableBuildingsList());
+                Buildings.Set(new SerializableBuildingsArray());
         }
 
         public void SaveData()

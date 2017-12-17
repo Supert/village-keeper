@@ -18,14 +18,14 @@ namespace VillageKeeper.Game
 
         public int gridX;
         public int gridY;
-        public BuildingScript Building = null;
+        public Building Building = null;
 
-        private BuildingTileStates _state;
+        private BuildingTileStates state;
         public BuildingTileStates State
         {
             get
             {
-                return _state;
+                return state;
             }
             set
             {
@@ -43,7 +43,7 @@ namespace VillageKeeper.Game
                         spriteRenderer.sprite = tileSpriteHighlighted;
                         break;
                 }
-                _state = value;
+                state = value;
             }
         }
 

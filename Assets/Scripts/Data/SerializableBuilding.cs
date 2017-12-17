@@ -1,24 +1,24 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace VillageKeeper.Data
 {
-    [XmlType("SerializableBuilding")]
+    [Serializable]
     public class SerializableBuilding
     {
-        [XmlElement("BuildingType")]
-        public BuildingTypes Type;
-        [XmlElement("X")]
-        public int X;
-        [XmlElement("Y")]
-        public int Y;
+        public BuildingTypes type;
+        public int x;
+        public int y;
+
         public SerializableBuilding()
         {
         }
+
         public SerializableBuilding(BuildingTypes type, int x, int y)
         {
-            Type = type;
-            X = x;
-            Y = y;
+            this.type = type;
+            this.x = x;
+            this.y = y;
         }
     }
 }

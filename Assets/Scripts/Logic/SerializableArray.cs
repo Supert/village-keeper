@@ -2,7 +2,7 @@
 {
     public abstract class SerializableArray<T>
     {
-        protected abstract T[] Values { get; }
+        public abstract T[] Values { get; set; }
         public T this[int index]
         {
             get { return Values[index]; }

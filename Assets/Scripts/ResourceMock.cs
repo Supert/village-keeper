@@ -1,10 +1,22 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
+using VillageKeeper.Data;
+using VillageKeeper.Game;
 
-public static class ResourceMock
+namespace VillageKeeper
 {
-    public static Sprite GetSprite(string path)
+    public static class ResourceMock
     {
-        return Resources.Load<Sprite>(path);
+        public static T Get<T>(string path) where T : UnityEngine.Object
+        {
+            return Resources.Load<T>(path);
+        }
+
+        public static Building GetBuilding(BuildingTypes type)
+        {
+            var path = string.Format(Core.Instance.Data.Resources.BuildingPrefabs.Get(), Enum.GetName(typeof(BuildingTypes), type));
+            Building bs = UnityEngine.Object.Instantiate(Get<Building>(path));
+            return bs;
+        }
     }
 }

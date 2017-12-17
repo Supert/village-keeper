@@ -5,26 +5,26 @@ namespace VillageKeeper.Game
 {
     public class ArrowScript : MonoBehaviour
     {
-        private Vector2 _targetPosition;
-        SpriteRenderer _shadow;
-        SpriteRenderer _sprite;
-        Vector2 _velocity;
+        private Vector2 targetPosition;
+        SpriteRenderer shadowRenderer;
+        SpriteRenderer spriteRenderer;
+        Vector2 velocity;
 
         void Start()
         {
-            _sprite = gameObject.AddComponent<SpriteRenderer>();
-            _sprite.sprite = Resources.Load<Sprite>("arrow");
-            _sprite.sortingLayerName = "Characters";
-            _sprite.sortingOrder = 1;
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Resources.Load<Sprite>("arrow");
+            spriteRenderer.sortingLayerName = "Characters";
+            spriteRenderer.sortingOrder = 1;
         }
 
         IEnumerator InitCoroutine()
         {
             yield return new WaitForEndOfFrame();
-            _shadow.transform.position = new Vector3(transform.position.x - _shadow.bounds.extents.x, _targetPosition.y, 0);
-            var scaleFactor = _sprite.bounds.size.x / _shadow.sprite.bounds.size.x;
-            _shadow.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-            _shadow.gameObject.SetActive(true);
+            shadowRenderer.transform.position = new Vector3(transform.position.x - shadowRenderer.bounds.extents.x, targetPosition.y, 0);
+            var scaleFactor = spriteRenderer.bounds.size.x / shadowRenderer.sprite.bounds.size.x;
+            shadowRenderer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+            shadowRenderer.gameObject.SetActive(true);
         }
 
         void SetVelocity(Vector2 initialPosition, Vector2 targetPosition, float initialRotationInRad)
@@ -34,33 +34,33 @@ namespace VillageKeeper.Game
             var angleInRads = initialRotationInRad;
             //http://physics.stackexchange.com/questions/60595/solve-for-initial-velocity-of-a-projectile-given-angle-gravity-and-initial-and
             var initialVelocity = (deltaPosition.x / Mathf.Cos(angleInRads)) * Mathf.Sqrt(gravity / (2 * (-deltaPosition.y + Mathf.Tan(angleInRads) * deltaPosition.x)));
-            _velocity = new Vector2(Mathf.Cos(angleInRads), Mathf.Sin(angleInRads)) * initialVelocity;
+            velocity = new Vector2(Mathf.Cos(angleInRads), Mathf.Sin(angleInRads)) * initialVelocity;
         }
 
         public void Init(Vector2 initialPosition, Vector2 targetPosition, float initialRotationInRad)
         {
-            _targetPosition = targetPosition;
+            this.targetPosition = targetPosition;
 
 
             var lp = transform.localPosition;
             lp.x = initialPosition.x;
             lp.y = initialPosition.y;
-            lp.z = _targetPosition.y;
+            lp.z = this.targetPosition.y;
             transform.position = lp;
 
             SetVelocity(initialPosition, targetPosition, initialRotationInRad);
-            var _shadowGO = new GameObject("arrow shadow");
-            _shadowGO.SetActive(false);
-            _shadow = _shadowGO.AddComponent<SpriteRenderer>() as SpriteRenderer;
-            _shadow.sprite = Resources.Load<Sprite>("shadow");
-            _shadow.color = new Color(1, 1, 1, 0.5f);
+            var shadowGO = new GameObject("arrow shadow");
+            shadowGO.SetActive(false);
+            shadowRenderer = shadowGO.AddComponent<SpriteRenderer>() as SpriteRenderer;
+            shadowRenderer.sprite = Resources.Load<Sprite>("shadow");
+            shadowRenderer.color = new Color(1, 1, 1, 0.5f);
             StartCoroutine(InitCoroutine());
         }
 
         void Update()
         {
-            _velocity -= new Vector2(0 /*- CoreScript.Instance.Wind.Strength * Time.deltaTime*/, 9.81f * Time.deltaTime);
-            var newPosition = transform.localPosition + ((Vector3)_velocity * Time.deltaTime);
+            velocity.x -= 9.81f * Time.deltaTime;
+            var newPosition = transform.localPosition + ((Vector3)velocity * Time.deltaTime);
             if (!(float.IsNaN(newPosition.x) || float.IsNaN(newPosition.y) || float.IsNaN(newPosition.z)))
             {
                 transform.localPosition = newPosition;
@@ -69,13 +69,13 @@ namespace VillageKeeper.Game
             {
                 Destroy();
             }
-            float angle = Mathf.Atan2(_velocity.y, _velocity.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            _shadow.transform.position = new Vector3(transform.position.x - _shadow.bounds.extents.x, _targetPosition.y, 1f);
+            shadowRenderer.transform.position = new Vector3(transform.position.x - shadowRenderer.bounds.extents.x, targetPosition.y, 1f);
 
 
-            if (((Vector2)transform.localPosition - (Vector2)_targetPosition).magnitude < _shadow.bounds.extents.y)
+            if (((Vector2)transform.localPosition - (Vector2)targetPosition).magnitude < shadowRenderer.bounds.extents.y)
             {
                 Destroy();
             }
@@ -89,7 +89,7 @@ namespace VillageKeeper.Game
         void Destroy()
         {
             Destroy(gameObject);
-            Destroy(_shadow.gameObject);
+            Destroy(shadowRenderer.gameObject);
         }
     }
 }

@@ -8,6 +8,16 @@ namespace VillageKeeper.Data
     {
         [SerializeField]
         private int[] values;
-        protected override int[] Values { get { return values; } }
+        public override int[] Values
+        {
+            get
+            {
+                return values;
+            }
+            set
+            {
+                this.values = value;
+            }
+        }
     }
 }

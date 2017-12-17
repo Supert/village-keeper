@@ -4,7 +4,6 @@ using VillageKeeper.UI;
 
 namespace VillageKeeper.Game
 {
-    [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Image))]
     public class ArcherScript : MonoBehaviour
     {

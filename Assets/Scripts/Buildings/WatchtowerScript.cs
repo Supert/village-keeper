@@ -4,31 +4,19 @@ using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
-    public class WatchtowerScript : BuildingScript
+    public class WatchtowerScript : Building
     {
-        public byte towerLevel;
-        public override BuildingTypes Type
-        {
-            get
-            {
-                if (towerLevel == 0)
-                    return BuildingTypes.WatchtowerWooden;
-                else
-                    return BuildingTypes.WatchtowerStone;
-            }
-        }
-
         private bool isLoaded = true;
         public void Shoot()
         {
             if (isLoaded)
             {
-                var _targetPosition = Core.Instance.Monster.transform.localPosition;
+                var targetPosition = Core.Instance.Monster.transform.localPosition;
                 var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
                 var initialPosition = (Vector2)transform.position;
-                var vectorToCalcAngle = (Vector2)_targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
+                var vectorToCalcAngle = (Vector2)targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - (Vector2)initialPosition;
                 var angle = Mathf.Atan2(vectorToCalcAngle.y, vectorToCalcAngle.x);
-                arrow.Init(initialPosition, _targetPosition, angle);
+                arrow.Init(initialPosition, targetPosition, angle);
                 isLoaded = false;
                 StartCoroutine(ReloadCoroutine());
             }
@@ -36,10 +24,18 @@ namespace VillageKeeper.Game
 
         private IEnumerator ReloadCoroutine()
         {
-            if (towerLevel == 0)
-                yield return new WaitForSeconds(3f);
-            else
-                yield return new WaitForSeconds(1.5f);
+            switch (type)
+            {
+                case BuildingTypes.WatchtowerWooden:
+                    yield return new WaitForSeconds(3f);
+                    break;
+                case BuildingTypes.WatchtowerStone:
+                    yield return new WaitForSeconds(1.5f);
+                    break;
+                default:
+                    throw new System.Exception($"Watchtower has building type {type}");
+            }
+
             isLoaded = true;
         }
 

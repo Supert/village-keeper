@@ -21,7 +21,7 @@ namespace VillageKeeper.Audio
             MonsterHit,
         }
 
-        private Dictionary<AudioClipNames, AudioClip> audioClips;
+        private Dictionary<string, List<AudioClip>> audioClips;
 
         private AudioSource backgroundAS;
         private AudioSource arrowAS;
@@ -29,51 +29,44 @@ namespace VillageKeeper.Audio
         private AudioSource clickAS;
         private AudioSource buildingAS;
 
+        public void PlaySoundEffect(AudioSource audioSource, string audioField)
+        {
+            if (!Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
+                return;
+            Play(audioSource, audioField);
+        }
+
+        public void PlayMusic(string audioField)
+        {
+            if (!Core.Instance.Data.Saved.IsMusicEnabled.Get())
+                return;
+            Play(backgroundAS, audioField);
+        }
+
+        public void Play(AudioSource audioSource, string audioField)
+        {
+            audioSource.clip = audioClips[audioField][UnityEngine.Random.Range(0, audioClips[audioField].Count)];
+            audioSource.Play();
+        }
+
         public void PlayArrowShot()
         {
-            if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
-            {
-
-                var n = UnityEngine.Random.Range(0, 3);
-                switch (n)
-                {
-                    case 0:
-                        arrowAS.clip = audioClips[AudioClipNames.ArrowShot0];
-                        break;
-                    case 1:
-                        arrowAS.clip = audioClips[AudioClipNames.ArrowShot1];
-                        break;
-                    case 2:
-                        arrowAS.clip = audioClips[AudioClipNames.ArrowShot2];
-                        break;
-                }
-                arrowAS.Play();
-            }
+            PlaySoundEffect(arrowAS, "ArrowShots");
         }
 
         public void PlayBuildingHit()
         {
-            if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
-            {
-                buildingAS.Play();
-            }
+            PlaySoundEffect(buildingAS, "BuildingHit");
         }
 
         public void PlayClick()
         {
-            if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
-            {
-                clickAS.Play();
-            }
+            PlaySoundEffect(clickAS, "Click");
         }
 
         public void PlayMonsterHit()
         {
-            if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get() && Core.Instance.FSM.Current == FSM.States.Battle)
-            {
-                monsterAS.clip = audioClips[AudioClipNames.MonsterHit];
-                monsterAS.Play();
-            }
+            PlaySoundEffect(monsterAS, "MonsterHit");
         }
 
         public IEnumerator MonsterRandomSoundsCoroutine(float delayInSeconds)
@@ -83,12 +76,7 @@ namespace VillageKeeper.Audio
             {
                 if (!monsterAS.isPlaying)
                 {
-                    var n = UnityEngine.Random.Range(0, 2);
-                    if (n == 0)
-                        monsterAS.clip = audioClips[AudioClipNames.Monster0];
-                    else
-                        monsterAS.clip = audioClips[AudioClipNames.Monster1];
-                    monsterAS.Play();
+                    PlaySoundEffect(monsterAS, "MonsterSounds");
                 }
                 StartCoroutine(MonsterRandomSoundsCoroutine(UnityEngine.Random.Range(1f, 5f)));
             }
@@ -103,29 +91,23 @@ namespace VillageKeeper.Audio
 
         public void Init()
         {
-            AudioClipNames[] ns = (AudioClipNames[])Enum.GetValues(typeof(AudioClipNames));
-            audioClips = new Dictionary<AudioClipNames, AudioClip>();
-            foreach (AudioClipNames n in ns)
-            {
-                audioClips.Add(n, Resources.Load<AudioClip>(Core.Instance.Data.Audio.);
-            }
-
             backgroundAS = GetNewAudioSource("Background Music");
             arrowAS = GetNewAudioSource("Arrow Launch");
             monsterAS = GetNewAudioSource("Monster");
-
             clickAS = GetNewAudioSource("Click");
-            clickAS.clip = audioClips[AudioClipNames.Click];
-            buildingAS = GetNewAudioSource("building");
-            buildingAS.clip = audioClips[AudioClipNames.BuildingHit];
+            buildingAS = GetNewAudioSource("Building");
 
-
-            if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
+            AudioClipNames[] ns = (AudioClipNames[])Enum.GetValues(typeof(AudioClipNames));
+            audioClips = new Dictionary<string, List<AudioClip>>();
+            foreach (var field in Core.Instance.Data.Audio.ReflectedProperties)
             {
-                backgroundAS.clip = audioClips[AudioClipNames.BackgroundPeace];
-                backgroundAS.volume = 1f;
-                backgroundAS.Play();
+                audioClips[field.Key] = new List<AudioClip>();
+                foreach (var path in (string[])field.Value.GetValue())
+                    audioClips[field.Key].Add(Resources.Load<AudioClip>(path));
             }
+
+            PlayMusic("BackgroundPeace");
+            backgroundAS.volume = 1f;
             backgroundAS.loop = true;
 
             Core.Instance.Data.Saved.IsMusicEnabled.OnValueChanged += () =>
@@ -140,20 +122,20 @@ namespace VillageKeeper.Audio
                 }
             };
 
-            Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, () =>
-            {
-                if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
-                {
-                    if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundBattle])
-                    {
-                        backgroundAS.clip = audioClips[AudioClipNames.BackgroundBattle];
-                        backgroundAS.volume = 0.3f;
-                        backgroundAS.Play();
-                    }
-                }
-                if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
-                    StartCoroutine(MonsterRandomSoundsCoroutine(1f));
-            });
+            //Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, () =>
+            //{
+            //    if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
+            //    {
+            //        if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundBattle.ToString()][0])
+            //        {
+            //            backgroundAS.clip = audioClips[AudioClipNames.BackgroundBattle.ToString()][0];
+            //            backgroundAS.volume = 0.3f;
+            //            backgroundAS.Play();
+            //        }
+            //    }
+            //    if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
+            //        StartCoroutine(MonsterRandomSoundsCoroutine(1f));
+            //});
 
             //    case CoreScript.GameStates.Paused:
             //    case CoreScript.GameStates.InHelp:
@@ -171,15 +153,15 @@ namespace VillageKeeper.Audio
             //        break;
             //}
 
-            if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
-            {
-                if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundPeace])
-                {
-                    backgroundAS.clip = audioClips[AudioClipNames.BackgroundPeace];
-                    backgroundAS.volume = 1f;
-                    backgroundAS.Play();
-                }
-            }
+            //if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
+            //{
+            //    if (backgroundAS.clip != audioClips[AudioClipNames.BackgroundPeace])
+            //    {
+            //        backgroundAS.clip = audioClips[AudioClipNames.BackgroundPeace];
+            //        backgroundAS.volume = 1f;
+            //        backgroundAS.Play();
+            //    }
+            //}
         }
     }
 }

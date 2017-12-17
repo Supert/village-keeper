@@ -2,57 +2,51 @@
 
 namespace VillageKeeper.Game
 {
-    [RequireComponent(typeof(DelayerScript))]
     public class WindScript : MonoBehaviour
     {
-        public float Strength { get; private set; }
-        public float TargetStrength { get; private set; }
+        private float strength;
+        private float target;
 
         public float maxStrength;
         public float strengthAcceleration;
         public float minTimeBeforeChange;
         public float maxTimeBeforeChange;
-        private DelayerScript delayer;
 
-        private void Awake()
+        float timeTargetReached = 0f;
+        float delay;
+        
+        private void Start()
         {
-            delayer = GetComponent<DelayerScript>() as DelayerScript;
+            strength = ((float) Core.Instance.Random.NextDouble() - 0.5f) * 2f * maxStrength;
+            target = (Random.value - 0.5f) * 2 * maxStrength;
         }
 
-        void Start()
+        private void SetNewTargetStrength()
         {
-            Strength = (Random.value - 0.5f) * 2 * maxStrength;
-            TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
+            target = ((float)Core.Instance.Random.NextDouble() - 0.5f) * 2f * maxStrength;
         }
-
-        void SelectNewTargetStrength()
+        
+        private void Update()
         {
-            delayer.RunUniqueWithRandomDelay(minTimeBeforeChange, maxTimeBeforeChange, () =>
+            float oldStrength = strength;
+            strength = Mathf.MoveTowards(strength, target, strengthAcceleration * Time.deltaTime);
+
+            if (strength == target)
             {
-                TargetStrength = (Random.value - 0.5f) * 2 * maxStrength;
-            });
-
-        }
-
-        void Update()
-        {
-            float oldStrength = Strength;
-            if (Mathf.Abs(Strength - TargetStrength) * Time.deltaTime >= strengthAcceleration * Time.deltaTime)
-            {
-                if (Strength > TargetStrength)
-                    Strength -= strengthAcceleration * Time.deltaTime;
+                if (timeTargetReached + delay > Time.time)
+                {
+                    SetNewTargetStrength();
+                }
                 else
-                    Strength += strengthAcceleration * Time.deltaTime;
-            }
-            else
-            {
-                Strength = TargetStrength;
-                SelectNewTargetStrength();
+                {
+                    delay = minTimeBeforeChange + (float)Core.Instance.Random.NextDouble() * (maxTimeBeforeChange - minTimeBeforeChange);
+                    timeTargetReached = Time.time;
+                }
             }
 
-            if (oldStrength != Strength)
+            if (oldStrength != strength)
             {
-                Core.Instance.Data.Common.Wind.Set(Strength);
+                Core.Instance.Data.Common.Wind.Set(strength);
             }
         }
     }

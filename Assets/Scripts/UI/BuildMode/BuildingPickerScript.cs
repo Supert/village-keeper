@@ -19,7 +19,7 @@ namespace VillageKeeper.UI
 
         private Dictionary<BuildingTypes, Sprite> iconSprites = null;
 
-        private Dictionary<BuildingTypes, BuildingScript> buildingsPrepared = new Dictionary<BuildingTypes, BuildingScript>();
+        private Dictionary<BuildingTypes, Building> buildingsPrepared = new Dictionary<BuildingTypes, Building>();
 
         private BuildingTypes currentBuildingType;
 
@@ -36,7 +36,7 @@ namespace VillageKeeper.UI
             return iconSprites[type];
         }
 
-        public BuildingScript CurrentPreparedBuilding
+        public Building CurrentPreparedBuilding
         {
             get
             {
@@ -60,16 +60,16 @@ namespace VillageKeeper.UI
             set
             {
                 currentBuildingType = value;
- //               nameText.text = CurrentPreparedBuilding.HumanFriendlyName;
-  //              priceText.text = CurrentPreparedBuilding.GoldCost.ToString();
-   //             descriptionText.text = CurrentPreparedBuilding.Description;
+                //               nameText.text = CurrentPreparedBuilding.HumanFriendlyName;
+                //              priceText.text = CurrentPreparedBuilding.GoldCost.ToString();
+                //             descriptionText.text = CurrentPreparedBuilding.Description;
                 iconImage.sprite = GetSpriteForIconByType(value);
             }
         }
 
         void PrepareBuildingOfType(BuildingTypes type)
         {
-            var bs = BuildingScript.GetNewBuildingOfType(type);
+            var bs = ResourceMock.GetBuilding(type);
             bs.gameObject.SetActive(false);
             if (!buildingsPrepared.ContainsKey(type))
                 buildingsPrepared.Add(type, bs);

@@ -6,16 +6,26 @@ namespace VillageKeeper.Data
 {
     public class BalanceData : BindableData
     {
-        public SerializableField<float> ArrowForceThreshold { get; private set; }// = 0.8f;
-        public SerializableField<int> MonsterBonusGold { get; private set; }// = 20;
-        public SerializableField<int> MaxVillageLevel { get; private set; }// = 2;
-        public SerializableField<int> FoodPerFarm { get; private set; }// = 1;
-        public SerializableField<int> FoodPerWindMillMultiplier { get; private set; }// = 1;
+        public SerializableField<float> ArrowForceThreshold { get; private set; }
+        public SerializableField<int> MonsterBonusGold { get; private set; }
+        public SerializableField<int> MaxVillageLevel { get; private set; }
+        public SerializableField<int> FoodPerFarm { get; private set; }
+        public SerializableField<int> FoodPerWindMillMultiplier { get; private set; }
 
-        public SerializableField<IntArray> CastleUpgradeCosts { get; private set; } // [600, 6000]
+        public SerializableField<IntArray> CastleUpgradeCosts { get; private set; }
 
-        public SerializableField<FloatArray> BuildingMaxHealths { get; private set; } //[2, 3, 6, 3, 4, 6]
-        public SerializableField<IntArray> BuildingCosts { get; private set; } //       [2, 2, 25, 10, 50, 100]
+        public SerializableField<FloatArray> BuildingMaxHealths { get; private set; }
+        public SerializableField<IntArray> BuildingCosts { get; private set; }
+
+        public float GetBuildingMaxHealth(BuildingTypes type)
+        {
+            return BuildingMaxHealths.Get()[(int)type];
+        }
+
+        public int GetBuildingGoldCost(BuildingTypes type)
+        {
+            return BuildingCosts.Get()[(int)type];
+        }
 
         public int GetBreadToGoldMultiplier(int villageLevel)
         {

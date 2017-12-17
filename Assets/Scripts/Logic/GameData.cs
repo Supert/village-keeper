@@ -33,8 +33,8 @@ namespace VillageKeeper.Data
         {
             int villageLevel = Core.Instance.Data.Saved.VillageLevel.Get();
             var buildings = Core.Instance.Data.Saved.Buildings.Get();
-            int farms = buildings.list.Count(c => c.Type == BuildingTypes.Farm);
-            int windmills = buildings.list.Count(c => c.Type == BuildingTypes.Windmill);
+            int farms = buildings.Values.Count(c => c.type == BuildingTypes.Farm);
+            int windmills = buildings.Values.Count(c => c.type == BuildingTypes.Windmill);
 
             CurrentBreadToGoldMultiplier.Set(Core.Instance.Data.Balance.GetBreadToGoldMultiplier(villageLevel));
             if (villageLevel < Core.Instance.Data.Balance.MaxVillageLevel.Get())

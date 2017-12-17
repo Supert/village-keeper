@@ -9,6 +9,7 @@ namespace VillageKeeper.Data
         public SerializableField<string> VillageBackground { get; private set; }
         public SerializableField<string> Cliff { get; private set; }
         public SerializableField<string> CastleUpgradeIcon { get; private set; }
-        public SerializableField<string> ArrowBar { get; private set; }  
+        public SerializableField<string> ArrowBar { get; private set; }
+        public SerializableField<string> BuildingPrefabs { get; private set; }
     }
 }

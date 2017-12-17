@@ -11,8 +11,7 @@ namespace VillageKeeper.FSM
 
         public virtual void Enter()
         {
-            if (OnEnter != null)
-                OnEnter();
+            OnEnter?.Invoke();
         }
 
         public virtual States Event(StateMachineEvents type, params object[] args) { return States.Empty; }

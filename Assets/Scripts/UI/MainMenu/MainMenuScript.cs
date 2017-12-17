@@ -7,7 +7,6 @@ namespace VillageKeeper.UI
     public class MainMenuScript : MonoBehaviour
     {
         public Text monstersDefeatedText;
-        public ScreenShadowScript shopShadow;
         public Image roomFurniture;
         public Sprite freeFurniture;
         public Sprite premiumFurniture;
@@ -46,24 +45,10 @@ namespace VillageKeeper.UI
             SetScores();
         }
 
-        public void ShowShop()
-        {
-            shopShadow.Show();
-        }
-
-        public void HideShop()
-        {
-            shopShadow.Hide();
-        }
-
         void Init()
         {
             SetScores();
             SetFurniture();
-            shopShadow.ShadowButton.onClick.AddListener(() =>
-            {
-                Core.Instance.FSM.Event(StateMachineEvents.GoToMenu);
-            });
 
             Core.Instance.Data.Saved.MonstersDefeated.OnValueChanged += SetScores;
             Core.Instance.Data.Saved.HasPremium.OnValueChanged += SetFurniture;

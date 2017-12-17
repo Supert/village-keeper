@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
     public class BuildingsAreaScript : MonoBehaviour
     {
-        private RectTransform _rect;
+        private RectTransform rect;
         public int numberOfColumns;
         public int numberOfRows;
-        private BuildingTileScript[,] _buildingsGrid;
-        public List<BuildingScript> buildings = new List<BuildingScript>();
+        private BuildingTileScript[,] buildingsGrid;
+        public List<Building> buildings = new List<Building>();
 
         void Awake()
         {
-            _rect = GetComponent<RectTransform>() as RectTransform;
-            _buildingsGrid = new BuildingTileScript[numberOfColumns, numberOfRows];
+            rect = GetComponent<RectTransform>() as RectTransform;
+            buildingsGrid = new BuildingTileScript[numberOfColumns, numberOfRows];
         }
 
         void Start()
@@ -25,14 +27,14 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    _buildingsGrid[i, j] = Instantiate(Resources.Load<BuildingTileScript>("Buildings/BuildingTile")) as BuildingTileScript;
-                    _buildingsGrid[i, j].gridX = i;
-                    _buildingsGrid[i, j].gridY = j;
-                    _buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
-                    _buildingsGrid[i, j].transform.parent = buildingTilesHolder.transform;
+                    buildingsGrid[i, j] = Instantiate(Resources.Load<BuildingTileScript>("Buildings/BuildingTile")) as BuildingTileScript;
+                    buildingsGrid[i, j].gridX = i;
+                    buildingsGrid[i, j].gridY = j;
+                    buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
+                    buildingsGrid[i, j].transform.parent = buildingTilesHolder.transform;
                     var lp = (Vector3)GetWorldPositionByGridPosition(new Vector2(i, j));
                     lp.z = lp.y;
-                    _buildingsGrid[i, j].transform.localPosition = lp;
+                    buildingsGrid[i, j].transform.localPosition = lp;
                 }
             }
             //CoreScript.Instance.GameStateChanged += (sender, e) =>
@@ -53,7 +55,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return _rect.TransformPoint(CellLocalSize) - _rect.TransformPoint(Vector2.zero);
+                return rect.TransformPoint(CellLocalSize) - rect.TransformPoint(Vector2.zero);
             }
         }
 
@@ -61,7 +63,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return new Vector2(_rect.rect.width / numberOfColumns, _rect.rect.height / numberOfRows);
+                return new Vector2(rect.rect.width / numberOfColumns, rect.rect.height / numberOfRows);
             }
         }
 
@@ -91,8 +93,8 @@ namespace VillageKeeper.Game
         public Vector2 GetWorldPositionByGridPosition(int x, int y)
         {
             var positionInLocal = new Vector2(CellLocalSize.x * (x + 0.5f), CellLocalSize.y * (y + 0.5f));
-            var positionInLocalWithOffset = positionInLocal - (_rect.rect.size / 2);
-            return (Vector2)_rect.TransformPoint(positionInLocalWithOffset);
+            var positionInLocalWithOffset = positionInLocal - (rect.rect.size / 2);
+            return (Vector2)rect.TransformPoint(positionInLocalWithOffset);
         }
 
         public Vector2 GetWorldPositionByGridPosition(Vector2 cellIndex)
@@ -117,7 +119,7 @@ namespace VillageKeeper.Game
         public bool IsCellsFree(List<Vector2> cellsIndexes)
         {
             foreach (var c in cellsIndexes)
-                if (_buildingsGrid[(int)c.x, (int)c.y].Building != null)
+                if (buildingsGrid[(int)c.x, (int)c.y].Building != null)
                     return false;
             return true;
         }
@@ -126,20 +128,20 @@ namespace VillageKeeper.Game
         {
             if (!IsCellFree(gridPosition))
             {
-                _buildingsGrid[(int)gridPosition.x, (int)gridPosition.y].Building.Damage();
+                buildingsGrid[(int)gridPosition.x, (int)gridPosition.y].Building.Damage();
             }
         }
 
-        public void PlaceBuilding(BuildingScript building, int x, int y)
+        public void PlaceBuilding(Building building, int x, int y)
         {
             PlaceBuilding(building, new Vector2(x, y));
         }
 
-        public void PlaceBuilding(BuildingScript building, Vector2 gridPosition)
+        public void PlaceBuilding(Building building, Vector2 gridPosition)
         {
             if (IsCellFree(gridPosition))
             {
-                building.Tile = _buildingsGrid[(int)gridPosition.x, (int)gridPosition.y];
+                building.Tile = buildingsGrid[(int)gridPosition.x, (int)gridPosition.y];
                 building.Tile.Building = building;
                 building.transform.parent = building.Tile.transform;
                 building.transform.localPosition = (new Vector3(0, 0, -0.1f));
@@ -147,7 +149,7 @@ namespace VillageKeeper.Game
             }
         }
 
-        public void BuyBuilding(BuildingScript building, Vector2 gridPosition)
+        public void BuyBuilding(Building building, Vector2 gridPosition)
         {
             if (IsCellFree(gridPosition) && Core.Instance.Data.Saved.Gold.Get() >= building.GoldCost)
             {
@@ -157,7 +159,7 @@ namespace VillageKeeper.Game
             }
         }
 
-        public void RemoveBuilding(BuildingScript building)
+        public void RemoveBuilding(Building building)
         {
             building.Tile.Building = null;
             building.Tile = null;
@@ -167,33 +169,30 @@ namespace VillageKeeper.Game
 
         public void SaveBuildings()
         {
-            var list = new Data.SerializableBuildingsList();
-            foreach (var b in buildings)
+            var list = new SerializableBuildingsArray()
             {
-                var x = (int)b.Tile.gridX;
-                var y = (int)b.Tile.gridY;
-                list.list.Add(new Data.SerializableBuilding(b.Type, x, y));
-            }
+                Values = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray()
+            };
             Core.Instance.Data.Saved.Buildings.Set(list);
         }
 
         public void LoadBuildings()
         {
             var list = Core.Instance.Data.Saved.Buildings.Get();
-            foreach (var b in list.list)
+            foreach (var b in list.Values)
             {
-                if (_buildingsGrid[b.X, b.Y].Building == null)
+                if (buildingsGrid[b.x, b.y].Building == null)
                 {
-                    var bs = BuildingScript.GetNewBuildingOfType(b.Type);
-                    PlaceBuilding(bs, b.X, b.Y);
+                    var bs = ResourceMock.GetBuilding(b.type);
+                    PlaceBuilding(bs, b.x, b.y);
                 }
                 else
                 {
-                    if (_buildingsGrid[b.X, b.Y].Building.Type != b.Type)
+                    if (buildingsGrid[b.x, b.y].Building.Type != b.type)
                     {
-                        RemoveBuilding(_buildingsGrid[b.X, b.Y].Building);
-                        var bs = BuildingScript.GetNewBuildingOfType(b.Type);
-                        PlaceBuilding(bs, b.X, b.Y);
+                        RemoveBuilding(buildingsGrid[b.x, b.y].Building);
+                        var bs = ResourceMock.GetBuilding(b.type);
+                        PlaceBuilding(bs, b.x, b.y);
                     }
                 }
             }
@@ -208,7 +207,7 @@ namespace VillageKeeper.Game
         {
             if (x < 0 || x >= numberOfColumns || y < 0 || y >= numberOfRows)
                 return null;
-            return _buildingsGrid[x, y];
+            return buildingsGrid[x, y];
         }
     }
 }

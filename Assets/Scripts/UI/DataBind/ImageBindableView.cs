@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Shibari.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Shibari.UI
+namespace VillageKeeper.UI
 {
     [RequireComponent(typeof(Image))]
     public class ImageBindableView : ResourceBindableView<Sprite>
@@ -11,7 +11,7 @@ namespace Shibari.UI
 
         public override Sprite GetResource()
         {
-            return ResourceMock.GetSprite(FullResourcePath);
+            return ResourceMock.Get<Sprite>(FullResourcePath);
         }
 
         protected void Awake()

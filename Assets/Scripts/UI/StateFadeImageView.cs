@@ -3,20 +3,9 @@ using UnityEngine.UI;
 
 namespace VillageKeeper.UI
 {
-    public class ScreenShadowScript : StateVisibleView
+    public class StateFadeImageView : StateVisibleView
     {
-        private Button button;
         private Image image;
-        
-        public Button ShadowButton
-        {
-            get
-            {
-                if (button == null)
-                    button = GetComponent<Button>() as Button;
-                return button;
-            }
-        }
 
         protected override void Start()
         {

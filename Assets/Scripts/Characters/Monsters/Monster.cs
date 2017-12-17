@@ -7,7 +7,6 @@ using System;
 
 namespace VillageKeeper.Game
 {
-    [RequireComponent(typeof(DelayerScript))]
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Collider2D))]

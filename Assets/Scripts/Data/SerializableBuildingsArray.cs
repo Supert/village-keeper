@@ -1,15 +1,13 @@
-﻿using System;
 using UnityEngine;
 
 namespace VillageKeeper.Data
 {
-    [Serializable]
-    public class StringArray : SerializableArray<string>
+    public class SerializableBuildingsArray : SerializableArray<SerializableBuilding>
     {
         [SerializeField]
-        string[] values;
+        private SerializableBuilding[] values = new SerializableBuilding[0];
 
-        public override string[] Values
+        public override SerializableBuilding[] Values
         {
             get
             {

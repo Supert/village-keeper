@@ -16,6 +16,7 @@ namespace VillageKeeper
 
         public Data.Data Data { get; private set; }
 
+        public System.Random Random { get; private set; }
 
         public GameController GameManager { get; private set; }
         public AudioManager AudioManager { get; private set; }
@@ -35,6 +36,8 @@ namespace VillageKeeper
         void Awake()
         {
             Instance = this;
+
+            Random = new System.Random();
 
             FSM = new StateMachine();
 

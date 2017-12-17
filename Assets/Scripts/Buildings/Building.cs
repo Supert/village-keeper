@@ -4,24 +4,17 @@ using VillageKeeper.Data;
 
 namespace VillageKeeper.Game
 {
-    public abstract partial class BuildingScript : MonoBehaviour
+    public class Building : MonoBehaviour
     {
-        public abstract BuildingTypes Type { get; }
-
-        public static BuildingScript GetNewBuildingOfType(BuildingTypes type)
-        {
-            var path = "Buildings/" + Enum.GetName(typeof(BuildingTypes), type);
-            var bs = Instantiate(Resources.Load<BuildingScript>(path)) as BuildingScript;
-            return bs;
-        }
+        [SerializeField]
+        protected BuildingTypes type;
+        public BuildingTypes Type { get { return type; } }
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth { get { throw new NotImplementedException(); } }
-        //public float MaxHealth { get { return BalanceData.GetBuildingMaxHealth(Type); } }
+        public float MaxHealth { get { return Core.Instance.Data.Balance.GetBuildingMaxHealth(type); } }
 
-        public int GoldCost { get { throw new NotImplementedException(); } }
-        //public int GoldCost { get { return BalanceData.GetBuildingGoldCost(Type); } }
+        public int GoldCost { get { return Core.Instance.Data.Balance.GetBuildingGoldCost(type); } }
 
         public float Health { get; protected set; }
 
