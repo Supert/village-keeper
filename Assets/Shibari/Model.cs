@@ -84,7 +84,7 @@ namespace Shibari
             foreach (var assembly in executingAssembly.GetReferencedAssemblies())
                 ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
         }
-        
+
         private static void ProcessBindableDataTypes(Type[] types)
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
@@ -112,17 +112,17 @@ namespace Shibari
         public static void Add(string id, BindableData data)
         {
             if (registered.ContainsKey(id))
-                throw new ArgumentException(string.Format("Data with id {0} is already registered"));
+                throw new ArgumentException($"Data with id {id} is already registered", "id");
             registered[id] = data;
         }
 
         public static T Get<T>(string id) where T : BindableData
         {
             if (!registered.ContainsKey(id))
-                throw new ArgumentException(string.Format("Data with id {0} is not registered.", id), "id");
+                throw new ArgumentException($"Data with id {id} is not registered.", "id");
 
             if (!typeof(T).IsAssignableFrom(registered[id].GetType()))
-                throw new Exception(string.Format("Can't cast data with id {0} to type {1}", id, typeof(T)));
+                throw new Exception($"Can't cast data with id {id} to type {typeof(T)}");
             return (T)registered[id];
         }
 
@@ -207,7 +207,7 @@ namespace Shibari
 
                 if (!model.ReflectedProperties.ContainsKey(splitted[0]))
                 {
-                    Debug.LogError($"Could not find property with id {splitted[0]} in data with id {dataId}");
+                    Debug.LogError($"Could not find property {splitted[0]} in data {dataId}");
                     return;
                 }
 
@@ -215,7 +215,7 @@ namespace Shibari
 
                 if (field.valueType.FullName != splitted[1])
                 {
-                    Debug.LogError($"Serialized property with id {splitted[0]} has type {splitted[1]} but type {field.valueType.FullName} expected.");
+                    Debug.LogError($"Serialized property {splitted[0]} has type {splitted[1]} but type {field.valueType.FullName} expected.");
                     return;
                 }
 
@@ -232,7 +232,7 @@ namespace Shibari
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Catched exception {e} while parsing {splitted[0]} in {dataId}");
+                    Debug.LogError($"Catched {e.GetType()} while parsing {splitted[0]} in {dataId}.\n{e}");
                     return;
                 }
             }
@@ -246,7 +246,7 @@ namespace Shibari
                 {
                     Type propertyType = fieldInfo.Value.property.PropertyType;
                     MethodInfo method = propertyType.GetMethod("Serialize", new Type[0]);
-                    string serializedValue = (string) method.Invoke(fieldInfo.Value.dataField, new object[0]);
+                    string serializedValue = (string)method.Invoke(fieldInfo.Value.dataField, new object[0]);
                     return $"{fieldInfo.Key}:{fieldInfo.Value.valueType.FullName}:{serializedValue}";
                 })
                 .ToArray();

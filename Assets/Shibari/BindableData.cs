@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Shibari
 {
@@ -11,7 +12,11 @@ namespace Shibari
         {
             ReflectedProperties = new Dictionary<string, BindableFieldInfo>();
 
-            foreach (var p in GetType().GetProperties())
+            var t = GetType();
+
+            var properties = t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (var p in properties)
             {
                 Type type = p.PropertyType;
                 while (type != typeof(object))

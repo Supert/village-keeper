@@ -1,6 +1,4 @@
-﻿using System;
-using Shibari;
-using VillageKeeper.Data;
+﻿using Shibari;
 
 namespace VillageKeeper.Data
 {
@@ -9,13 +7,12 @@ namespace VillageKeeper.Data
         public SerializableField<float> ArrowForceThreshold { get; private set; }
         public SerializableField<int> MonsterBonusGold { get; private set; }
         public SerializableField<int> MaxVillageLevel { get; private set; }
-        public SerializableField<int> FoodPerFarm { get; private set; }
-        public SerializableField<int> FoodPerWindMillMultiplier { get; private set; }
 
-        public SerializableField<IntArray> CastleUpgradeCosts { get; private set; }
-
-        public SerializableField<FloatArray> BuildingMaxHealths { get; private set; }
-        public SerializableField<IntArray> BuildingCosts { get; private set; }
+        protected SerializableField<int> FoodPerFarm { get; set; }
+        protected SerializableField<int> FoodPerWindMillMultiplier { get; set; }
+        protected SerializableField<IntArray> CastleUpgradeCosts { get; set; }
+        protected SerializableField<FloatArray> BuildingMaxHealths { get; set; }
+        protected SerializableField<IntArray> BuildingCosts { get; set; }
 
         public float GetBuildingMaxHealth(BuildingTypes type)
         {
