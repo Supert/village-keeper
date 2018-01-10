@@ -44,8 +44,13 @@ namespace Shibari.UI
 
         protected void OnDestroy()
         {
-            foreach (var field in Fields)
-                field.eventInfo.RemoveEventHandler(field.dataField, onValueChangedDelegate);
+            if (Fields != null)
+            {
+                foreach (var field in Fields)
+                {
+                    field.eventInfo.RemoveEventHandler(field.dataField, onValueChangedDelegate);
+                }
+            }
         }
     }
 }
