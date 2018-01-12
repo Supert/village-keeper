@@ -18,8 +18,7 @@ namespace VillageKeeper.FSM
 
         public virtual void Exit()
         {
-            if (OnExit != null)
-                OnExit();
+            OnExit?.Invoke();
         }
     }
 }

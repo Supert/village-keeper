@@ -67,7 +67,6 @@ namespace Shibari
             }
 
             serialized = serialized.Replace("\r", string.Empty);
-            //serialized = serialized.Replace("\n", string.Empty);
 
             Type type = typeof(TValue);
 

@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using VillageKeeper.Game;
 
 namespace VillageKeeper.UI
 {
     public class Sky : MonoBehaviour
     {
-        public Wind wind;
+        private Wind wind;
 
         private List<RectTransform> cloudsList = new List<RectTransform>();
 

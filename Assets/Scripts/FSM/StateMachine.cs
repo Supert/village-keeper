@@ -7,18 +7,18 @@ namespace VillageKeeper.FSM
     {
         private Dictionary<States, State> states = new Dictionary<States, State>
         {
-            { States.Empty, null },
-            { States.BattleHelp, new BattleHelpState() },
-            { States.Battle, new BattleState() },
-            { States.BuildHelp, new BuildHelpState() },
-            { States.Build, new BuildState() },
-            { States.Init, new InitState() },
-            { States.Menu, new MenuState() },
-            { States.Pause, new PauseState() },
-            { States.RoundFinished, new RoundFinishedState() },
-            { States.Shop, new ShopState() }
+            [States.Empty] = null,
+            [States.BattleHelp] = new BattleHelpState(),
+            [States.Battle] = new BattleState(),
+            [States.BuildHelp] = new BuildHelpState(),
+            [States.Build] = new BuildState(),
+            [States.Init] = new InitState(),
+            [States.Menu] = new MenuState(),
+            [States.Pause] = new PauseState(),
+            [States.RoundFinished] = new RoundFinishedState(),
+            [States.Shop] = new ShopState(),
         };
-        
+
         public States Current { get; private set; }
 
         public StateMachine()

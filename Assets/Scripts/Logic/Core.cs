@@ -1,9 +1,9 @@
+using GoogleMobileAds.Api;
 using UnityEngine;
 using VillageKeeper.FSM;
 using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
-using VillageKeeper.Data;
 using Shibari;
 
 namespace VillageKeeper
@@ -18,8 +18,6 @@ namespace VillageKeeper
 
         public System.Random Random { get; private set; }
 
-        public GameController GameManager { get; private set; }
-
         public AudioManager AudioManager { get; private set; }
 
         public Monster Monster { get; private set; }
@@ -32,12 +30,33 @@ namespace VillageKeeper
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
 
+        private void InitAds()
+        {
+            BannerView bannerView = new BannerView(Data.Resources.AdUnitId.Get(), AdSize.Banner, AdPosition.Bottom);
+            AdRequest adRequest = new AdRequest.Builder().Build();
+            bannerView.LoadAd(adRequest);
+
+            Data.Saved.HasPremium.OnValueChanged += () =>
+            {
+                if (Data.Saved.HasPremium.Get())
+                    bannerView.Hide();
+            };
+
+            FSM.SubscribeToEnter(States.Menu, () =>
+            {
+                if (!Data.Saved.HasPremium.Get())
+                    bannerView.Show();
+            });
+
+            FSM.SubscribeToExit(States.Menu, bannerView.Hide);
+        }
+
         private void Awake()
         {
             Instance = this;
 
             Random = new System.Random();
-            
+
             FSM = new StateMachine();
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -54,11 +73,10 @@ namespace VillageKeeper
             Data = new Data.Data();
             Data.Init();
 
-            GameManager = transform.Find("Game").GetComponent<GameController>();
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
-
-            GameManager.Init();
             AudioManager.Init();
+
+            InitAds();
 
             FSM.Event(StateMachineEvents.GameInitialized);
         }

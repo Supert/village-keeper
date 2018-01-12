@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VillageKeeper.FSM
+﻿namespace VillageKeeper.FSM
 {
     public class RoundFinishedState : State
     {

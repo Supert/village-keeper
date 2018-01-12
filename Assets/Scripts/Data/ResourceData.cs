@@ -15,5 +15,7 @@ namespace VillageKeeper.Data
         public SerializableField<string> BuildingTile { get; private set; }
 
         public SerializableField<string> GhostPrefab { get; private set; }
+
+        public SerializableField<string> AdUnitId { get; private set; }
     }
 }

@@ -167,18 +167,18 @@ namespace VillageKeeper.Game
 
             foreach (var b in list.Values)
             {
-                if (buildingsGrid[b.x, b.y].Building == null)
+                if (buildingsGrid[b.X, b.Y].Building == null)
                 {
-                    var bs = ResourceMock.GetBuilding(b.type);
-                    PlaceBuilding(bs, b.x, b.y);
+                    var bs = ResourceMock.GetBuilding(b.Type);
+                    PlaceBuilding(bs, b.X, b.Y);
                 }
                 else
                 {
-                    if (buildingsGrid[b.x, b.y].Building.Type != b.type)
+                    if (buildingsGrid[b.X, b.Y].Building.Type != b.Type)
                     {
-                        RemoveBuilding(buildingsGrid[b.x, b.y].Building);
-                        var bs = ResourceMock.GetBuilding(b.type);
-                        PlaceBuilding(bs, b.x, b.y);
+                        RemoveBuilding(buildingsGrid[b.X, b.Y].Building);
+                        var bs = ResourceMock.GetBuilding(b.Type);
+                        PlaceBuilding(bs, b.X, b.Y);
                     }
                 }
             }

@@ -6,9 +6,9 @@ namespace VillageKeeper.Game
     public class ArrowScript : MonoBehaviour
     {
         private Vector2 targetPosition;
-        SpriteRenderer shadowRenderer;
-        SpriteRenderer spriteRenderer;
-        Vector2 velocity;
+        private SpriteRenderer shadowRenderer;
+        private SpriteRenderer spriteRenderer;
+        private Vector2 velocity;
 
         void Start()
         {

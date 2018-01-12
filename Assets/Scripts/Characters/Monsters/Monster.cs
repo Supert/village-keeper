@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DeenGames.Utils.AStarPathFinder;
 using DeenGames.Utils;
-using System;
 
 namespace VillageKeeper.Game
 {
@@ -19,7 +18,7 @@ namespace VillageKeeper.Game
             Far,
         }
 
-        public int maxHealth;
+        private int maxHealth;
 
         private Animator animator;
         private SpriteRenderer sprite;
@@ -141,7 +140,7 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
                 {
-                    if (buildingsArea.IsCellFree(new Vector2(i, j)) 
+                    if (buildingsArea.IsCellFree(new Vector2(i, j))
                         && (i == buildingsArea.numberOfColumns - 1 || buildingsArea.IsCellFree(new Vector2(i + 1, j))))
                     {
                         pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
@@ -174,8 +173,10 @@ namespace VillageKeeper.Game
                         possibleTargets.Add(new Point(i, j));
                 }
             }
-            var pathFinder = new PathFinder(pathGrid);
-            pathFinder.Diagonals = false;
+            var pathFinder = new PathFinder(pathGrid)
+            {
+                Diagonals = false,
+            };
 
             var monsterPoint = new Point((int)GridPosition.x, (int)GridPosition.y);
             var paths = new List<List<PathFinderNode>>();
@@ -187,7 +188,7 @@ namespace VillageKeeper.Game
             }
             if (paths == null || paths.Count == 0)
                 return null;
-            return paths[UnityEngine.Random.Range(0, paths.Count)];
+            return paths[Random.Range(0, paths.Count)];
         }
 
         public bool CheckHitByPosition(Vector3 projectilePosition)
@@ -279,16 +280,10 @@ namespace VillageKeeper.Game
 
         private void SetMaxHealthAndAgressiveness()
         {
-            float buildingsHealth = 0;
-            float buildingsCost = 0;
-            foreach (var b in Core.Instance.BuildingsArea.buildings)
-            {
-                buildingsHealth += b.MaxHealth;
-                buildingsCost += b.GoldCost;
-            }
-            float pointsPool = buildingsHealth / 2 * (1 + Core.Instance.Data.Saved.VillageLevel.Get() * 0.25f);
-            float minHealthPossible = 10 * (3 * buildingsCost / 800 + 1);
-            float maxHealthPossible = 100;
+            float pointsPool = Core.Instance.Data.Balance.GetMonsterPowerPoints();
+            float minHealthPossible = Core.Instance.Data.Balance.GetMonsterMinHealth();
+            float maxHealthPossible = Core.Instance.Data.Balance.GetMonsterMaxHealth();
+
             if (pointsPool < minHealthPossible)
             {
                 maxHealth = (int)minHealthPossible;
@@ -303,7 +298,7 @@ namespace VillageKeeper.Game
                 }
                 else
                 {
-                    agressiveness = UnityEngine.Random.Range(pointsPool / maxHealthPossible, 1);
+                    agressiveness = Random.Range(pointsPool / maxHealthPossible, 1);
                     maxHealth = (int)(pointsPool / agressiveness);
                 }
             }

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Collections;
 
 [RequireComponent(typeof(Text))]
 public class TextSizeFitterScript : MonoBehaviour

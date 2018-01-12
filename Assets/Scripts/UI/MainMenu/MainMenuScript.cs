@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using VillageKeeper.FSM;
 
 namespace VillageKeeper.UI
 {

@@ -17,8 +17,7 @@ namespace Shibari
         public static Dictionary<Type, BindableMapper> Mappers { get; private set; }
 
         public static ModelRecord[] Records { get; private set; }
-
-
+        
         static Model()
         {
             LoadRecords();

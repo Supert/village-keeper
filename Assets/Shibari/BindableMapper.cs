@@ -17,13 +17,7 @@ namespace Shibari
 
             foreach (var m in methods)
             {
-                ReflectedMappings.Add(m.Name, new MappingInfo()
-                {
-                    signature = m.GetParameters(),
-                    method = m,
-                    owner = this,
-                    returnType = m.ReturnType
-                });
+                ReflectedMappings.Add(m.Name, new MappingInfo(m, this));
             }
         }
     }

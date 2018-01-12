@@ -1,8 +1,4 @@
-﻿using UnityEngine;
-
-//set health on enter battle
-
-namespace VillageKeeper.Data
+﻿namespace VillageKeeper.Data
 {
     public enum BuildingTypes : byte
     {

@@ -6,21 +6,28 @@ namespace Shibari
 {
     public class MappingInfo
     {
-        public MethodInfo method;
-        public BindableMapper owner;
+        public MethodInfo Method { get; private set; }
+        public BindableMapper Owner { get; private set; }
+        public ParameterInfo[] Parameters { get; private set; }
 
-        public Type returnType;
-        public ParameterInfo[] signature;
+        public MappingInfo(MethodInfo method, BindableMapper owner)
+        {
+            Method = method;
+            Owner = owner;
+            Parameters = method.GetParameters();
+        }
 
-        public object Invoke(params object[] o)
+        public object Invoke(params object[] parameters)
         {
             try
             {
-                return method.Invoke(owner, o);
+                return Method.Invoke(Owner, parameters);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.LogError(e);
+                if (Method.ReturnType.IsValueType)
+                    return Activator.CreateInstance(Method.ReturnType);
                 return null;
             }
         }
