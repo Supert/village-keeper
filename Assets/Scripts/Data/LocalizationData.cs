@@ -13,10 +13,15 @@ namespace VillageKeeper.Data
 
     public class LocalizationData : BindableData
     {
-        public SerializableField<string> TipFormat { get; private set; }
-        public SerializableField<string[]> BattleHelpTips { get; private set; }
-        public SerializableField<string[]> BuildHelpTips { get; private set; }
-        public SerializableField<string[]> BuildingDescriptions { get; private set; }
-        public SerializableField<string[]> BuildingNames { get; private set; }
+        [SerializeValue]
+        public BindableField<string> TipFormat { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BattleHelpTips { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BuildHelpTips { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BuildingDescriptions { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BuildingNames { get; private set; }
     }
 }

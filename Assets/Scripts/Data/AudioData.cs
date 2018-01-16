@@ -4,12 +4,19 @@ namespace VillageKeeper.Data
 {
     public class AudioData : BindableData
     {
-        public SerializableField<string[]> ArrowShots { get; private set; }
-        public SerializableField<string[]> BackgroundPeace { get; private set; }
-        public SerializableField<string[]> BackgroundBattle { get; private set; }
-        public SerializableField<string[]> BuildingHit { get; private set; }
-        public SerializableField<string[]> Click { get; private set; }
-        public SerializableField<string[]> MonsterSounds { get; private set; }
-        public SerializableField<string[]> MonsterHit { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> ArrowShots { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BackgroundPeace { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BackgroundBattle { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> BuildingHit { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> Click { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> MonsterSounds { get; private set; }
+        [SerializeValue]
+        public BindableField<string[]> MonsterHit { get; private set; }
     }
 }

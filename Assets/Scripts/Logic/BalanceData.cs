@@ -5,21 +5,34 @@ namespace VillageKeeper.Data
 {
     public class BalanceData : BindableData
     {
-        public SerializableField<float> ArrowForceThreshold { get; private set; }
-        public SerializableField<int> MonsterBonusGold { get; private set; }
-        public SerializableField<int> MaxVillageLevel { get; private set; }
-        
-        protected SerializableField<int> MonsterMaxHealthPossible { get; private set; }
-        protected SerializableField<int> MonsterMinHealthPossible { get; private set; }
-        protected SerializableField<float> MonsterBuildingCostModifier { get; private set; }
-        protected SerializableField<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
-        protected SerializableField<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
+        [SerializeValue]
+        public BindableField<float> ArrowForceThreshold { get; private set; }
+        [SerializeValue]
+        public BindableField<int> MonsterBonusGold { get; private set; }
+        [SerializeValue]
+        public BindableField<int> MaxVillageLevel { get; private set; }
 
-        protected SerializableField<int> FoodPerFarm { get; set; }
-        protected SerializableField<int> FoodPerWindMillMultiplier { get; set; }
-        protected SerializableField<int[]> CastleUpgradeCosts { get; set; }
-        protected SerializableField<float[]> BuildingMaxHealths { get; set; }
-        protected SerializableField<int[]> BuildingCosts { get; set; }
+        [SerializeValue]
+        protected BindableField<int> MonsterMaxHealthPossible { get; private set; }
+        [SerializeValue]
+        protected BindableField<int> MonsterMinHealthPossible { get; private set; }
+        [SerializeValue]
+        protected BindableField<float> MonsterBuildingCostModifier { get; private set; }
+        [SerializeValue]
+        protected BindableField<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
+        [SerializeValue]
+        protected BindableField<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
+
+        [SerializeValue]
+        protected BindableField<int> FoodPerFarm { get; set; }
+        [SerializeValue]
+        protected BindableField<int> FoodPerWindMillMultiplier { get; set; }
+        [SerializeValue]
+        protected BindableField<int[]> CastleUpgradeCosts { get; set; }
+        [SerializeValue]
+        protected BindableField<float[]> BuildingMaxHealths { get; set; }
+        [SerializeValue]
+        protected BindableField<int[]> BuildingCosts { get; set; }
 
         public float GetMonsterPowerPoints()
         {

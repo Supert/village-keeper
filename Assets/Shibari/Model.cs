@@ -165,7 +165,8 @@ namespace Shibari
 
         public static bool IsSerializableField(PropertyInfo property)
         {
-            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(SerializableField<>));
+            return property.GetCustomAttribute<SerializeValueAttribute>() != null
+                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>));
         }
 
         private static bool CheckTypeTreeByPredicate(Type type, Func<Type, bool> predicate)
