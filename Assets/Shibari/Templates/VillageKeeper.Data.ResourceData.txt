@@ -1,8 +1,13 @@
-CastleBackground:System.String:
-MountainsBackground:System.String:
-VillageBackground:System.String:
-Cliff:System.String:
-CastleUpgradeIcon:System.String:
-ArrowBar:System.String:
-BuildingPrefabs:System.String:
-FarmCrops:System.String:
+{
+  "AdUnitId": "",
+  "GhostPrefab": "",
+  "BuildingTile": "",
+  "FarmCrops": "",
+  "BuildingPrefabs": "",
+  "ArrowBar": "",
+  "CastleUpgradeIcon": "",
+  "Cliff": "",
+  "VillageBackground": "",
+  "MountainsBackground": "",
+  "CastleBackground": ""
+}

@@ -150,10 +150,7 @@ namespace VillageKeeper.Game
 
         public void SaveBuildings()
         {
-            var list = new SerializableBuildingsArray()
-            {
-                Values = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray()
-            };
+            var list = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray();
 
             Core.Instance.Data.Saved.Buildings.Set(list);
         }
@@ -162,10 +159,10 @@ namespace VillageKeeper.Game
         {
             var list = Core.Instance.Data.Saved.Buildings.Get();
 
-            if (list == null || list.Values == null)
+            if (list == null)
                 return;
 
-            foreach (var b in list.Values)
+            foreach (var b in list)
             {
                 if (buildingsGrid[b.X, b.Y].Building == null)
                 {

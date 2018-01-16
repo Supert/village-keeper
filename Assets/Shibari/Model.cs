@@ -4,6 +4,7 @@ using System.Reflection;
 using System;
 using UnityEngine;
 using UnityEditor;
+using Newtonsoft.Json;
 
 namespace Shibari
 {
@@ -17,7 +18,9 @@ namespace Shibari
         public static Dictionary<Type, BindableMapper> Mappers { get; private set; }
 
         public static ModelRecord[] Records { get; private set; }
-        
+
+        private static Dictionary<string, BindableData> registered = new Dictionary<string, BindableData>();
+
         static Model()
         {
             LoadRecords();
@@ -106,8 +109,6 @@ namespace Shibari
             }
         }
 
-        private static Dictionary<string, BindableData> registered = new Dictionary<string, BindableData>();
-
         public static void Add(string id, BindableData data)
         {
             if (registered.ContainsKey(id))
@@ -180,86 +181,14 @@ namespace Shibari
             return false;
         }
 
-        public static void DeserializeData(string dataId, string serialized)
-        {
-            var record = Records.FirstOrDefault(r => r.key == dataId);
-
-            if (record == null)
-            {
-                Debug.LogError($"Model record with id {dataId} is not found.");
-                return;
-            }
-
-            var model = Get<BindableData>(dataId);
-
-            foreach (string s in serialized.Split(new string[1] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                var splitted = s.Split(':');
-                if (splitted.Length < 3)
-                {
-                    Debug.LogError($"Error parsing line {s} in {dataId}");
-                    return;
-                }
-
-                splitted[2] = string.Join(":", splitted.Skip(2).ToArray());
-                Array.Resize(ref splitted, 3);
-
-                if (!model.ReflectedProperties.ContainsKey(splitted[0]))
-                {
-                    Debug.LogError($"Could not find property {splitted[0]} in data {dataId}");
-                    return;
-                }
-
-                BindableFieldInfo field = model.ReflectedProperties[splitted[0]];
-
-                if (field.valueType.FullName != splitted[1])
-                {
-                    Debug.LogError($"Serialized property {splitted[0]} has type {splitted[1]} but type {field.valueType.FullName} expected.");
-                    return;
-                }
-
-                var property = field.property;
-
-                if (!IsSerializableField(property))
-                {
-                    Debug.LogError($"Property {splitted[0]} of model with id {dataId} is not SerializableField.");
-                }
-
-                try
-                {
-                    field.dataField.GetType().GetMethod("Deserialize", new Type[1] { typeof(string) }).Invoke(field.dataField, new object[1] { splitted[2] });
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"Catched {e.GetType()} while parsing {splitted[0]} in {dataId}.\n{e}");
-                    return;
-                }
-            }
-        }
-
-        public static string SerializeData(BindableData deserialized)
-        {
-            string[] result = deserialized.ReflectedProperties
-                .Where(fieldInfo => IsSerializableField(fieldInfo.Value.property))
-                .Select(fieldInfo =>
-                {
-                    Type propertyType = fieldInfo.Value.property.PropertyType;
-                    MethodInfo method = propertyType.GetMethod("Serialize", new Type[0]);
-                    string serializedValue = (string)method.Invoke(fieldInfo.Value.dataField, new object[0]);
-                    return $"{fieldInfo.Key}:{fieldInfo.Value.valueType.FullName}:{serializedValue}";
-                })
-                .ToArray();
-            return string.Join("\n", result);
-        }
-
         public static string GenerateSerializationTemplate(Type t)
         {
             if (!typeof(BindableData).IsAssignableFrom(t))
                 throw new ArgumentException("Type t should be child of BindableData", "t");
 
-            var def = Activator.CreateInstance(t);
-            ((BindableData)def).InitializeProperties();
-            return SerializeData(def as BindableData);
+            BindableData def = (BindableData)Activator.CreateInstance(t);
+            def.InitializeProperties();
+            return def.Serialize();
         }
 
         public static string GenerateSerializationTemplate<T>() where T : BindableData

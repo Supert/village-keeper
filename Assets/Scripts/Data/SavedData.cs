@@ -5,7 +5,7 @@ namespace VillageKeeper.Data
 {
     public class SavedData : BindableData
     {
-        public SerializableField<SerializableBuildingsArray> Buildings { get; private set; }
+        public SerializableField<SerializableBuilding[]> Buildings { get; private set; }
 
         public SerializableField<int> VillageLevel { get; private set; }
         public SerializableField<int> Gold { get; private set; }

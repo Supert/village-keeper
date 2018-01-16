@@ -1,10 +1,13 @@
-CastleBackground:System.String:Background/Castle/{0}/{1}
-MountainsBackground:System.String:Background/Mountains/{0}
-VillageBackground:System.String:Background/Village/{0}
-Cliff:System.String:UI/BattleMode/Cliff/{0}
-CastleUpgradeIcon:System.String:UI/BuildMode/CastleUpgradeIcons/{0}
-ArrowBar:System.String:UI/BattleMode/ArrowBar/{0}
-BuildingPrefabs:System.String:Prefabs/Buildings/{0}
-FarmCrops:System.String:Buildings/FarmCrops/Crops_{0}
-BuildingTile:System.String:Prefabs/BuildingTile
-GhostPrefab:System.String:Prefabs/Characters/Monsters/Ghost/Ghost
+{
+  "AdUnitId": "",
+  "GhostPrefab": "Prefabs/Characters/Monsters/Ghost/Ghost",
+  "BuildingTile": "Prefabs/BuildingTile",
+  "FarmCrops": "Buildings/FarmCrops/Crops_{0}",
+  "BuildingPrefabs": "Prefabs/Buildings/{0}",
+  "ArrowBar": "UI/BattleMode/ArrowBar/{0}",
+  "CastleUpgradeIcon": "UI/BuildMode/CastleUpgradeIcons/{0}",
+  "Cliff": "UI/BattleMode/Cliff/{0}",
+  "VillageBackground": "Background/Village/{0}",
+  "MountainsBackground": "Background/Mountains/{0}",
+  "CastleBackground": "Background/Castle/{0}/{1}"
+}

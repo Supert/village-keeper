@@ -1,9 +1,11 @@
-Buildings:VillageKeeper.Data.SerializableBuildingsArray:
-VillageLevel:System.Int32:0
-Gold:System.Int32:100
-HasPremium:System.Boolean:false
-WasBuildTipShown:System.Boolean:false
-WasBattleTipShown:System.Boolean:false
-MonstersDefeated:System.Int32:0
-IsSoundEffectsEnabled:System.Boolean:true
-IsMusicEnabled:System.Boolean:true
+{
+  "IsMusicEnabled": true,
+  "IsSoundEffectsEnabled": true,
+  "MonstersDefeated": 0,
+  "WasBattleTipShown": false,
+  "WasBuildTipShown": false,
+  "HasPremium": false,
+  "Gold": 100,
+  "VillageLevel": 0,
+  "Buildings": []
+}

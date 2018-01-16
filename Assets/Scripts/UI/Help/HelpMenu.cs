@@ -42,9 +42,9 @@ namespace VillageKeeper.UI
         private void Show()
         {
             if (Core.Instance.FSM.Current == States.BattleHelp)
-                tips = Core.Instance.Data.Localization.BattleHelpTips.Get().Values;
+                tips = Core.Instance.Data.Localization.BattleHelpTips.Get();
             else if (Core.Instance.FSM.Current == States.BuildHelp)
-                tips = Core.Instance.Data.Localization.BuildHelpTips.Get().Values;
+                tips = Core.Instance.Data.Localization.BuildHelpTips.Get();
             Core.Instance.Data.Game.HelpTipsCount.Set(tips.Length);
             Core.Instance.Data.Game.CurrentHelpTip.Set(1);
         }

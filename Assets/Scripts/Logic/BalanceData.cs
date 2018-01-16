@@ -8,23 +8,18 @@ namespace VillageKeeper.Data
         public SerializableField<float> ArrowForceThreshold { get; private set; }
         public SerializableField<int> MonsterBonusGold { get; private set; }
         public SerializableField<int> MaxVillageLevel { get; private set; }
-
-        //100f
+        
         protected SerializableField<int> MonsterMaxHealthPossible { get; private set; }
-        //10f
         protected SerializableField<int> MonsterMinHealthPossible { get; private set; }
-        //0.0375f
         protected SerializableField<float> MonsterBuildingCostModifier { get; private set; }
-        //0.5f
         protected SerializableField<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
-        //0.25f
         protected SerializableField<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
 
         protected SerializableField<int> FoodPerFarm { get; set; }
         protected SerializableField<int> FoodPerWindMillMultiplier { get; set; }
-        protected SerializableField<IntArray> CastleUpgradeCosts { get; set; }
-        protected SerializableField<FloatArray> BuildingMaxHealths { get; set; }
-        protected SerializableField<IntArray> BuildingCosts { get; set; }
+        protected SerializableField<int[]> CastleUpgradeCosts { get; set; }
+        protected SerializableField<float[]> BuildingMaxHealths { get; set; }
+        protected SerializableField<int[]> BuildingCosts { get; set; }
 
         public float GetMonsterPowerPoints()
         {

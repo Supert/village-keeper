@@ -122,7 +122,7 @@ namespace VillageKeeper.Audio
             foreach (var field in Core.Instance.Data.Audio.ReflectedProperties)
             {
                 audioClips[field.Key] = new List<AudioClip>();
-                foreach (var path in (field.Value.GetValue() as StringArray).Values)
+                foreach (var path in (field.Value.GetValue() as string[]))
                     audioClips[field.Key].Add(Resources.Load<AudioClip>(path));
             }
 

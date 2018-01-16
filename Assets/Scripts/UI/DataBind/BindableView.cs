@@ -22,7 +22,7 @@ namespace Shibari.UI
             for (int i = 0; i < dataEntries.Length; i++)
             {
                 Fields[i] = GetField(dataEntries[i]);
-                Fields[i].eventInfo.AddEventHandler(Fields[i].dataField, onValueChangedDelegate);
+                Fields[i].EventInfo.AddEventHandler(Fields[i].DataField, onValueChangedDelegate);
             }
 
             OnValueChanged();
@@ -47,7 +47,7 @@ namespace Shibari.UI
             {
                 foreach (var field in Fields)
                 {
-                    field.eventInfo.RemoveEventHandler(field.dataField, onValueChangedDelegate);
+                    field.EventInfo.RemoveEventHandler(field.DataField, onValueChangedDelegate);
                 }
             }
         }

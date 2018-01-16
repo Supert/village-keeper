@@ -1,7 +1,9 @@
-ArrowShots:VillageKeeper.Data.StringArray:{"values":["Audio/ArrowShot0", "Audio/ArrowShot1", "Audio/ArrowShot2"]}
-BackgroundPeace:VillageKeeper.Data.StringArray:{"values":["Audio/BackgroundPeace"]}
-BackgroundBattle:VillageKeeper.Data.StringArray:{"values":["Audio/BackgroundBattle"]}
-BuildingHit:VillageKeeper.Data.StringArray:{"values":["Audio/BuildingHit"]}
-Click:VillageKeeper.Data.StringArray:{"values":["Audio/Click"]}
-MonsterSounds:VillageKeeper.Data.StringArray:{"values":["Audio/Monster0", "Audio/Monster1"]}
-MonsterHit:VillageKeeper.Data.StringArray:{"values":["Audio/MonsterHit"]}
+{
+  "MonsterHit": ["Audio/MonsterHit"],
+  "MonsterSounds": ["Audio/Monster0", "Audio/Monster1"],
+  "Click": ["Audio/Click"],
+  "BuildingHit": ["Audio/BuildingHit"],
+  "BackgroundBattle": ["Audio/BackgroundBattle"],
+  "BackgroundPeace": ["Audio/BackgroundPeace"],
+  "ArrowShots": ["Audio/ArrowShot0", "Audio/ArrowShot1", "Audio/ArrowShot2"]
+}

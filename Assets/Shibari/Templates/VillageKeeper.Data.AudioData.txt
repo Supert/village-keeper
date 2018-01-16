@@ -1,7 +1,9 @@
-ArrowShots:VillageKeeper.Data.StringArray:
-BackgroundPeace:VillageKeeper.Data.StringArray:
-BackgroundBattle:VillageKeeper.Data.StringArray:
-BuildingHit:VillageKeeper.Data.StringArray:
-Click:VillageKeeper.Data.StringArray:
-MonsterSounds:VillageKeeper.Data.StringArray:
-MonsterHit:VillageKeeper.Data.StringArray:
+{
+  "MonsterHit": [],
+  "MonsterSounds": [],
+  "Click": [],
+  "BuildingHit": [],
+  "BackgroundBattle": [],
+  "BackgroundPeace": [],
+  "ArrowShots": []
+}
