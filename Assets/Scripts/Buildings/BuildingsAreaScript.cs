@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    buildingsGrid[i, j] = Instantiate(ResourceMock.Get<BuildingTileScript>(Data.Resources.BuildingTileFormat));
+                    buildingsGrid[i, j] = Instantiate(Data.Resources.BuildingTile.Get());
                     buildingsGrid[i, j].gridX = i;
                     buildingsGrid[i, j].gridY = j;
                     buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";

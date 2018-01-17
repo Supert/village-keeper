@@ -1,9 +1,9 @@
 {
-  "AdUnitId": "",
+  "MenuFurniture": "UI/MainMenu/Furniture/HasPremium_{0}",
   "GhostPrefab": "Prefabs/Characters/Monsters/Ghost/Ghost",
   "BuildingTile": "Prefabs/BuildingTile",
   "FarmCrops": "Buildings/FarmCrops/Crops_{0}",
-  "BuildingPrefabs": "Prefabs/Buildings/{0}",
+  "CurrentBuildingPrefab": "Prefabs/Buildings/{0}",
   "ArrowBar": "UI/BattleMode/ArrowBar/{0}",
   "CastleUpgradeIcon": "UI/BuildMode/CastleUpgradeIcons/{0}",
   "Cliff": "UI/BattleMode/Cliff/{0}",

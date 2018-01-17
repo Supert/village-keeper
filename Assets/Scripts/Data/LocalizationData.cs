@@ -2,11 +2,6 @@
 
 namespace VillageKeeper.Model
 {
-    public class FormattedAndLocalizedData : BindableData
-    {
-
-    }
-
     public class LocalizationData : BindableData
     {
         [SerializeValue]

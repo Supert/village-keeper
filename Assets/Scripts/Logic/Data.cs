@@ -8,6 +8,7 @@ namespace VillageKeeper.Model
         public static FormattedAndLocalizedData FormattedAndLocalizedData { get; private set; }
         public static LocalizationData Localization { get; private set; }
         public static ResourceData Resources { get; private set; }
+        public static ResourcePathData ResourcePaths { get; private set; }
         public static SavedData Saved { get; private set; }
         public static CommonData Common { get; private set; }
         public static GameData Game { get; private set; }
@@ -17,6 +18,8 @@ namespace VillageKeeper.Model
         public static void Init()
         {
             Localization = Shibari.Model.Get<LocalizationData>("Localization");
+            FormattedAndLocalizedData = Shibari.Model.Get<FormattedAndLocalizedData>("FormattedAndLocalized");
+            ResourcePaths = Shibari.Model.Get<ResourcePathData>("ResourcePaths");
             Resources = Shibari.Model.Get<ResourceData>("Resources");
             Saved = Shibari.Model.Get<SavedData>("Saved");
             Common = Shibari.Model.Get<CommonData>("Common");
@@ -25,7 +28,7 @@ namespace VillageKeeper.Model
             Audio = Shibari.Model.Get<AudioData>("Audio");
 
             Saved.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.SavedData").text);
-            Resources.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.ResourceData").text);
+            ResourcePaths.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.ResourcePathData").text);
             Localization.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.LocalizationData").text);
             Balance.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.BalanceData").text);
             Audio.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.AudioData").text);

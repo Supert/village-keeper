@@ -1,13 +1,3 @@
 {
-  "AdUnitId": "",
-  "GhostPrefabFormat": "",
-  "BuildingTileFormat": "",
-  "FarmCropsFormat": "",
-  "BuildingPrefabsFormat": "",
-  "ArrowBarFormat": "",
-  "CastleUpgradeIconFormat": "",
-  "CliffFormat": "",
-  "VillageBackgroundFormat": "",
-  "MountainsBackgroundFormat": "",
-  "CastleBackgroundFormat": ""
+  "AdUnitId": ""
 }

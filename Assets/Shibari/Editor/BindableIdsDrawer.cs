@@ -20,8 +20,9 @@ namespace Shibari.Editor
 
             Tuple<string, Type>[] fields = new Tuple<string, Type>[0];
             if (selectedModel >= 0)
+            {
                 fields = Shibari.Model.ModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type].ToArray();
-
+            }
             int selectedField = fields.TakeWhile(f => f.Item1 != fieldId.stringValue).Count();
             if (selectedField == fields.Length)
                 selectedField = -1;

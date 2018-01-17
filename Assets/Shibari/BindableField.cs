@@ -33,6 +33,15 @@ namespace Shibari
             {
                 bindable.OnValueChanged += ValueChanged;
             }
+
+            try
+            {
+                calculateValueFunction.Invoke();
+            }
+            catch
+            {
+
+            }
         }
 
         public SecondaryValue(Func<TValue> calculateValueFunction, params IBindable[] subscribeTo) : this(calculateValueFunction, subscribeTo.AsEnumerable())

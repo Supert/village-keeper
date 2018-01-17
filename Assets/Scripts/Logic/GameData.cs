@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Shibari;
+using static VillageKeeper.Model.Data;
 
 namespace VillageKeeper.Model
 {
@@ -10,39 +11,46 @@ namespace VillageKeeper.Model
 
         public PrimaryValue<int> TotalFood { get; private set; }
 
-        public PrimaryValue<int> CurrentBreadToGoldMultiplier { get; private set; }
-        public PrimaryValue<int> NextBreadToGoldMultiplier { get; private set; }
         public PrimaryValue<int> RoundFinishedBonusGold { get; private set; }
-        public PrimaryValue<int> CastleUpgradeCost { get; private set; }
 
         public PrimaryValue<float> ClampedMonsterHealth { get; private set; }
         public PrimaryValue<float> ClampedArrowForce { get; private set; }
 
-        public PrimaryValue<bool> IsArrowForceOverThreshold { get; private set; }
+        public PrimaryValue<BuildingTypes> SelectedBuildingType { get; internal set; }
+
+        public SecondaryValue<int> NextBreadToGoldMultiplier { get; private set; }
+        public SecondaryValue<int> CurrentBreadToGoldMultiplier { get; private set; }
+        public SecondaryValue<int> CastleUpgradeCost { get; }
+        public SecondaryValue<bool> IsArrowForceOverThreshold { get; }
+
+        public GameData()
+        {
+            IsArrowForceOverThreshold = new SecondaryValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
+            CastleUpgradeCost = new SecondaryValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
+        }
 
         public void Init()
         {
             CalculateEconomy();
 
-            Data.Saved.VillageLevel.OnValueChanged += CalculateEconomy;
+            Saved.VillageLevel.OnValueChanged += CalculateEconomy;
+
             Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
-            ClampedArrowForce.OnValueChanged += () => IsArrowForceOverThreshold.Set(ClampedArrowForce >= Data.Balance.ArrowForceThreshold);
+
+            CurrentBreadToGoldMultiplier = new SecondaryValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel), Saved.VillageLevel);
+            NextBreadToGoldMultiplier = new SecondaryValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel + 1), Saved.VillageLevel);
         }
 
         public void CalculateEconomy()
         {
-            int villageLevel = Data.Saved.VillageLevel;
-            SerializableBuilding[] buildings = Data.Saved.Buildings;
+            int villageLevel = Saved.VillageLevel;
+            SerializableBuilding[] buildings = Saved.Buildings;
             int farms = buildings?.Count(c => c.Type == BuildingTypes.Farm) ?? 0;
             int windmills = buildings?.Count(c => c.Type == BuildingTypes.Windmill) ?? 0;
+            
+            RoundFinishedBonusGold.Set(Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills));
 
-            CurrentBreadToGoldMultiplier.Set(Data.Balance.GetBreadToGoldMultiplier(villageLevel));
-            if (villageLevel < Data.Balance.MaxVillageLevel)
-                NextBreadToGoldMultiplier.Set(Data.Balance.GetBreadToGoldMultiplier(villageLevel + 1));
-            RoundFinishedBonusGold.Set(Data.Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills));
-            CastleUpgradeCost.Set(Data.Balance.GetCastleUpgradeCost(villageLevel));
-
-            TotalFood.Set((Data.Balance.CalculateFarmsFood(farms) + Data.Balance.CalculateWindmillsFood(windmills, farms)));
+            TotalFood.Set((Balance.CalculateFarmsFood(farms) + Balance.CalculateWindmillsFood(windmills, farms)));
         }
     }
 }

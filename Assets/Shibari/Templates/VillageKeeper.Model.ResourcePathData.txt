@@ -1,0 +1,13 @@
+{
+  "MenuFurniture": "",
+  "GhostPrefab": "",
+  "BuildingTile": "",
+  "FarmCrops": "",
+  "CurrentBuildingPrefab": "",
+  "ArrowBar": "",
+  "CastleUpgradeIcon": "",
+  "Cliff": "",
+  "VillageBackground": "",
+  "MountainsBackground": "",
+  "CastleBackground": ""
+}
