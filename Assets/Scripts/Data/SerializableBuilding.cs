@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VillageKeeper.Data
+namespace VillageKeeper.Model
 {
     [Serializable]
     public class SerializableBuilding

@@ -1,27 +1,23 @@
-﻿using System;
-using Shibari;
+﻿using Shibari;
 
-namespace VillageKeeper.Data
+namespace VillageKeeper.Model
 {
-    public class LocalizationMapper : BindableMapper
+    public class FormattedAndLocalizedData : BindableData
     {
-        public string GetCurrentTip(int i)
-        {
-            return "";
-        }
+
     }
 
     public class LocalizationData : BindableData
     {
         [SerializeValue]
-        public BindableField<string> TipFormat { get; private set; }
+        public PrimaryValue<string> TipFormat { get; private set; }
         [SerializeValue]
-        public BindableField<string[]> BattleHelpTips { get; private set; }
+        public PrimaryValue<string[]> BattleHelpTips { get; private set; }
         [SerializeValue]
-        public BindableField<string[]> BuildHelpTips { get; private set; }
+        public PrimaryValue<string[]> BuildHelpTips { get; private set; }
         [SerializeValue]
-        public BindableField<string[]> BuildingDescriptions { get; private set; }
+        public PrimaryValue<string[]> BuildingDescriptions { get; private set; }
         [SerializeValue]
-        public BindableField<string[]> BuildingNames { get; private set; }
+        public PrimaryValue<string[]> BuildingNames { get; private set; }
     }
 }

@@ -1,54 +1,54 @@
 ﻿using Shibari;
 using System.Linq;
 
-namespace VillageKeeper.Data
+namespace VillageKeeper.Model
 {
     public class BalanceData : BindableData
     {
         [SerializeValue]
-        public BindableField<float> ArrowForceThreshold { get; private set; }
+        public PrimaryValue<float> ArrowForceThreshold { get; private set; }
         [SerializeValue]
-        public BindableField<int> MonsterBonusGold { get; private set; }
+        public PrimaryValue<int> MonsterBonusGold { get; private set; }
         [SerializeValue]
-        public BindableField<int> MaxVillageLevel { get; private set; }
+        public PrimaryValue<int> MaxVillageLevel { get; private set; }
 
         [SerializeValue]
-        protected BindableField<int> MonsterMaxHealthPossible { get; private set; }
+        protected PrimaryValue<int> MonsterMaxHealthPossible { get; private set; }
         [SerializeValue]
-        protected BindableField<int> MonsterMinHealthPossible { get; private set; }
+        protected PrimaryValue<int> MonsterMinHealthPossible { get; private set; }
         [SerializeValue]
-        protected BindableField<float> MonsterBuildingCostModifier { get; private set; }
+        protected PrimaryValue<float> MonsterBuildingCostModifier { get; private set; }
         [SerializeValue]
-        protected BindableField<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
+        protected PrimaryValue<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
         [SerializeValue]
-        protected BindableField<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
+        protected PrimaryValue<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
 
         [SerializeValue]
-        protected BindableField<int> FoodPerFarm { get; set; }
+        protected PrimaryValue<int> FoodPerFarm { get; set; }
         [SerializeValue]
-        protected BindableField<int> FoodPerWindMillMultiplier { get; set; }
+        protected PrimaryValue<int> FoodPerWindMillMultiplier { get; set; }
         [SerializeValue]
-        protected BindableField<int[]> CastleUpgradeCosts { get; set; }
+        protected PrimaryValue<int[]> CastleUpgradeCosts { get; set; }
         [SerializeValue]
-        protected BindableField<float[]> BuildingMaxHealths { get; set; }
+        protected PrimaryValue<float[]> BuildingMaxHealths { get; set; }
         [SerializeValue]
-        protected BindableField<int[]> BuildingCosts { get; set; }
+        protected PrimaryValue<int[]> BuildingCosts { get; set; }
 
         public float GetMonsterPowerPoints()
         {
             float buildingsHealth = Core.Instance.BuildingsArea.buildings.Sum(b => b.MaxHealth);
-            return buildingsHealth * MonsterPowerPointsBuildingsHealthModifier.Get() * (1 + Core.Instance.Data.Saved.VillageLevel.Get() * MonsterPowerPointsVillageLevelModifier.Get());
+            return buildingsHealth * MonsterPowerPointsBuildingsHealthModifier * (1 + Data.Saved.VillageLevel * MonsterPowerPointsVillageLevelModifier);
         }
 
         public float GetMonsterMinHealth()
         {
             float buildingsCost = Core.Instance.BuildingsArea.buildings.Sum(b => b.GoldCost);
-            return buildingsCost * MonsterBuildingCostModifier.Get() + MonsterMinHealthPossible.Get();
+            return buildingsCost * MonsterBuildingCostModifier + MonsterMinHealthPossible;
         }
 
         public float GetMonsterMaxHealth()
         {
-            return MonsterMaxHealthPossible.Get();
+            return MonsterMaxHealthPossible;
         }
 
         public float GetBuildingMaxHealth(BuildingTypes type)
@@ -68,17 +68,17 @@ namespace VillageKeeper.Data
 
         public int CalculateFarmsFood(int farms)
         {
-            return farms * FoodPerFarm.Get();
+            return farms * FoodPerFarm;
         }
 
         public int CalculateWindmillsFood(int windmills, int farms)
         {
-            return windmills * farms * FoodPerWindMillMultiplier.Get();
+            return windmills * farms * FoodPerWindMillMultiplier;
         }
 
         public int CalculateRoundFinishedBonusGold(int villageLevel, int farms, int windmills)
         {
-            int result = MonsterBonusGold.Get();
+            int result = MonsterBonusGold;
             int food = CalculateFarmsFood(farms) + CalculateWindmillsFood(windmills, farms);
             result += food * GetBreadToGoldMultiplier(villageLevel);
             return result;

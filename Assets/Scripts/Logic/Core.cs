@@ -5,6 +5,7 @@ using VillageKeeper.Game;
 using VillageKeeper.UI;
 using VillageKeeper.Audio;
 using Shibari;
+using VillageKeeper.Model;
 
 namespace VillageKeeper
 {
@@ -13,8 +14,6 @@ namespace VillageKeeper
         public static Core Instance { get; private set; }
 
         public StateMachine FSM { get; private set; }
-
-        public Data.Data Data { get; private set; }
 
         public System.Random Random { get; private set; }
 
@@ -32,19 +31,19 @@ namespace VillageKeeper
 
         private void InitAds()
         {
-            BannerView bannerView = new BannerView(Data.Resources.AdUnitId.Get(), AdSize.Banner, AdPosition.Bottom);
+            BannerView bannerView = new BannerView(Data.Resources.AdUnitId, AdSize.Banner, AdPosition.Bottom);
             AdRequest adRequest = new AdRequest.Builder().Build();
             bannerView.LoadAd(adRequest);
 
             Data.Saved.HasPremium.OnValueChanged += () =>
             {
-                if (Data.Saved.HasPremium.Get())
+                if (Data.Saved.HasPremium)
                     bannerView.Hide();
             };
 
             FSM.SubscribeToEnter(States.Menu, () =>
             {
-                if (!Data.Saved.HasPremium.Get())
+                if (!Data.Saved.HasPremium)
                     bannerView.Show();
             });
 
@@ -68,9 +67,8 @@ namespace VillageKeeper
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
 
-            Model.Init();
-
-            Data = new Data.Data();
+            Shibari.Model.Init();
+            
             Data.Init();
 
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();

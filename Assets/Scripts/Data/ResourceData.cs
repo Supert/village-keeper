@@ -1,32 +1,43 @@
 ﻿using Shibari;
 
-namespace VillageKeeper.Data
+namespace VillageKeeper.Model
 {
     public class ResourceData : BindableData
     {
-        [SerializeValue]
-        public BindableField<string> CastleBackground { get; private set; }
-        [SerializeValue]
-        public BindableField<string> MountainsBackground { get; private set; }
-        [SerializeValue]
-        public BindableField<string> VillageBackground { get; private set; }
-        [SerializeValue]
-        public BindableField<string> Cliff { get; private set; }
-        [SerializeValue]
-        public BindableField<string> CastleUpgradeIcon { get; private set; }
-        [SerializeValue]
-        public BindableField<string> ArrowBar { get; private set; }
-        [SerializeValue]
-        public BindableField<string> BuildingPrefabs { get; private set; }
-        [SerializeValue]
-        public BindableField<string> FarmCrops { get; private set; }
-        [SerializeValue]
-        public BindableField<string> BuildingTile { get; private set; }
+        //[ShowInEditor]
+        public SecondaryValue<string> CastleBackground { get; }
 
         [SerializeValue]
-        public BindableField<string> GhostPrefab { get; private set; }
+        public PrimaryValue<string> CastleBackgroundFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> MountainsBackgroundFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> VillageBackgroundFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> CliffFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> CastleUpgradeIconFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> ArrowBarFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> BuildingPrefabsFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> FarmCropsFormat { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> BuildingTileFormat { get; private set; }
 
         [SerializeValue]
-        public BindableField<string> AdUnitId { get; private set; }
+        public PrimaryValue<string> GhostPrefab { get; private set; }
+
+        [SerializeValue]
+        public PrimaryValue<string> AdUnitId { get; private set; }
+
+        public ResourceData()
+        {
+            CastleBackground = new SecondaryValue<string>(
+            () => string.Format(CastleBackgroundFormat, Data.Common.Special, Data.Saved.VillageLevel),
+            Data.Common.Special,
+            Data.Saved.VillageLevel);
+        }
     }
 }

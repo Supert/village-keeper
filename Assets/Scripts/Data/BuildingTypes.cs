@@ -1,4 +1,4 @@
-﻿namespace VillageKeeper.Data
+﻿namespace VillageKeeper.Model
 {
     public enum BuildingTypes : byte
     {

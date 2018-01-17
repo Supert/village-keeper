@@ -14,7 +14,7 @@ namespace Shibari.UI
         [SerializeField]
         protected BindableIds formatProvider;
 
-        protected BindableFieldInfo formatProviderField;
+        protected PrimaryValueInfo formatProviderField;
 
         [SerializeField]
         protected string format;

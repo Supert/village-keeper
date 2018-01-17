@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using VillageKeeper.FSM;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -17,22 +18,22 @@ namespace VillageKeeper.UI
         {
             nextButton.onClick.AddListener(() =>
             {
-                Core.Instance.Data.Game.CurrentHelpTip.Set(Core.Instance.Data.Game.CurrentHelpTip.Get() + 1);
+                Data.Game.CurrentHelpTip.Set(Data.Game.CurrentHelpTip.Get() + 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
-                Core.Instance.Data.Game.CurrentHelpTip.Set(Core.Instance.Data.Game.CurrentHelpTip.Get() - 1);
+                Data.Game.CurrentHelpTip.Set(Data.Game.CurrentHelpTip.Get() - 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
-            Core.Instance.Data.Game.CurrentHelpTip.OnValueChanged += () =>
+            Data.Game.CurrentHelpTip.OnValueChanged += () =>
             {
-                int tip = Core.Instance.Data.Game.CurrentHelpTip.Get();
+                int tip = Data.Game.CurrentHelpTip.Get();
 
-                tipText.text = tips[Core.Instance.Data.Game.CurrentHelpTip.Get() - 1];
-                tipCounterText.text = string.Format(Core.Instance.Data.Localization.TipFormat.Get(), tip, tips.Length);
+                tipText.text = tips[Data.Game.CurrentHelpTip.Get() - 1];
+                tipCounterText.text = string.Format(Data.Localization.TipFormat.Get(), tip, tips.Length);
             };
 
             Core.Instance.FSM.SubscribeToEnter(States.BattleHelp, Show);
@@ -42,11 +43,11 @@ namespace VillageKeeper.UI
         private void Show()
         {
             if (Core.Instance.FSM.Current == States.BattleHelp)
-                tips = Core.Instance.Data.Localization.BattleHelpTips.Get();
+                tips = Data.Localization.BattleHelpTips.Get();
             else if (Core.Instance.FSM.Current == States.BuildHelp)
-                tips = Core.Instance.Data.Localization.BuildHelpTips.Get();
-            Core.Instance.Data.Game.HelpTipsCount.Set(tips.Length);
-            Core.Instance.Data.Game.CurrentHelpTip.Set(1);
+                tips = Data.Localization.BuildHelpTips.Get();
+            Data.Game.HelpTipsCount.Set(tips.Length);
+            Data.Game.CurrentHelpTip.Set(1);
         }
     }
 }

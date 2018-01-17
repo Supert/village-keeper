@@ -15,8 +15,6 @@ namespace Shibari
 
         public static Dictionary<Type, Tuple<string, Type>[]> ModelTree { get; private set; }
 
-        public static Dictionary<Type, BindableMapper> Mappers { get; private set; }
-
         public static ModelRecord[] Records { get; private set; }
 
         private static Dictionary<string, BindableData> registered = new Dictionary<string, BindableData>();
@@ -24,7 +22,6 @@ namespace Shibari
         static Model()
         {
             LoadRecords();
-            LoadMappers();
         }
 
         public static void Init()
@@ -35,30 +32,7 @@ namespace Shibari
                 Register(record.key, (BindableData)o);
             }
         }
-
-        private static void LoadMappers()
-        {
-            Mappers = new Dictionary<Type, BindableMapper>();
-
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            ProcessMapperTypes(executingAssembly.GetTypes());
-
-            foreach (var assembly in executingAssembly.GetReferencedAssemblies())
-                ProcessMapperTypes(Assembly.Load(assembly).GetTypes());
-        }
-
-        private static void ProcessMapperTypes(Type[] types)
-        {
-            foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableMapper).IsAssignableFrom(t)))
-            {
-                if (type.GetConstructor(new Type[0]) == null)
-                    Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
-
-                Mappers[type] = (BindableMapper)Activator.CreateInstance(type);
-                Mappers[type].InitializeMappings();
-            }
-        }
-
+        
         public static void LoadRecords()
         {
             ShibariSettings settings = Resources.Load<ShibariSettings>("ShibariSettings");
@@ -99,7 +73,7 @@ namespace Shibari
                     .Select(p =>
                     {
                         Type t = p.PropertyType;
-                        while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>)))
+                        while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
                         {
                             t = t.BaseType;
                         }
@@ -147,7 +121,7 @@ namespace Shibari
                 Type type = p.PropertyType;
                 while (type != typeof(object))
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableField<>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableValue<>))
                     {
                         object value = Activator.CreateInstance(p.PropertyType);
                         p.SetValue(data, value);
@@ -160,13 +134,13 @@ namespace Shibari
 
         public static bool IsBindableField(PropertyInfo property)
         {
-            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>));
+            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>));
         }
 
-        public static bool IsSerializableField(PropertyInfo property)
+        public static bool IsSerializableValue(PropertyInfo property)
         {
             return property.GetCustomAttribute<SerializeValueAttribute>() != null
-                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableField<>));
+                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>));
         }
 
         private static bool CheckTypeTreeByPredicate(Type type, Func<Type, bool> predicate)

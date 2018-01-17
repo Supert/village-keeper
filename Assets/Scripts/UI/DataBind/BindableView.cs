@@ -8,7 +8,7 @@ namespace Shibari.UI
         [SerializeField]
         private BindableIds[] dataEntries = new BindableIds[0];
 
-        protected BindableFieldInfo[] Fields { get; private set; }
+        protected PrimaryValueInfo[] Fields { get; private set; }
 
         protected abstract void OnValueChanged();
 
@@ -17,7 +17,7 @@ namespace Shibari.UI
         protected virtual void Start()
         {
             onValueChangedDelegate = Delegate.CreateDelegate(typeof(Action), this, "OnValueChanged");
-            Fields = new BindableFieldInfo[dataEntries.Length];
+            Fields = new PrimaryValueInfo[dataEntries.Length];
 
             for (int i = 0; i < dataEntries.Length; i++)
             {
@@ -28,7 +28,7 @@ namespace Shibari.UI
             OnValueChanged();
         }
 
-        protected BindableFieldInfo GetField(BindableIds ids)
+        protected PrimaryValueInfo GetField(BindableIds ids)
         {
             try
             {

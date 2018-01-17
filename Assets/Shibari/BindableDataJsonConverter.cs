@@ -38,8 +38,8 @@ namespace Shibari
             {
                 if (instance.ReflectedProperties.ContainsKey(serialized.Name))
                 {
-                    BindableFieldInfo reflected = instance.ReflectedProperties[serialized.Name];
-                    if (Model.IsSerializableField(reflected.Property))
+                    PrimaryValueInfo reflected = instance.ReflectedProperties[serialized.Name];
+                    if (Model.IsSerializableValue(reflected.Property))
                     {
                         if (serialized.Value.Type == JTokenType.Array)
                         {
@@ -85,7 +85,7 @@ namespace Shibari
             JObject jsonObject = new JObject();
             BindableData data = (BindableData)value;
 
-            foreach (var property in data.ReflectedProperties.Where(p => Model.IsSerializableField(p.Value.Property)))
+            foreach (var property in data.ReflectedProperties.Where(p => Model.IsSerializableValue(p.Value.Property)))
             {
                 object v = property.Value.GetValue();
                 if (v == null)

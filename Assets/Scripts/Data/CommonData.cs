@@ -1,7 +1,8 @@
 ﻿using System;
 using Shibari;
+using VillageKeeper.FSM;
 
-namespace VillageKeeper.Data
+namespace VillageKeeper.Model
 {
     public class CommonData : BindableData
     {
@@ -11,9 +12,11 @@ namespace VillageKeeper.Data
             Winter,
         }
 
-        public BindableField<Specials> Special { get; private set; }
+        public PrimaryValue<Specials> Special { get; private set; }
 
-        public BindableField<float> Wind { get; private set; }
+        public PrimaryValue<float> Wind { get; private set; }
+
+        public PrimaryValue<States> FsmState { get; private set; }
 
         public void Init()
         {

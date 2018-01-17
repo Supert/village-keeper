@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using VillageKeeper.Data;
+using VillageKeeper.Model;
 using VillageKeeper.Game;
 
 namespace VillageKeeper
@@ -14,7 +14,7 @@ namespace VillageKeeper
 
         public static Building GetBuilding(BuildingTypes type)
         {
-            var path = string.Format(Core.Instance.Data.Resources.BuildingPrefabs.Get(), Enum.GetName(typeof(BuildingTypes), type));
+            var path = string.Format(Data.Resources.BuildingPrefabsFormat, Enum.GetName(typeof(BuildingTypes), type));
             Building bs = UnityEngine.Object.Instantiate(Get<Building>(path));
             return bs;
         }

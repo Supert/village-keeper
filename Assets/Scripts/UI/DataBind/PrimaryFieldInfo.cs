@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Shibari
 {
-    public class BindableFieldInfo
+    public class PrimaryValueInfo
     {
         public object DataField { get; private set; }
         public EventInfo EventInfo { get; private set; }
@@ -15,7 +15,7 @@ namespace Shibari
         private MethodInfo getMethod;
         private MethodInfo setMethod;
 
-        public BindableFieldInfo(PropertyInfo property, BindableData owner)
+        public PrimaryValueInfo(PropertyInfo property, BindableData owner)
         {
             Property = property;
             DataField = property.GetValue(owner);

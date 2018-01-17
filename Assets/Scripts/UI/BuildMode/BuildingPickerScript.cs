@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using VillageKeeper.Game;
-using VillageKeeper.Data;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -104,7 +104,7 @@ namespace VillageKeeper.UI
             if (Core.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && Core.Instance.Data.Saved.Gold.Get() >= CurrentPreparedBuilding.GoldCost)
+                && Data.Saved.Gold >= CurrentPreparedBuilding.GoldCost)
             {
                 CurrentPreparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 CurrentPreparedBuilding.gameObject.SetActive(true);

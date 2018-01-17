@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DeenGames.Utils.AStarPathFinder;
 using DeenGames.Utils;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {
@@ -37,7 +38,7 @@ namespace VillageKeeper.Game
             private set
             {
                 health = value;
-                Core.Instance.Data.Game.ClampedMonsterHealth.Set(health / (float)maxHealth);
+                Data.Game.ClampedMonsterHealth.Set(health / (float)maxHealth);
                 if (health == 0)
                     Kill();
             }
@@ -214,7 +215,7 @@ namespace VillageKeeper.Game
         public void Kill()
         {
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            var ghost = Instantiate(ResourceMock.Get<Ghost>(Core.Instance.Data.Resources.GhostPrefab.Get()));
+            var ghost = Instantiate(ResourceMock.Get<Ghost>(Data.Resources.GhostPrefab));
             ghost.transform.localPosition = transform.localPosition;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
@@ -280,9 +281,9 @@ namespace VillageKeeper.Game
 
         private void SetMaxHealthAndAgressiveness()
         {
-            float pointsPool = Core.Instance.Data.Balance.GetMonsterPowerPoints();
-            float minHealthPossible = Core.Instance.Data.Balance.GetMonsterMinHealth();
-            float maxHealthPossible = Core.Instance.Data.Balance.GetMonsterMaxHealth();
+            float pointsPool = Data.Balance.GetMonsterPowerPoints();
+            float minHealthPossible = Data.Balance.GetMonsterMinHealth();
+            float maxHealthPossible = Data.Balance.GetMonsterMaxHealth();
 
             if (pointsPool < minHealthPossible)
             {

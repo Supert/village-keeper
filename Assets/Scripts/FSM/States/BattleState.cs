@@ -1,4 +1,6 @@
-﻿namespace VillageKeeper.FSM
+﻿using VillageKeeper.Model;
+
+namespace VillageKeeper.FSM
 {
     public class BattleState : State
     {
@@ -7,10 +9,10 @@
         public override void Enter()
         {
             base.Enter();
-            if (!Core.Instance.Data.Saved.WasBattleTipShown.Get())
+            if (!Data.Saved.WasBattleTipShown)
             {
                 Core.Instance.FSM.Event(StateMachineEvents.ShowHelp);
-                Core.Instance.Data.Saved.WasBattleTipShown.Set(true);
+                Data.Saved.WasBattleTipShown.Set(true);
             }
         }
 

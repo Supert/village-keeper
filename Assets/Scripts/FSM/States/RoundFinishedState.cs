@@ -1,4 +1,6 @@
-﻿namespace VillageKeeper.FSM
+﻿using VillageKeeper.Model;
+
+namespace VillageKeeper.FSM
 {
     public class RoundFinishedState : State
     {
@@ -7,7 +9,7 @@
         public override void Enter()
         {
             base.Enter();
-            Core.Instance.Data.Saved.Gold.Set(Core.Instance.Data.Saved.Gold.Get() + Core.Instance.Data.Game.RoundFinishedBonusGold.Get());
+            Data.Saved.Gold.Set(Data.Saved.Gold + Data.Game.RoundFinishedBonusGold);
         }
 
         public override States Event(StateMachineEvents type, params object[] args)

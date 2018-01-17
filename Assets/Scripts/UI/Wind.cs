@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -55,7 +56,7 @@ namespace VillageKeeper.UI
 
             if (oldStrength != Strength)
             {
-                Core.Instance.Data.Common.Wind.Set(Strength);
+                Data.Common.Wind.Set(Strength);
             }
         }
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -12,7 +13,7 @@ namespace VillageKeeper.UI
 
         void SetScores()
         {
-            var monstersDefeated = Core.Instance.Data.Saved.MonstersDefeated.Get();
+            var monstersDefeated = Data.Saved.MonstersDefeated;
             if (monstersDefeated == 0)
                 monstersDefeatedText.text = "No monsters defeated yet";
             else
@@ -26,7 +27,7 @@ namespace VillageKeeper.UI
 
         private void SetFurniture()
         {
-            if (Core.Instance.Data.Saved.HasPremium.Get())
+            if (Data.Saved.HasPremium)
             {
                 if (roomFurniture.sprite != premiumFurniture)
                     roomFurniture.sprite = premiumFurniture;
@@ -49,8 +50,8 @@ namespace VillageKeeper.UI
             SetScores();
             SetFurniture();
 
-            Core.Instance.Data.Saved.MonstersDefeated.OnValueChanged += SetScores;
-            Core.Instance.Data.Saved.HasPremium.OnValueChanged += SetFurniture;
+            Data.Saved.MonstersDefeated.OnValueChanged += SetScores;
+            Data.Saved.HasPremium.OnValueChanged += SetFurniture;
         }
     }
 }

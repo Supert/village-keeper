@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using VillageKeeper.Data;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {

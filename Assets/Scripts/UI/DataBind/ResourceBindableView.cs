@@ -8,7 +8,7 @@ namespace Shibari.UI
         [SerializeField, Header("Resource Path Entry")]
         protected BindableIds resourceDataIds;
 
-        protected BindableFieldInfo ResourcePathField { get; private set; }
+        protected PrimaryValueInfo ResourcePathField { get; private set; }
 
         protected virtual string FullResourcePath
         {

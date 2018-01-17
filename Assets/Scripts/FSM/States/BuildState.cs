@@ -1,4 +1,6 @@
-﻿namespace VillageKeeper.FSM
+﻿using VillageKeeper.Model;
+
+namespace VillageKeeper.FSM
 {
     public class BuildState : State
     {
@@ -7,10 +9,10 @@
         public override void Enter()
         {
             base.Enter();
-            if (!Core.Instance.Data.Saved.WasBuildTipShown.Get())
+            if (!Data.Saved.WasBuildTipShown.Get())
             {
                 Core.Instance.FSM.Event(StateMachineEvents.ShowHelp);
-                Core.Instance.Data.Saved.WasBuildTipShown.Set(true);
+                Data.Saved.WasBuildTipShown.Set(true);
             }
         }
 

@@ -9,11 +9,11 @@ namespace Shibari
     {
         private static readonly BindableDataJsonConverter converter = new BindableDataJsonConverter();
 
-        public Dictionary<string, BindableFieldInfo> ReflectedProperties { get; protected set; }
+        public Dictionary<string, PrimaryValueInfo> ReflectedProperties { get; protected set; }
 
         public void InitializeProperties()
         {
-            ReflectedProperties = new Dictionary<string, BindableFieldInfo>();
+            ReflectedProperties = new Dictionary<string, PrimaryValueInfo>();
 
             var t = GetType();
 
@@ -24,11 +24,11 @@ namespace Shibari
                 Type type = p.PropertyType;
                 while (type != typeof(object))
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableField<>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(PrimaryValue<>))
                     {
                         object o = Activator.CreateInstance(p.PropertyType);
                         p.SetValue(this, o);
-                        ReflectedProperties[p.Name] = new BindableFieldInfo(p, this);
+                        ReflectedProperties[p.Name] = new PrimaryValueInfo(p, this);
 
                         break;
                     }

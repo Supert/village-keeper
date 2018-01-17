@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -18,7 +19,7 @@ namespace VillageKeeper.UI
 
         void SetButtons()
         {
-            if (Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get())
+            if (Data.Saved.IsSoundEffectsEnabled.Get())
             {
                 SoundsButton.image.sprite = SoundsOnSprite;
                 var s = SoundsButton.spriteState;
@@ -32,7 +33,7 @@ namespace VillageKeeper.UI
                 s.pressedSprite = SoundsOffPressedSprite;
                 SoundsButton.spriteState = s;
             }
-            if (Core.Instance.Data.Saved.IsMusicEnabled.Get())
+            if (Data.Saved.IsMusicEnabled.Get())
             {
                 MusicButton.image.sprite = MusicOnSprite;
                 var s = MusicButton.spriteState;
@@ -50,18 +51,18 @@ namespace VillageKeeper.UI
 
         void Init()
         {
-            Core.Instance.Data.Saved.IsSoundEffectsEnabled.OnValueChanged += SetButtons;
-            Core.Instance.Data.Saved.IsMusicEnabled.OnValueChanged += SetButtons;
+            Data.Saved.IsSoundEffectsEnabled.OnValueChanged += SetButtons;
+            Data.Saved.IsMusicEnabled.OnValueChanged += SetButtons;
 
             MusicButton.onClick.AddListener(() =>
             {
-                Core.Instance.Data.Saved.IsMusicEnabled.Set(!Core.Instance.Data.Saved.IsMusicEnabled.Get());
+                Data.Saved.IsMusicEnabled.Set(!Data.Saved.IsMusicEnabled.Get());
                 Core.Instance.AudioManager.PlayClick();
             });
 
             SoundsButton.onClick.AddListener(() =>
             {
-                Core.Instance.Data.Saved.IsSoundEffectsEnabled.Set(!Core.Instance.Data.Saved.IsSoundEffectsEnabled.Get());
+                Data.Saved.IsSoundEffectsEnabled.Set(!Data.Saved.IsSoundEffectsEnabled.Get());
                 Core.Instance.AudioManager.PlayClick();
             });
         }

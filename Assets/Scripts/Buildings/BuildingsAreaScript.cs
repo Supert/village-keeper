@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using VillageKeeper.Data;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {
@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    buildingsGrid[i, j] = Instantiate(ResourceMock.Get<BuildingTileScript>(Core.Instance.Data.Resources.BuildingTile.Get()));
+                    buildingsGrid[i, j] = Instantiate(ResourceMock.Get<BuildingTileScript>(Data.Resources.BuildingTileFormat));
                     buildingsGrid[i, j].gridX = i;
                     buildingsGrid[i, j].gridY = j;
                     buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
@@ -132,9 +132,9 @@ namespace VillageKeeper.Game
 
         public void BuyBuilding(Building building, Vector2 gridPosition)
         {
-            if (IsCellFree(gridPosition) && Core.Instance.Data.Saved.Gold.Get() >= building.GoldCost)
+            if (IsCellFree(gridPosition) && Data.Saved.Gold >= building.GoldCost)
             {
-                Core.Instance.Data.Saved.Gold.Set(Core.Instance.Data.Saved.Gold.Get() - building.GoldCost);
+                Data.Saved.Gold.Set(Data.Saved.Gold - building.GoldCost);
                 PlaceBuilding(building, gridPosition);
                 SaveBuildings();
             }
@@ -152,12 +152,12 @@ namespace VillageKeeper.Game
         {
             var list = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray();
 
-            Core.Instance.Data.Saved.Buildings.Set(list);
+            Data.Saved.Buildings.Set(list);
         }
 
         public void LoadBuildings()
         {
-            var list = Core.Instance.Data.Saved.Buildings.Get();
+            SerializableBuilding[] list = Data.Saved.Buildings;
 
             if (list == null)
                 return;

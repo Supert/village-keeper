@@ -1,4 +1,5 @@
 using UnityEngine;
+using VillageKeeper.Model;
 
 namespace VillageKeeper
 {
@@ -20,7 +21,7 @@ namespace VillageKeeper
             {
                 if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, t.position, Camera.current))
                 {
-                    if (t.phase == TouchPhase.Began && Core.Instance.Data.Game.IsArrowForceOverThreshold.Get())
+                    if (t.phase == TouchPhase.Began && Data.Game.IsArrowForceOverThreshold.Get())
                     {
                         Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
                     }
@@ -77,10 +78,10 @@ namespace VillageKeeper
                 return;
 
             if (isLoading)
-                Core.Instance.Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(-(bowLoadingTouchCurrentPosition - bowLoadingTouchStartingPosition).x / 150f));
+                Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(-(bowLoadingTouchCurrentPosition - bowLoadingTouchStartingPosition).x / 150f));
 
-            if (!isLoading && !Core.Instance.Data.Game.IsArrowForceOverThreshold.Get())
-                Core.Instance.Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(Core.Instance.Data.Game.ClampedArrowForce.Get() - Time.deltaTime * 3f));
+            if (!isLoading && !Data.Game.IsArrowForceOverThreshold.Get())
+                Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(Data.Game.ClampedArrowForce.Get() - Time.deltaTime * 3f));
         }
 
         private void Update()

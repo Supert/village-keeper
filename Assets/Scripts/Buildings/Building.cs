@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using VillageKeeper.Data;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {
@@ -12,9 +12,9 @@ namespace VillageKeeper.Game
 
         public BuildingTileScript Tile;
 
-        public float MaxHealth { get { return Core.Instance.Data.Balance.GetBuildingMaxHealth(type); } }
+        public float MaxHealth { get { return Data.Balance.GetBuildingMaxHealth(type); } }
 
-        public int GoldCost { get { return Core.Instance.Data.Balance.GetBuildingGoldCost(type); } }
+        public int GoldCost { get { return Data.Balance.GetBuildingGoldCost(type); } }
 
         public float Health { get; protected set; }
 
@@ -56,7 +56,7 @@ namespace VillageKeeper.Game
                     var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
                     var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
                     var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Core.Instance.Data.Saved.Gold.Get() >= GoldCost)
+                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Data.Saved.Gold >= GoldCost)
                     {
                         buildingsArea.BuyBuilding(this, closestCell);
                     }

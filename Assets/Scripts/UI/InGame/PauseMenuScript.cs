@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {
@@ -29,9 +30,9 @@ namespace VillageKeeper.UI
         {
             title.text = "Victory!";
             roundFinishedText.SetActive(true);
-            WeCollectedFoodText.text = "We collected " + (Core.Instance.Data.Game.TotalFood.Get());
-            WithMonsterBonusText.text = "With " + Core.Instance.Data.Balance.MonsterBonusGold.Get().ToString();
-            YouGainGoldText.text = "you gain " + Core.Instance.Data.Game.RoundFinishedBonusGold.Get().ToString();
+            WeCollectedFoodText.text = "We collected " + (Data.Game.TotalFood.Get());
+            WithMonsterBonusText.text = "With " + Data.Balance.MonsterBonusGold.Get().ToString();
+            YouGainGoldText.text = "you gain " + Data.Game.RoundFinishedBonusGold.Get().ToString();
         }
     }
 }
