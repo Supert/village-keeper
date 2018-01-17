@@ -1,0 +1,5 @@
+{
+  "MaxVillageLevel": 0,
+  "MonsterBonusGold": 0,
+  "ArrowForceThreshold": 0.0
+}

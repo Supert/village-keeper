@@ -5,15 +5,10 @@ using UnityEngine.UI;
 namespace VillageKeeper.UI
 {
     [RequireComponent(typeof(Image))]
-    public class ImageBindableView : ResourceBindableView<Sprite>
+    public class ImageBindableView : BindableView
     {
         private Image image;
-
-        public override Sprite GetResource()
-        {
-            return ResourceMock.Get<Sprite>(FullResourcePath);
-        }
-
+        
         protected void Awake()
         {
             image = GetComponent<Image>();
@@ -21,7 +16,7 @@ namespace VillageKeeper.UI
 
         protected override void OnValueChanged()
         {
-            image.sprite = GetResource();
+            image.sprite = (Sprite) Fields[0].GetValue();
         }
     }
 }

@@ -30,7 +30,8 @@ namespace Shibari
             if (instance == null)
             {
                 instance = (BindableData)Activator.CreateInstance(objectType);
-                instance.InitializeProperties();
+                instance.InitializePrimaryValues();
+                instance.InitializeSecondaryValues();
             }
 
             JObject jsonObject = JObject.Load(reader);
@@ -106,6 +107,34 @@ namespace Shibari
             }
 
             jsonObject.WriteTo(writer);
+        }
+
+        public static string GenerateJsonTemplate(Type type)
+        {
+            if (!typeof(BindableData).IsAssignableFrom(type))
+                throw new ArgumentException("Type should be child of BindableData", "type");
+
+            JObject jsonObject = new JObject();
+            
+            foreach (var property in Model.ModelTree[type].Where(tuple => Model.IsSerializableValue(type.GetProperty(tuple.Item1))))
+            {
+                Type valueType = property.Item2;
+
+                if (valueType.IsValueType)
+                {
+                    jsonObject.AddFirst(new JProperty(property.Item1, Activator.CreateInstance(valueType)));
+                }
+                else if (valueType == typeof(string) || valueType.GetInterface(nameof(IEnumerable)) == null)
+                {
+                    jsonObject.AddFirst(new JProperty(property.Item1, new JValue("")));
+                }
+                else
+                {
+                    jsonObject.AddFirst(new JProperty(property.Item1, new JArray()));
+                }
+            }
+
+            return jsonObject.ToString(Formatting.Indented);
         }
     }
 }

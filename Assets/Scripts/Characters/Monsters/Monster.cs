@@ -215,7 +215,7 @@ namespace VillageKeeper.Game
         public void Kill()
         {
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            var ghost = Instantiate(ResourceMock.Get<Ghost>(Data.Resources.GhostPrefab));
+            var ghost = Instantiate(Data.Resources.GhostPrefab.Get());
             ghost.transform.localPosition = transform.localPosition;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }

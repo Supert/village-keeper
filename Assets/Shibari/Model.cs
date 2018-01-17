@@ -60,7 +60,7 @@ namespace Shibari
             foreach (var assembly in executingAssembly.GetReferencedAssemblies())
                 ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
         }
-
+        
         private static void ProcessBindableDataTypes(Type[] types)
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
@@ -109,27 +109,14 @@ namespace Shibari
         {
             InitializeFields(data);
 
-            data.InitializeProperties();
+            data.ReflectProperties();
 
             Add(dataId, data);
         }
 
         private static void InitializeFields(BindableData data)
         {
-            foreach (var p in data.GetType().GetProperties())
-            {
-                Type type = p.PropertyType;
-                while (type != typeof(object))
-                {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BindableValue<>))
-                    {
-                        object value = Activator.CreateInstance(p.PropertyType);
-                        p.SetValue(data, value);
-                        break;
-                    }
-                    type = type.BaseType;
-                }
-            }
+
         }
 
         public static bool IsBindableField(PropertyInfo property)
@@ -160,10 +147,8 @@ namespace Shibari
         {
             if (!typeof(BindableData).IsAssignableFrom(t))
                 throw new ArgumentException("Type t should be child of BindableData", "t");
-
-            BindableData def = (BindableData)Activator.CreateInstance(t);
-            def.InitializeProperties();
-            return def.Serialize();
+            
+            return BindableDataJsonConverter.GenerateJsonTemplate(t);
         }
 
         public static string GenerateSerializationTemplate<T>() where T : BindableData

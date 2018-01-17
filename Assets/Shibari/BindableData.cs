@@ -2,16 +2,41 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace Shibari
 {
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
+    public class ShowInEditorAttribute : Attribute
+    {
+
+    }
+
     public abstract class BindableData
     {
         private static readonly BindableDataJsonConverter converter = new BindableDataJsonConverter();
 
         public Dictionary<string, PrimaryValueInfo> ReflectedProperties { get; protected set; }
+        
+        private void InitializeValuesOfType(Type t)
+        {
+            foreach (var p in GetType().GetProperties())
+            {
+                Type type = p.PropertyType;
+                while (type != typeof(object))
+                {
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == t)
+                    {
+                        object value = Activator.CreateInstance(p.PropertyType);
+                        p.SetValue(this, value);
+                        break;
+                    }
+                    type = type.BaseType;
+                }
+            }
+        }
 
-        public void InitializeProperties()
+        public void ReflectProperties()
         {
             ReflectedProperties = new Dictionary<string, PrimaryValueInfo>();
 
@@ -21,10 +46,10 @@ namespace Shibari
 
             foreach (var p in properties)
             {
-                Type type = p.PropertyType;
-                while (type != typeof(object))
+                Type propertyType = p.PropertyType;
+                while (propertyType != typeof(object))
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(PrimaryValue<>))
+                    if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(BindableValue<>))
                     {
                         object o = Activator.CreateInstance(p.PropertyType);
                         p.SetValue(this, o);
@@ -32,7 +57,7 @@ namespace Shibari
 
                         break;
                     }
-                    type = type.BaseType;
+                    propertyType = propertyType.BaseType;
                 }
             }
         }
@@ -63,6 +88,16 @@ namespace Shibari
         public static T GetDeserializedData<T>(string serialized) where T : BindableData
         {
             return (T) GetDeserializedData(serialized, typeof(T));
+        }
+
+        public void InitializeSecondaryValues()
+        {
+            InitializeValuesOfType(typeof(SecondaryValue<>));
+        }
+
+        public void InitializePrimaryValues()
+        {
+            InitializeValuesOfType(typeof(PrimaryValue<>));
         }
     }
 }

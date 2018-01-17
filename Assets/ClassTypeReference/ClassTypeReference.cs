@@ -52,7 +52,7 @@ namespace TypeReferences {
 
 		void ISerializationCallbackReceiver.OnAfterDeserialize() {
 			if (!string.IsNullOrEmpty(_classRef)) {
-				_type = System.Type.GetType(_classRef);
+				_type = Type.GetType(_classRef);
 
 				if (_type == null)
 					Debug.LogWarning(string.Format("'{0}' was referenced but class type was not found.", _classRef));
