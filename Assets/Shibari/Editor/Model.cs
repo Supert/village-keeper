@@ -58,7 +58,7 @@ namespace Shibari.Editor
                 FileInfo file = new FileInfo($"{path}");
                 file.Delete();
             }
-            foreach (var model in Shibari.Model.ModelTree.Keys)
+            foreach (var model in Shibari.Model.FullModelTree.Keys)
             {
                 FileInfo file = new FileInfo($"{SERIALIZATION_TEMPLATES}{model.FullName}.txt");
                 file.Directory.Create();

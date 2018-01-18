@@ -116,7 +116,7 @@ namespace Shibari
 
             JObject jsonObject = new JObject();
             
-            foreach (var property in Model.ModelTree[type].Where(tuple => Model.IsSerializableValue(type.GetProperty(tuple.Item1))))
+            foreach (var property in Model.FullModelTree[type].Where(tuple => Model.IsSerializableValue(type.GetProperty(tuple.Item1))))
             {
                 Type valueType = property.Item2;
 

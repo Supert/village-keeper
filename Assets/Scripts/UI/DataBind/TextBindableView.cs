@@ -7,18 +7,7 @@ namespace Shibari.UI
 
     [RequireComponent(typeof(Text))]
     public class TextBindableView : BindableView
-    {
-        [SerializeField]
-        protected bool useFormatProvider;
-
-        [SerializeField]
-        protected BindableIds formatProvider;
-
-        protected PrimaryValueInfo formatProviderField;
-
-        [SerializeField]
-        protected string format;
-
+    {        
         protected Text text;
 
         protected void Awake()
@@ -26,24 +15,9 @@ namespace Shibari.UI
             text = GetComponent<Text>();
         }
 
-        protected override void Start()
-        {
-            base.Start();
-            if (useFormatProvider)
-                formatProviderField = GetField(formatProvider);
-        }
-
         protected override void OnValueChanged()
         {
-            text.text = string.Format(format, Fields.Select(f => f.GetValue()).ToArray());
-        }
-
-        protected string GetFormat()
-        {
-            if (useFormatProvider)
-                return formatProviderField.ToString();
-            else
-                return format;
+            text.text = Fields[0].ToString();
         }
     }
 }

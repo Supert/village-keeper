@@ -13,7 +13,7 @@ namespace Shibari.Editor
             SerializedProperty dataId = property.FindPropertyRelative("dataId");
             SerializedProperty fieldId = property.FindPropertyRelative("fieldId");
 
-            string[] models = Shibari.Model.Records.Select(r => r.key).ToArray();
+            string[] models = Shibari.Model.Records.Where(r => Shibari.Model.VisibleInEditorModelTree.ContainsKey(r.type.Type)).Select(r => r.key).ToArray();
             int selectedModel = models.TakeWhile(m => m != dataId.stringValue).Count();
             if (selectedModel == models.Length)
                 selectedModel = -1;
@@ -21,7 +21,7 @@ namespace Shibari.Editor
             Tuple<string, Type>[] fields = new Tuple<string, Type>[0];
             if (selectedModel >= 0)
             {
-                fields = Shibari.Model.ModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type].ToArray();
+                fields = Shibari.Model.VisibleInEditorModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type].ToArray();
             }
             int selectedField = fields.TakeWhile(f => f.Item1 != fieldId.stringValue).Count();
             if (selectedField == fields.Length)

@@ -13,7 +13,9 @@ namespace Shibari
     {
         public const string PREFS_KEY = "SHIBARI_MODEL_RECORDS";
 
-        public static Dictionary<Type, Tuple<string, Type>[]> ModelTree { get; private set; }
+        public static Dictionary<Type, Tuple<string, Type>[]> FullModelTree { get; private set; }
+
+        public static Dictionary<Type, Tuple<string, Type>[]> VisibleInEditorModelTree { get; private set; }
 
         public static ModelRecord[] Records { get; private set; }
 
@@ -32,7 +34,7 @@ namespace Shibari
                 Register(record.key, (BindableData)o);
             }
         }
-        
+
         public static void LoadRecords()
         {
             ShibariSettings settings = Resources.Load<ShibariSettings>("ShibariSettings");
@@ -52,7 +54,8 @@ namespace Shibari
             }
             Records = groups.Select(g => g.First()).ToArray();
 
-            ModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
+            FullModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
+            VisibleInEditorModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
 
             var executingAssembly = Assembly.GetExecutingAssembly();
             ProcessBindableDataTypes(executingAssembly.GetTypes());
@@ -60,7 +63,7 @@ namespace Shibari
             foreach (var assembly in executingAssembly.GetReferencedAssemblies())
                 ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
         }
-        
+
         private static void ProcessBindableDataTypes(Type[] types)
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
@@ -68,7 +71,7 @@ namespace Shibari
                 if (type.GetConstructor(new Type[0]) == null)
                     Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
 
-                ModelTree[type] = type.GetProperties()
+                FullModelTree[type] = type.GetProperties()
                     .Where(p => IsBindableField(p))
                     .Select(p =>
                     {
@@ -80,6 +83,9 @@ namespace Shibari
                         return new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]);
                     })
                     .ToArray();
+                var visibleProperties = FullModelTree[type].Where(t => type.GetProperty(t.Item1).GetCustomAttribute(typeof(ShowInEditorAttribute)) != null);
+                if (visibleProperties.Any())
+                    VisibleInEditorModelTree[type] = visibleProperties.ToArray();
             }
         }
 
@@ -147,7 +153,7 @@ namespace Shibari
         {
             if (!typeof(BindableData).IsAssignableFrom(t))
                 throw new ArgumentException("Type t should be child of BindableData", "t");
-            
+
             return BindableDataJsonConverter.GenerateJsonTemplate(t);
         }
 
