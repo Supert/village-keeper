@@ -13,13 +13,17 @@ namespace VillageKeeper.Model
 
         public PrimaryValue<int> RoundFinishedBonusGold { get; private set; }
 
+        [ShowInEditor]
         public PrimaryValue<float> ClampedMonsterHealth { get; private set; }
+        [ShowInEditor]
         public PrimaryValue<float> ClampedArrowForce { get; private set; }
 
         public PrimaryValue<BuildingTypes> SelectedBuildingType { get; internal set; }
 
         public SecondaryValue<int> NextBreadToGoldMultiplier { get; private set; }
         public SecondaryValue<int> CurrentBreadToGoldMultiplier { get; private set; }
+
+        [ShowInEditor]
         public SecondaryValue<int> CastleUpgradeCost { get; }
         public SecondaryValue<bool> IsArrowForceOverThreshold { get; }
 

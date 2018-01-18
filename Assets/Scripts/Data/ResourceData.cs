@@ -8,27 +8,30 @@ namespace VillageKeeper.Model
     public class ResourceData : BindableData
     {
         [ShowInEditor]
-        public ResourceValue<Sprite> CastleBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.CastleBackground.Get, Common.Special, Saved.VillageLevel);
+        public ResourceValue<Sprite> CastleBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.CastleBackground, Common.Special, Saved.VillageLevel);
         [ShowInEditor]
-        public ResourceValue<Sprite> MountainsBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.MountainsBackground.Get, Common.Special);
+        public ResourceValue<Sprite> MountainsBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.MountainsBackground, Common.Special);
         [ShowInEditor]
-        public ResourceValue<Sprite> VillageBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.VillageBackground.Get, Common.Special);
+        public ResourceValue<Sprite> VillageBackground { get; } = new ResourceValue<Sprite>(ResourcePaths.VillageBackground, Common.Special);
         [ShowInEditor]
-        public ResourceValue<Sprite> Cliff { get; } = new ResourceValue<Sprite>(ResourcePaths.Cliff.Get, Common.Special);
+        public ResourceValue<Sprite> Cliff { get; } = new ResourceValue<Sprite>(ResourcePaths.Cliff, Common.Special);
         [ShowInEditor]
-        public ResourceValue<Sprite> CastleUpgradeIcon { get; } = new ResourceValue<Sprite>(ResourcePaths.CastleUpgradeIcon.Get, Saved.VillageLevel);
+        public ResourceValue<Sprite> CastleUpgradeIcon { get; } = new ResourceValue<Sprite>(ResourcePaths.CastleUpgradeIcon, Saved.VillageLevel);
         [ShowInEditor]
-        public ResourceValue<Sprite> ArrowBar { get; } = new ResourceValue<Sprite>(ResourcePaths.ArrowBar.Get, Data.Game.IsArrowForceOverThreshold);
+        public ResourceValue<Sprite> ArrowBar { get; } = new ResourceValue<Sprite>(ResourcePaths.ArrowBar, Data.Game.IsArrowForceOverThreshold);
         [ShowInEditor]
-        public SecondaryValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(ResourcePaths.CurrentBuildingPrefab.Get, Data.Game.SelectedBuildingType);
+        public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(ResourcePaths.BuildingIcons, Data.Game.SelectedBuildingType);
         [ShowInEditor]
-        public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(ResourcePaths.FarmCrops.Get, Common.Special);
+        public SecondaryValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(ResourcePaths.BuildingPrefabs, Data.Game.SelectedBuildingType);
         [ShowInEditor]
-        public ResourceValue<Sprite> MenuFurniture { get; } = new ResourceValue<Sprite>(ResourcePaths.MenuFurniture.Get, Common.Special);
+        public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(ResourcePaths.FarmCrops, Common.Special);
         [ShowInEditor]
-        public ResourceValue<BuildingTileScript> BuildingTile { get; } = new ResourceValue<BuildingTileScript>(ResourcePaths.BuildingTile.Get);
+        public ResourceValue<Sprite> MenuFurniture { get; } = new ResourceValue<Sprite>(ResourcePaths.MenuFurniture, Common.Special);
         [ShowInEditor]
-        public ResourceValue<Ghost> GhostPrefab { get; } = new ResourceValue<Ghost>(ResourcePaths.GhostPrefab.Get);
+        public ResourceValue<BuildingTileScript> BuildingTile { get; } = new ResourceValue<BuildingTileScript>(ResourcePaths.BuildingTile);
+        [ShowInEditor]
+        public ResourceValue<Ghost> GhostPrefab { get; } = new ResourceValue<Ghost>(ResourcePaths.GhostPrefab);
+
         [SerializeValue]
         public PrimaryValue<string> AdUnitId { get; private set; }
     }

@@ -17,7 +17,9 @@ namespace VillageKeeper.Model
         [SerializeValue]
         public PrimaryValue<string> ArrowBar { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> CurrentBuildingPrefab { get; private set; }
+        public PrimaryValue<string> BuildingPrefabs { get; private set; }
+        [SerializeValue]
+        public PrimaryValue<string> BuildingIcons { get; private set; }
         [SerializeValue]
         public PrimaryValue<string> FarmCrops { get; private set; }
         [SerializeValue]

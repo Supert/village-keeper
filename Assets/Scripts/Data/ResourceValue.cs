@@ -9,5 +9,10 @@ namespace VillageKeeper.Model
         {
 
         }
+
+        public ResourceValue(BindableValue<string> bindable, params IBindable[] formatValues) : this(bindable.Get, formatValues)
+        {
+
+        }
     }
 }
