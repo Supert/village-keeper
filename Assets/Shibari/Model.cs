@@ -26,13 +26,20 @@ namespace Shibari
             LoadRecords();
         }
 
-        public static void Init()
+        public static void BeginInitialization()
         {
             foreach (var record in Records)
             {
                 object o = Activator.CreateInstance(record.type.Type);
                 Register(record.key, (BindableData)o);
             }
+        }
+
+        public static void FinalizeInitialization()
+        {
+            foreach (var data in registered.Values)
+                foreach (var value in data.Values)
+                    value.Value.InvokeOnValueChanged();
         }
 
         public static void LoadRecords()
@@ -43,7 +50,7 @@ namespace Shibari
                 Debug.LogError("Could not find container prefab for Shibari Settings.");
 
             if (settings.values == null)
-                settings.values = new ModelRecord[0];
+                settings.values = new List<ModelRecord>();
 
             var groups = settings.values.Where(r => r != null).GroupBy(r => r.key);
             foreach (var group in groups)
@@ -64,28 +71,43 @@ namespace Shibari
                 ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
         }
 
+        public static IEnumerable<PropertyInfo> GetBindableValues(Type type)
+        {
+            return type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Where(p => !p.GetMethod.IsPrivate)
+                    .Where(p => IsBindableValue(p));
+        }
+
+        public static IEnumerable<PropertyInfo> GetPrimaryValues(Type type)
+        {
+            return GetBindableValues(type).Where(p => CheckTypeTreeByPredicate(type, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>)));
+        }
+
         private static void ProcessBindableDataTypes(Type[] types)
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
             {
+                var fullModel = new List<Tuple<string, Type>>();
+                var visibleModel = new List<Tuple<string, Type>>();
                 if (type.GetConstructor(new Type[0]) == null)
                     Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
 
-                FullModelTree[type] = type.GetProperties()
-                    .Where(p => IsBindableField(p))
-                    .Select(p =>
+                foreach (var p in GetBindableValues(type))
+                {
+                    Type t = p.PropertyType;
+                    while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
                     {
-                        Type t = p.PropertyType;
-                        while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
-                        {
-                            t = t.BaseType;
-                        }
-                        return new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]);
-                    })
-                    .ToArray();
-                var visibleProperties = FullModelTree[type].Where(t => type.GetProperty(t.Item1).GetCustomAttribute(typeof(ShowInEditorAttribute)) != null);
-                if (visibleProperties.Any())
-                    VisibleInEditorModelTree[type] = visibleProperties.ToArray();
+                        t = t.BaseType;
+                    }
+                    fullModel.Add(new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]));
+                    if (p.GetCustomAttribute(typeof(ShowInEditorAttribute)) != null)
+                        visibleModel.Add(new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]));
+                }
+
+                if (fullModel.Any())
+                    FullModelTree[type] = fullModel.ToArray();
+                if (visibleModel.Any())
+                    VisibleInEditorModelTree[type] = visibleModel.ToArray();
             }
         }
 
@@ -101,8 +123,6 @@ namespace Shibari
             if (!registered.ContainsKey(id))
                 throw new ArgumentException($"Data with id {id} is not registered.", "id");
 
-            if (!typeof(T).IsAssignableFrom(registered[id].GetType()))
-                throw new Exception($"Can't cast data with id {id} to type {typeof(T)}");
             return (T)registered[id];
         }
 
@@ -113,21 +133,27 @@ namespace Shibari
 
         public static void Register(string dataId, BindableData data)
         {
-            InitializeFields(data);
-
-            data.ReflectProperties();
+            data.Initialize();
 
             Add(dataId, data);
+
+            Debug.Log($"Data {dataId} is registered");
         }
 
-        private static void InitializeFields(BindableData data)
-        {
-
-        }
-
-        public static bool IsBindableField(PropertyInfo property)
+        public static bool IsBindableValue(PropertyInfo property)
         {
             return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>));
+        }
+
+        public static bool IsPrimaryValue(PropertyInfo property)
+        {
+            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>));
+        }
+
+        public static bool IsSerializableValue(Type type, string propertyName)
+        {
+            var property = type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            return IsSerializableValue(property);
         }
 
         public static bool IsSerializableValue(PropertyInfo property)

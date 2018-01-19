@@ -8,7 +8,7 @@ namespace Shibari.UI
         [SerializeField]
         private BindableIds[] dataEntries = new BindableIds[0];
 
-        protected PrimaryValueInfo[] Fields { get; private set; }
+        protected BindableValueInfo[] Fields { get; private set; }
 
         protected abstract void OnValueChanged();
 
@@ -17,28 +17,23 @@ namespace Shibari.UI
         protected virtual void Start()
         {
             onValueChangedDelegate = Delegate.CreateDelegate(typeof(Action), this, "OnValueChanged");
-            Fields = new PrimaryValueInfo[dataEntries.Length];
+            Fields = new BindableValueInfo[dataEntries.Length];
 
             for (int i = 0; i < dataEntries.Length; i++)
             {
                 Fields[i] = GetField(dataEntries[i]);
-                Fields[i].EventInfo.AddEventHandler(Fields[i].DataField, onValueChangedDelegate);
+                Fields[i].EventInfo.AddEventHandler(Fields[i].BindableValue, onValueChangedDelegate);
             }
 
             OnValueChanged();
         }
 
-        protected PrimaryValueInfo GetField(BindableIds ids)
+        protected BindableValueInfo GetField(BindableIds ids)
         {
-            try
-            {
-                return Model.Get<BindableData>(ids.dataId).ReflectedProperties[ids.fieldId];
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                return null;
-            }
+            if (Model.Get<BindableData>(ids.dataId).Values.ContainsKey(ids.fieldId))
+                return Model.Get<BindableData>(ids.dataId).Values[ids.fieldId];
+            Debug.Log($"Field with id {ids.fieldId} is not found in data {ids.dataId}.");
+            return null;
         }
 
         protected void OnDestroy()
@@ -47,7 +42,7 @@ namespace Shibari.UI
             {
                 foreach (var field in Fields)
                 {
-                    field.EventInfo.RemoveEventHandler(field.DataField, onValueChangedDelegate);
+                    field.EventInfo.RemoveEventHandler(field.BindableValue, onValueChangedDelegate);
                 }
             }
         }

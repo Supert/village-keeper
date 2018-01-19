@@ -17,7 +17,7 @@ namespace Shibari.UI
 
         protected override void OnValueChanged()
         {
-            text.text = Fields[0].ToString();
+            text.text = Fields[0].GetValue().ToString();
         }
     }
 }

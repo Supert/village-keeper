@@ -5,22 +5,6 @@ using UnityEngine;
 
 namespace Shibari
 {
-    public class PrimaryValue<TValue> : BindableValue<TValue>
-    {
-        protected TValue Value { get; private set; }
-
-        public override TValue Get()
-        {
-            return Value;
-        }
-
-        public virtual void Set(TValue value)
-        {
-            Value = value;
-            InvokeOnValueChanged();
-        }
-    }
-
     public class SecondaryValue<TValue> : BindableValue<TValue>
     {
         protected TValue Value { get; private set; }
@@ -29,14 +13,22 @@ namespace Shibari
 
         public SecondaryValue(Func<TValue> calculateValueFunction, IEnumerable<IBindable> subscribeTo)
         {
+            if (this is VillageKeeper.Model.ResourceValue<GameObject>)
+                Debug.Log(subscribeTo.Count());
+
             foreach (var bindable in subscribeTo)
             {
-                bindable.OnValueChanged += ValueChanged;
+                if (bindable == null)
+                    Debug.LogError($"Cannot subscribe to null IBindable");
+                else
+                    bindable.OnValueChanged += ValueChanged;
             }
+
+            this.calculateValueFunction = calculateValueFunction;
 
             try
             {
-                calculateValueFunction.Invoke();
+                Value = calculateValueFunction.Invoke();
             }
             catch
             {
@@ -51,12 +43,14 @@ namespace Shibari
 
         protected virtual void ValueChanged()
         {
+            if (this is VillageKeeper.Model.ResourceValue<GameObject>)
+                Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             if (calculateValueFunction == null)
             {
                 Debug.LogError("calculateValueFunction is not assigned.");
                 return;
             }
-            calculateValueFunction.Invoke();
+            Value = calculateValueFunction.Invoke();
             InvokeOnValueChanged();
         }
 
@@ -64,27 +58,5 @@ namespace Shibari
         {
             return Value;
         }
-    }
-
-    public abstract class BindableValue<TValue> : IBindable
-    {
-        public event Action OnValueChanged;
-
-        protected void InvokeOnValueChanged()
-        {
-            OnValueChanged?.Invoke();
-        }
-
-        public abstract TValue Get();
-
-        public static implicit operator TValue(BindableValue<TValue> bindableValue)
-        {
-            return bindableValue.Get();
-        }
-    }
-
-    public interface IBindable
-    {
-        event Action OnValueChanged;
     }
 }

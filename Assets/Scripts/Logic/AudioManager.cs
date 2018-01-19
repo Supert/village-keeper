@@ -119,7 +119,7 @@ namespace VillageKeeper.Audio
             buildingAS = GetNewAudioSource("Building");
 
             audioClips = new Dictionary<string, List<AudioClip>>();
-            foreach (var field in Data.Audio.ReflectedProperties)
+            foreach (var field in Data.Audio.Values)
             {
                 audioClips[field.Key] = new List<AudioClip>();
                 foreach (var path in (field.Value.GetValue() as string[]))

@@ -1,37 +1,29 @@
 ﻿using UnityEngine;
-using Shibari;
+using static Shibari.Model;
+using static UnityEngine.Resources;
 
 namespace VillageKeeper.Model
 {
     public static class Data
     {
-        public static FormattedAndLocalizedData FormattedAndLocalizedData { get; private set; }
-        public static LocalizationData Localization { get; private set; }
-        public static ResourceData Resources { get; private set; }
-        public static ResourcePathData ResourcePaths { get; private set; }
-        public static SavedData Saved { get; private set; }
-        public static CommonData Common { get; private set; }
-        public static GameData Game { get; private set; }
-        public static BalanceData Balance { get; private set; }
-        public static AudioData Audio { get; private set; }
+        public static FormattedAndLocalizedData FormattedAndLocalizedData { get { return Get<FormattedAndLocalizedData>("FormattedAndLocalized"); } }
+        public static LocalizationData Localization { get { return Get<LocalizationData>("Localization"); } }
+        public static ResourceData Resources { get { return Get<ResourceData>("Resources"); } }
+        public static ResourcePathData ResourcePaths { get { return Get<ResourcePathData>("ResourcePaths"); } }
+        public static SavedData Saved { get { return Get<SavedData>("Saved"); } }
+        public static CommonData Common { get { return Get<CommonData>("Common"); } }
+        public static GameData Game { get { return Get<GameData>("Game"); } }
+        public static BalanceData Balance { get { return Get<BalanceData>("Balance"); } }
+        public static AudioData Audio { get { return Get<AudioData>("Audio"); } }
 
         public static void Init()
         {
-            Localization = Shibari.Model.Get<LocalizationData>("Localization");
-            FormattedAndLocalizedData = Shibari.Model.Get<FormattedAndLocalizedData>("FormattedAndLocalized");
-            ResourcePaths = Shibari.Model.Get<ResourcePathData>("ResourcePaths");
-            Resources = Shibari.Model.Get<ResourceData>("Resources");
-            Saved = Shibari.Model.Get<SavedData>("Saved");
-            Common = Shibari.Model.Get<CommonData>("Common");
-            Game = Shibari.Model.Get<GameData>("Game");
-            Balance = Shibari.Model.Get<BalanceData>("Balance");
-            Audio = Shibari.Model.Get<AudioData>("Audio");
-
-            Saved.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.SavedData").text);
-            ResourcePaths.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.ResourcePathData").text);
-            Localization.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.LocalizationData").text);
-            Balance.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.BalanceData").text);
-            Audio.Deserialize(UnityEngine.Resources.Load<TextAsset>("Data/VillageKeeper.Data.AudioData").text);
+            Saved.Deserialize(Load<TextAsset>("Data/SavedData").text);
+            ResourcePaths.Deserialize(Load<TextAsset>("Data/ResourcePathData").text);
+            Localization.Deserialize(Load<TextAsset>("Data/LocalizationData").text);
+            Balance.Deserialize(Load<TextAsset>("Data/BalanceData").text);
+            Audio.Deserialize(Load<TextAsset>("Data/AudioData").text);
+            Resources.Deserialize(Load<TextAsset>("Data/ResourceData").text);
 
             Common.Init();
             Game.Init();

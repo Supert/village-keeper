@@ -6,7 +6,6 @@ namespace VillageKeeper.UI
 {
     public class PauseMenuScript : OffScreenMenuScript
     {
-        public Text title;
         public GameObject roundFinishedText;
         public Text WeCollectedFoodText;
         public Text WithMonsterBonusText;
@@ -22,13 +21,11 @@ namespace VillageKeeper.UI
 
         public void ShowPause()
         {
-            title.text = "Pause";
             roundFinishedText.SetActive(false);
         }
 
         public void ShowRoundFinished()
         {
-            title.text = "Victory!";
             roundFinishedText.SetActive(true);
             WeCollectedFoodText.text = "We collected " + (Data.Game.TotalFood.Get());
             WithMonsterBonusText.text = "With " + Data.Balance.MonsterBonusGold.Get().ToString();

@@ -5,42 +5,22 @@ using System.Collections.Generic;
 
 namespace Shibari
 {
-    public class PrimaryValueInfo
+    public class PrimaryValueInfo : BindableValueInfo
     {
-        public object DataField { get; private set; }
-        public EventInfo EventInfo { get; private set; }
-        public PropertyInfo Property { get; private set; }
-        public Type ValueType { get; private set; }
-
-        private MethodInfo getMethod;
         private MethodInfo setMethod;
 
-        public PrimaryValueInfo(PropertyInfo property, BindableData owner)
+        public PrimaryValueInfo(PropertyInfo property, BindableData owner) : base(property, owner)
         {
-            Property = property;
-            DataField = property.GetValue(owner);
-
-            Type type = property.PropertyType;
-            Type dataFieldType = DataField.GetType();
-
-            EventInfo = property.PropertyType.GetEvent("OnValueChanged");
-            ValueType = type.GetGenericArguments()[0];
-            getMethod = dataFieldType.GetMethod("Get", new Type[0]);
-            setMethod = dataFieldType.GetMethod("Set", new Type[1] { ValueType });
+            setMethod = BindableValue.GetType().GetMethod("Set", new Type[2] { ValueType, typeof(Boolean) });
         }
 
-        public object GetValue()
-        {
-            return getMethod.Invoke(DataField, new object[0]);
-        }
-
-        public void SetValue(object o)
+        public void SetValue(object o, bool silent)
         {
             if (ValueType.IsValueType && o == null)
                 throw new NullReferenceException($"Field type {ValueType} is value type, but argument is null");
 
             if (o == null)
-                setMethod.Invoke(DataField, null);
+                setMethod.Invoke(BindableValue, new object[2] { null, silent });
 
             Type objectType = o.GetType();
 
@@ -52,7 +32,7 @@ namespace Shibari
                     Array array = (Array)Activator.CreateInstance(ValueType, new object[1] { inputList.Count });
 
                     inputList.CopyTo(array, 0);
-                    setMethod.Invoke(DataField, new object[1] { array });
+                    setMethod.Invoke(BindableValue, new object[2] { array, silent });
                 }
                 else if (ValueType.GetInterface(nameof(IDictionary)) != null)
                 {
@@ -63,7 +43,7 @@ namespace Shibari
                     PropertyInfo kvpValue = kvpType.GetProperty("Value");
                     foreach (var kvp in inputList)
                         dictionary[kvpKey.GetValue(kvp)] = kvpValue.GetValue(kvp);
-                    setMethod.Invoke(DataField, new object[1] { dictionary });
+                    setMethod.Invoke(BindableValue, new object[2] { dictionary, silent });
                 }
                 else if (ValueType.GetInterface(nameof(IList)) != null
                     && o is IList)
@@ -72,7 +52,7 @@ namespace Shibari
                     var list = (IList)Activator.CreateInstance(ValueType);
                     foreach (var element in inputList)
                         list.Add(element);
-                    setMethod.Invoke(DataField, new object[1] { list });
+                    setMethod.Invoke(BindableValue, new object[2] { list, silent });
                 }
                 else
                 {
@@ -82,7 +62,7 @@ namespace Shibari
             }
             else
             {
-                setMethod.Invoke(DataField, new object[1] { o });
+                setMethod.Invoke(BindableValue, new object[2] { o, silent });
             }
         }
     }

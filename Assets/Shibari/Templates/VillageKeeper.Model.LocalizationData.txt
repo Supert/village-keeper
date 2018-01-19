@@ -3,5 +3,14 @@
   "BuildingDescriptions": [],
   "BuildHelpTips": [],
   "BattleHelpTips": [],
-  "TipFormat": ""
+  "TipFormat": "",
+  "MonstersSlainedFormat": "",
+  "RoundFinished": "",
+  "Pause": "",
+  "TipCounterFormat": "",
+  "GameName": "",
+  "Shop": "",
+  "BuildingPickerMemo": "",
+  "UpgradeCastleButtonText": "",
+  "Help": ""
 }

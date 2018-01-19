@@ -13,9 +13,7 @@ namespace VillageKeeper.UI
 
         public Button previousButton;
         public Button nextButton;
-
-        private Dictionary<BuildingTypes, Sprite> iconSprites = null;
-
+        
         private Dictionary<BuildingTypes, Building> preparedBuildings = new Dictionary<BuildingTypes, Building>();
         
         void PrepareBuilding()

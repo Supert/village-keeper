@@ -28,7 +28,7 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ResourceValue<Sprite> MenuFurniture { get; } = new ResourceValue<Sprite>(ResourcePaths.MenuFurniture, Common.Special);
         [ShowInEditor]
-        public ResourceValue<BuildingTileScript> BuildingTile { get; } = new ResourceValue<BuildingTileScript>(ResourcePaths.BuildingTile);
+        public ResourceValue<GameObject> BuildingTile { get; } = new ResourceValue<GameObject>(ResourcePaths.BuildingTile);
         [ShowInEditor]
         public ResourceValue<Ghost> GhostPrefab { get; } = new ResourceValue<Ghost>(ResourcePaths.GhostPrefab);
 

@@ -10,7 +10,7 @@ namespace VillageKeeper.Model
 
         [SerializeValue]
         public PrimaryValue<int> VillageLevel { get; private set; }
-        [SerializeValue]
+        [SerializeValue, ShowInEditor]
         public PrimaryValue<int> Gold { get; private set; }
 
         [SerializeValue]

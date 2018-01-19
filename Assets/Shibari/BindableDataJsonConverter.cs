@@ -30,16 +30,15 @@ namespace Shibari
             if (instance == null)
             {
                 instance = (BindableData)Activator.CreateInstance(objectType);
-                instance.InitializePrimaryValues();
-                instance.InitializeSecondaryValues();
+                instance.Initialize();
             }
 
             JObject jsonObject = JObject.Load(reader);
             foreach (var serialized in jsonObject.Properties())
             {
-                if (instance.ReflectedProperties.ContainsKey(serialized.Name))
+                if (instance.PrimaryValues.ContainsKey(serialized.Name))
                 {
-                    PrimaryValueInfo reflected = instance.ReflectedProperties[serialized.Name];
+                    PrimaryValueInfo reflected = instance.PrimaryValues[serialized.Name];
                     if (Model.IsSerializableValue(reflected.Property))
                     {
                         if (serialized.Value.Type == JTokenType.Array)
@@ -59,10 +58,10 @@ namespace Shibari
                             }
 
                             var elements = serialized.Values().Select(v => v.ToObject(elementType)).ToArray();
-                            reflected.SetValue(elements);
+                            reflected.SetValue(elements, true);
                             continue;
                         }
-                        reflected.SetValue(serialized.ToObject(reflected.ValueType));
+                        reflected.SetValue(serialized.ToObject(reflected.ValueType), true);
                         continue;
                     }
                     else
@@ -86,7 +85,7 @@ namespace Shibari
             JObject jsonObject = new JObject();
             BindableData data = (BindableData)value;
 
-            foreach (var property in data.ReflectedProperties.Where(p => Model.IsSerializableValue(p.Value.Property)))
+            foreach (var property in data.Values.Where(p => Model.IsSerializableValue(p.Value.Property)))
             {
                 object v = property.Value.GetValue();
                 if (v == null)
@@ -116,7 +115,7 @@ namespace Shibari
 
             JObject jsonObject = new JObject();
             
-            foreach (var property in Model.FullModelTree[type].Where(tuple => Model.IsSerializableValue(type.GetProperty(tuple.Item1))))
+            foreach (var property in Model.FullModelTree[type].Where(tuple => Model.IsSerializableValue(type, tuple.Item1)))
             {
                 Type valueType = property.Item2;
 

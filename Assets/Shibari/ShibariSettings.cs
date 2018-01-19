@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Shibari
 {
     public class ShibariSettings : MonoBehaviour
     {
-        public ModelRecord[] values;
+        public List<ModelRecord> values;
     }
 }

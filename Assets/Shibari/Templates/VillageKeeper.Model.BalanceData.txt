@@ -1,4 +1,14 @@
 {
+  "BuildingCosts": [],
+  "BuildingMaxHealths": [],
+  "CastleUpgradeCosts": [],
+  "FoodPerWindMillMultiplier": 0,
+  "FoodPerFarm": 0,
+  "MonsterPowerPointsVillageLevelModifier": 0.0,
+  "MonsterPowerPointsBuildingsHealthModifier": 0.0,
+  "MonsterBuildingCostModifier": 0.0,
+  "MonsterMinHealthPossible": 0,
+  "MonsterMaxHealthPossible": 0,
   "MaxVillageLevel": 0,
   "MonsterBonusGold": 0,
   "ArrowForceThreshold": 0.0

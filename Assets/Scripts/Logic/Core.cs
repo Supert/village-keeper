@@ -67,9 +67,11 @@ namespace VillageKeeper
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
 
-            Shibari.Model.Init();
+            Shibari.Model.BeginInitialization();
             
             Data.Init();
+
+            Shibari.Model.FinalizeInitialization();
 
             AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
             AudioManager.Init();
