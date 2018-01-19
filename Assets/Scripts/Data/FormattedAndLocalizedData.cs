@@ -71,5 +71,10 @@ namespace VillageKeeper.Model
             Data.Localization.BuildHelpTips,
             Data.Localization.TipCounterFormat,
             Data.Game.CurrentHelpTipIndex);
+
+        [ShowInEditor]
+        public SecondaryValue<string> CollectedGold { get; } = new SecondaryValue<string>(
+            () => string.Format(Data.Localization.CollectedGoldFormat, Data.Game.RoundFinishedBonusGold),
+            Data.Game.RoundFinishedBonusGold);
     }
 }

@@ -73,7 +73,7 @@ namespace VillageKeeper
 
             Shibari.Model.FinalizeInitialization();
 
-            AudioManager = transform.Find("Audio").GetComponent<AudioManager>();
+            AudioManager = GetComponent<AudioManager>();
             AudioManager.Init();
 
             InitAds();

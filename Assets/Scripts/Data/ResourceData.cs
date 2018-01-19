@@ -26,7 +26,7 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(ResourcePaths.FarmCrops, Common.Special);
         [ShowInEditor]
-        public ResourceValue<Sprite> MenuFurniture { get; } = new ResourceValue<Sprite>(ResourcePaths.MenuFurniture, Common.Special);
+        public ResourceValue<Sprite> MenuFurniture { get; } = new ResourceValue<Sprite>(ResourcePaths.MenuFurniture, Saved.HasPremium);
         [ShowInEditor]
         public ResourceValue<GameObject> BuildingTile { get; } = new ResourceValue<GameObject>(ResourcePaths.BuildingTile);
         [ShowInEditor]

@@ -12,5 +12,6 @@
   "Shop": "Shop",
   "BuildingPickerMemo": "Drag'n'drop icon to build.",
   "UpgradeCastleButtonText": "Buy",
-  "Help": "Help"
+  "Help": "Help",
+  "CollectedGoldFormat": "We collected {0} "
 }

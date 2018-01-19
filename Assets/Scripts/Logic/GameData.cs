@@ -7,10 +7,21 @@ namespace VillageKeeper.Model
     public class GameData : BindableData
     {
         public PrimaryValue<int> CurrentHelpTipIndex { get; private set; }
-
-        public PrimaryValue<int> TotalFood { get; private set; }
-
-        public PrimaryValue<int> RoundFinishedBonusGold { get; private set; }
+        
+        public SecondaryValue<int> RoundFinishedBonusGold { get; } = new SecondaryValue<int>(
+            () =>
+            {
+                if (Common.FsmState == FSM.States.RoundFinished)
+                {
+                    int villageLevel = Saved.VillageLevel;
+                    SerializableBuilding[] buildings = Saved.Buildings;
+                    int farms = buildings?.Count(c => c.Type == BuildingTypes.Farm) ?? 0;
+                    int windmills = buildings?.Count(c => c.Type == BuildingTypes.Windmill) ?? 0;
+                    return Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills);
+                }
+                return 0;
+            },
+            Common.FsmState);
 
         [ShowInEditor]
         public PrimaryValue<float> ClampedMonsterHealth { get; private set; }
@@ -32,27 +43,6 @@ namespace VillageKeeper.Model
         {
             IsArrowForceOverThreshold = new SecondaryValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
             CastleUpgradeCost = new SecondaryValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
-        }
-
-        public void Init()
-        {
-            CalculateEconomy();
-
-            Saved.VillageLevel.OnValueChanged += CalculateEconomy;
-
-            Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, CalculateEconomy);
-        }
-
-        public void CalculateEconomy()
-        {
-            int villageLevel = Saved.VillageLevel;
-            SerializableBuilding[] buildings = Saved.Buildings;
-            int farms = buildings?.Count(c => c.Type == BuildingTypes.Farm) ?? 0;
-            int windmills = buildings?.Count(c => c.Type == BuildingTypes.Windmill) ?? 0;
-
-            RoundFinishedBonusGold.Set(Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills));
-
-            TotalFood.Set((Balance.CalculateFarmsFood(farms) + Balance.CalculateWindmillsFood(windmills, farms)));
         }
     }
 }

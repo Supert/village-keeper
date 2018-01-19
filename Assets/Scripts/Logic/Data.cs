@@ -26,7 +26,6 @@ namespace VillageKeeper.Model
             Resources.Deserialize(Load<TextAsset>("Data/ResourceData").text);
 
             Common.Init();
-            Game.Init();
         }
     }
 }

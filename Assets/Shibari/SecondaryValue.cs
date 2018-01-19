@@ -13,9 +13,6 @@ namespace Shibari
 
         public SecondaryValue(Func<TValue> calculateValueFunction, IEnumerable<IBindable> subscribeTo)
         {
-            if (this is VillageKeeper.Model.ResourceValue<GameObject>)
-                Debug.Log(subscribeTo.Count());
-
             foreach (var bindable in subscribeTo)
             {
                 if (bindable == null)
@@ -43,8 +40,6 @@ namespace Shibari
 
         protected virtual void ValueChanged()
         {
-            if (this is VillageKeeper.Model.ResourceValue<GameObject>)
-                Debug.LogWarning("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             if (calculateValueFunction == null)
             {
                 Debug.LogError("calculateValueFunction is not assigned.");

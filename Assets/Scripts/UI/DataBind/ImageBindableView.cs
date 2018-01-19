@@ -8,7 +8,7 @@ namespace VillageKeeper.UI
     public class ImageBindableView : BindableView
     {
         private Image image;
-        
+
         protected void Awake()
         {
             image = GetComponent<Image>();
@@ -16,7 +16,8 @@ namespace VillageKeeper.UI
 
         protected override void OnValueChanged()
         {
-            image.sprite = (Sprite) Fields[0].GetValue();
+            var value = Fields[0].GetValue();
+            image.sprite = (Sprite)value;
         }
     }
 }

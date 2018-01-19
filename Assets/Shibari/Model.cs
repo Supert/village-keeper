@@ -136,8 +136,6 @@ namespace Shibari
             data.Initialize();
 
             Add(dataId, data);
-
-            Debug.Log($"Data {dataId} is registered");
         }
 
         public static bool IsBindableValue(PropertyInfo property)

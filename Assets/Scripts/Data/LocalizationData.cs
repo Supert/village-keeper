@@ -15,7 +15,8 @@ namespace VillageKeeper.Model
         [SerializeValue, ShowInEditor]
         public PrimaryValue<string> GameName { get; private set; }
 
-
+        [SerializeValue]
+        public PrimaryValue<string> CollectedGoldFormat { get; private set; }
         [SerializeValue]
         public PrimaryValue<string> TipCounterFormat { get; private set; }
         [SerializeValue]
