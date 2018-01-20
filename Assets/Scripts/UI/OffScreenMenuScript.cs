@@ -18,8 +18,6 @@ namespace VillageKeeper.UI
         protected virtual void Awake()
         {
             rect = GetComponent<RectTransform>() as RectTransform;
-            if (name == "HelpMenu")
-                Debug.Log(rect.anchoredPosition);
             targetPosition = rect.anchoredPosition;
             anchorMin = rect.anchorMin;
             anchorMax = rect.anchorMax;
@@ -66,8 +64,6 @@ namespace VillageKeeper.UI
                     break;
             }
 
-            if (progress < 1f)
-                Debug.Log(currentInset + " " + targetInset + " " + progress);
             rect.SetInsetAndSizeFromParentEdge(edge, progress >= 1f ? targetInset : Mathf.Lerp(currentInset, targetInset, progress), size);
         }
 
