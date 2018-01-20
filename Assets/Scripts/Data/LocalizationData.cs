@@ -1,9 +1,12 @@
 ﻿using Shibari;
+using VillageKeeper.FSM;
 
 namespace VillageKeeper.Model
 {
     public class LocalizationData : BindableData
     {
+        public SecondaryValue<string[]> CurrentTips { get; }
+
         [SerializeValue, ShowInEditor]
         public PrimaryValue<string> Help { get; private set; }
         [SerializeValue, ShowInEditor]
@@ -35,5 +38,26 @@ namespace VillageKeeper.Model
         public PrimaryValue<string[]> BuildingDescriptions { get; private set; }
         [SerializeValue]
         public PrimaryValue<string[]> BuildingNames { get; private set; }
+
+        public LocalizationData()
+        {
+            CurrentTips = new SecondaryValue<string[]>(() =>
+            {
+                if (Data.Common.FsmState == States.BattleHelp)
+                {
+                    Data.Game.CurrentHelpTipIndex.Set(0);
+                    return BattleHelpTips;
+                }
+                if (Data.Common.FsmState == States.BuildHelp)
+                {
+                    Data.Game.CurrentHelpTipIndex.Set(0);
+                    return BuildHelpTips;
+                }
+
+                return CurrentTips;
+            },
+            Data.Common.FsmState);
+        }
     }
+
 }

@@ -8,7 +8,9 @@ namespace VillageKeeper.UI
         protected FSM.States[] showAtStates;
 
         [SerializeField]
-        protected float animationTime;
+        protected float animationDuration;
+        
+        protected float animationStartTime;
 
         [SerializeField]
         protected bool isShownAtStart;
@@ -22,6 +24,8 @@ namespace VillageKeeper.UI
             }
             protected set
             {
+                if (value != IsShown)
+                    animationStartTime = Time.time;
                 if (value)
                     gameObject.SetActive(true);
                 isShown = value;
@@ -38,7 +42,17 @@ namespace VillageKeeper.UI
             IsShown = false;
         }
 
-        protected abstract void AnimationUpdate();
+        protected abstract void ShowUpdate();
+
+        protected abstract void HideUpdate();
+
+        protected void AnimationUpdate()
+        {
+            if (IsShown)
+                ShowUpdate();
+            else
+                HideUpdate();
+        }
 
         protected virtual void Start()
         {

@@ -45,15 +45,10 @@ namespace VillageKeeper.Model
         public SecondaryValue<string> CurrentTip { get; } = new SecondaryValue<string>(
             () =>
             {
-                if (Data.Common.FsmState.Get() == FSM.States.BattleHelp)
-                    return Data.Localization.BattleHelpTips.Get()[Data.Game.CurrentHelpTipIndex];
-                if (Data.Common.FsmState.Get() == FSM.States.BuildHelp)
-                    return Data.Localization.BuildHelpTips.Get()[Data.Game.CurrentHelpTipIndex];
-                return "";
+                return Data.Localization.CurrentTips.Get()?[Data.Game.CurrentHelpTipIndex] ?? "";
             },
-            Data.Common.FsmState,
-            Data.Localization.BattleHelpTips,
-            Data.Localization.BuildHelpTips);
+            Data.Game.CurrentHelpTipIndex,
+            Data.Localization.CurrentTips);
 
         [ShowInEditor]
         public SecondaryValue<string> CurrentTipCounter { get; } = new SecondaryValue<string>(

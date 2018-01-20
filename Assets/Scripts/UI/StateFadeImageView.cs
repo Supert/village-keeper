@@ -13,22 +13,17 @@ namespace VillageKeeper.UI
             image = GetComponent<Image>() as Image;
         }
 
-        protected override void AnimationUpdate()
+        protected override void ShowUpdate()
         {
-            if (IsShown)
-            {
-                if (image.color != Color.white)
-                {
-                    image.color = Vector4.MoveTowards(image.color, Color.white, animationTime == 0 ? 1 : Time.deltaTime / animationTime);
-                }
-            }
+            image.color = Vector4.MoveTowards(image.color, Color.white, animationDuration == 0 ? 1f : (Time.time - animationStartTime) / animationDuration);
+        }
+
+        protected override void HideUpdate()
+        {
+            if (image.color == new Color(1f, 1f, 1f, 0f))
+                gameObject.SetActive(false);
             else
-            {
-                if (image.color == new Color(1f, 1f, 1f, 0f))
-                    gameObject.SetActive(false);
-                else
-                    image.color = Vector4.MoveTowards(image.color, new Color(1f, 1f, 1f, 0f), animationTime == 0 ? 1 : Time.deltaTime / animationTime);
-            }
+                image.color = Vector4.MoveTowards(image.color, new Color(1f, 1f, 1f, 0f), animationDuration == 0 ? 1f : (Time.time - animationStartTime) / animationDuration);
         }
     }
 }

@@ -8,6 +8,7 @@
   "RoundFinished": "",
   "Pause": "",
   "TipCounterFormat": "",
+  "CollectedGoldFormat": "",
   "GameName": "",
   "Shop": "",
   "BuildingPickerMemo": "",
