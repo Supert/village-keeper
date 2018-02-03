@@ -11,16 +11,13 @@ namespace VillageKeeper.UI
         protected RectTransform.Edge edge;
 
         private Vector2 targetPosition;
-        private Vector2 anchorMin;
-        private Vector2 anchorMax;
+
         private RectTransform rect;
-        
+
         protected virtual void Awake()
         {
             rect = GetComponent<RectTransform>() as RectTransform;
             targetPosition = rect.anchoredPosition;
-            anchorMin = rect.anchorMin;
-            anchorMax = rect.anchorMax;
         }
 
         protected override void Start()
@@ -64,7 +61,16 @@ namespace VillageKeeper.UI
                     break;
             }
 
+            Vector2 anchorMin = rect.anchorMin;
+            Vector2 anchorMax = rect.anchorMax;
             rect.SetInsetAndSizeFromParentEdge(edge, progress >= 1f ? targetInset : Mathf.Lerp(currentInset, targetInset, progress), size);
+            Vector3 position = rect.position;
+            Vector2 rectSize = rect.rect.size;
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.position = position;
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectSize.x);
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rectSize.y);
         }
 
         protected override void ShowUpdate()
@@ -76,8 +82,6 @@ namespace VillageKeeper.UI
                 progress = (Time.time - animationStartTime) / animationDuration;
             if (progress >= 1f)
                 rect.anchoredPosition = targetPosition;
-            rect.anchorMin = anchorMin;
-            rect.anchorMax = anchorMax;
             rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, targetPosition, progress);
         }
 
@@ -106,8 +110,7 @@ namespace VillageKeeper.UI
                     flag = false;
                     break;
             }
-
-            float value = ((!flag) ? 0f : 1f);
+            
             if (flag)
                 return -rect.anchoredPosition[index] - size * (1f - rect.pivot[index]);
             else
