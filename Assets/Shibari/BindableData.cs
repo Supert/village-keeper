@@ -31,12 +31,12 @@ namespace Shibari
             return JsonConvert.SerializeObject(this, Formatting.Indented, converter);
         }
 
-        public void Deserialize(string serialized, bool raiseOnValueChanged = false)
+        public void Deserialize(string serialized)
         {
             BindableData deserialized = GetDeserializedData(serialized, GetType());
             foreach (var property in deserialized.PrimaryValues)
             {
-                PrimaryValues[property.Key].SetValue(property.Value.GetValue(), !raiseOnValueChanged);
+                PrimaryValues[property.Key].SetValue(property.Value.GetValue());
             }
         }
 

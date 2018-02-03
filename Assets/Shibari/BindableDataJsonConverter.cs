@@ -58,10 +58,10 @@ namespace Shibari
                             }
 
                             var elements = serialized.Values().Select(v => v.ToObject(elementType)).ToArray();
-                            reflected.SetValue(elements, true);
+                            reflected.SetValue(elements);
                             continue;
                         }
-                        reflected.SetValue(serialized.ToObject(reflected.ValueType), true);
+                        reflected.SetValue(serialized.ToObject(reflected.ValueType));
                         continue;
                     }
                     else
@@ -115,21 +115,21 @@ namespace Shibari
 
             JObject jsonObject = new JObject();
             
-            foreach (var property in Model.FullModelTree[type].Where(tuple => Model.IsSerializableValue(type, tuple.Item1)))
+            foreach (var property in Model.FullModelTree[type].Where(p => Model.IsSerializableValue(type, p.Name)))
             {
-                Type valueType = property.Item2;
+                Type valueType = property.ValueType;
 
                 if (valueType.IsValueType)
                 {
-                    jsonObject.AddFirst(new JProperty(property.Item1, Activator.CreateInstance(valueType)));
+                    jsonObject.AddFirst(new JProperty(property.Name, Activator.CreateInstance(valueType)));
                 }
                 else if (valueType == typeof(string) || valueType.GetInterface(nameof(IEnumerable)) == null)
                 {
-                    jsonObject.AddFirst(new JProperty(property.Item1, new JValue("")));
+                    jsonObject.AddFirst(new JProperty(property.Name, new JValue("")));
                 }
                 else
                 {
-                    jsonObject.AddFirst(new JProperty(property.Item1, new JArray()));
+                    jsonObject.AddFirst(new JProperty(property.Name, new JArray()));
                 }
             }
 

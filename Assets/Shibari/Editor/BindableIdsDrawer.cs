@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -13,17 +12,21 @@ namespace Shibari.Editor
             SerializedProperty dataId = property.FindPropertyRelative("dataId");
             SerializedProperty fieldId = property.FindPropertyRelative("fieldId");
 
+            var bindableIds = PropertyDrawerUtility.GetActualObjectForSerializedProperty<BindableIds>(fieldInfo, property);
+            
             string[] models = Shibari.Model.Records.Where(r => Shibari.Model.VisibleInEditorModelTree.ContainsKey(r.type.Type)).Select(r => r.key).ToArray();
             int selectedModel = models.TakeWhile(m => m != dataId.stringValue).Count();
             if (selectedModel == models.Length)
                 selectedModel = -1;
 
-            Tuple<string, Type>[] fields = new Tuple<string, Type>[0];
+            BindableValueReflection[] fields = new BindableValueReflection[0];
             if (selectedModel >= 0)
             {
-                fields = Shibari.Model.VisibleInEditorModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type].ToArray();
+                fields = Shibari.Model.VisibleInEditorModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type]
+                    .Where(t => bindableIds.allowedValueType.IsAssignableFrom(t.ValueType) && (!bindableIds.isSetterRequired || t.Type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISettable<>))))
+                    .ToArray();
             }
-            int selectedField = fields.TakeWhile(f => f.Item1 != fieldId.stringValue).Count();
+            int selectedField = fields.TakeWhile(f => f.Name != fieldId.stringValue).Count();
             if (selectedField == fields.Length)
                 selectedField = -1;
 
@@ -31,7 +34,7 @@ namespace Shibari.Editor
             int newModel = EditorGUI.Popup(rect, selectedModel, models);
 
             rect.position += Vector2.right * rect.width;
-            int newField = EditorGUI.Popup(rect, selectedField, fields.Select(kvp => $"{kvp.Item1} - {kvp.Item2}").ToArray());
+            int newField = EditorGUI.Popup(rect, selectedField, fields.Select(kvp => $"{kvp.Name} - {kvp.ValueType}").ToArray());
 
             if (newModel != selectedModel)
             {
@@ -42,7 +45,7 @@ namespace Shibari.Editor
             else
             {
                 if (newField != -1)
-                    fieldId.stringValue = fields[newField].Item1;
+                    fieldId.stringValue = fields[newField].Name;
             }
         }
     }

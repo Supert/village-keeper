@@ -11,16 +11,16 @@ namespace Shibari
 
         public PrimaryValueInfo(PropertyInfo property, BindableData owner) : base(property, owner)
         {
-            setMethod = BindableValue.GetType().GetMethod("Set", new Type[2] { ValueType, typeof(Boolean) });
+            setMethod = BindableValue.GetType().GetMethod("Set", new Type[1] { ValueType });
         }
 
-        public void SetValue(object o, bool silent)
+        public void SetValue(object o)
         {
             if (ValueType.IsValueType && o == null)
                 throw new NullReferenceException($"Field type {ValueType} is value type, but argument is null");
 
             if (o == null)
-                setMethod.Invoke(BindableValue, new object[2] { null, silent });
+                setMethod.Invoke(BindableValue, new object[1] { null });
             else
             {
                 Type objectType = o?.GetType();
@@ -33,7 +33,7 @@ namespace Shibari
                         Array array = (Array)Activator.CreateInstance(ValueType, new object[1] { inputList.Count });
 
                         inputList.CopyTo(array, 0);
-                        setMethod.Invoke(BindableValue, new object[2] { array, silent });
+                        setMethod.Invoke(BindableValue, new object[1] { array });
                     }
                     else if (ValueType.GetInterface(nameof(IDictionary)) != null)
                     {
@@ -44,7 +44,7 @@ namespace Shibari
                         PropertyInfo kvpValue = kvpType.GetProperty("Value");
                         foreach (var kvp in inputList)
                             dictionary[kvpKey.GetValue(kvp)] = kvpValue.GetValue(kvp);
-                        setMethod.Invoke(BindableValue, new object[2] { dictionary, silent });
+                        setMethod.Invoke(BindableValue, new object[1] { dictionary });
                     }
                     else if (ValueType.GetInterface(nameof(IList)) != null
                         && o is IList)
@@ -53,7 +53,7 @@ namespace Shibari
                         var list = (IList)Activator.CreateInstance(ValueType);
                         foreach (var element in inputList)
                             list.Add(element);
-                        setMethod.Invoke(BindableValue, new object[2] { list, silent });
+                        setMethod.Invoke(BindableValue, new object[1] { list });
                     }
                     else
                     {
@@ -63,7 +63,7 @@ namespace Shibari
                 }
                 else
                 {
-                    setMethod.Invoke(BindableValue, new object[2] { o, silent });
+                    setMethod.Invoke(BindableValue, new object[1] { o });
                 }
             }
         }

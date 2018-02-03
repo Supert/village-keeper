@@ -1,6 +1,6 @@
 ﻿namespace Shibari
 {
-    public class PrimaryValue<TValue> : BindableValue<TValue>
+    public class PrimaryValue<TValue> : BindableValue<TValue>, ISettable<TValue>
     {
         protected TValue Value { get; private set; }
 
@@ -9,11 +9,9 @@
             return Value;
         }
 
-        public virtual void Set(TValue value, bool silent = false)
+        public virtual void Set(TValue value)
         {
             Value = value;
-            if (!silent)
-                InvokeOnValueChanged();
         }
     }
 }

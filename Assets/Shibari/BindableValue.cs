@@ -2,7 +2,7 @@
 
 namespace Shibari
 {
-    public abstract class BindableValue<TValue> : IBindable
+    public abstract class BindableValue<TValue> : IBindable, IGettable<TValue>
     {
         public event Action OnValueChanged;
 

@@ -1,14 +1,40 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 
 namespace Shibari.UI
 {
-    public abstract partial class BindableView : MonoBehaviour
+
+    public abstract class BindableView : MonoBehaviour
     {
+        public abstract BindableValueRestraint[] BindableValueRestraints { get; }
+
         [SerializeField]
-        private BindableIds[] dataEntries = new BindableIds[0];
+        private BindableIds[] bindableValuesIds = new BindableIds[0];
+
+        public BindableIds[] BindableValuesIds { get { return bindableValuesIds; } set { bindableValuesIds = value; } }
 
         protected BindableValueInfo[] Fields { get; private set; }
+
+        public void Initialize()
+        {
+            if (BindableValuesIds == null || bindableValuesIds.Length != BindableValueRestraints.Length)
+                bindableValuesIds = BindableValueRestraints.Select(bvt => new BindableIds() { allowedValueType = bvt.Type }).ToArray();
+            for (int i = 0; i < bindableValuesIds.Length; i++)
+            {
+                if (bindableValuesIds[i] == null)
+                    bindableValuesIds[i] = new BindableIds();
+                if (bindableValuesIds[i].isSetterRequired != BindableValueRestraints[i].IsSetterRequired)
+                    bindableValuesIds[i].isSetterRequired = BindableValueRestraints[i].IsSetterRequired;
+                if (bindableValuesIds[i].allowedValueType == null || bindableValuesIds[i].allowedValueType != BindableValueRestraints[i].Type)
+                    bindableValuesIds[i].allowedValueType = BindableValueRestraints[i].Type;
+            }
+        }
+
+        protected virtual void Awake()
+        {
+            Initialize();
+        }
 
         protected abstract void OnValueChanged();
 
@@ -17,11 +43,11 @@ namespace Shibari.UI
         protected virtual void Start()
         {
             onValueChangedDelegate = Delegate.CreateDelegate(typeof(Action), this, "OnValueChanged");
-            Fields = new BindableValueInfo[dataEntries.Length];
+            Fields = new BindableValueInfo[bindableValuesIds.Length];
 
-            for (int i = 0; i < dataEntries.Length; i++)
+            for (int i = 0; i < bindableValuesIds.Length; i++)
             {
-                Fields[i] = GetField(dataEntries[i]);
+                Fields[i] = GetField(bindableValuesIds[i]);
                 Fields[i].EventInfo.AddEventHandler(Fields[i].BindableValue, onValueChangedDelegate);
             }
 

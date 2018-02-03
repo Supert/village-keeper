@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Shibari.UI
@@ -6,6 +7,13 @@ namespace Shibari.UI
     [RequireComponent(typeof(Image))]
     public class FillerBindableView : BindableView
     {
+        private BindableValueRestraint[] bindableValueTypes = new BindableValueRestraint[1]
+        {
+            new BindableValueRestraint(typeof(Single)),
+        };
+
+        public override BindableValueRestraint[] BindableValueRestraints { get { return bindableValueTypes; } }
+
         private Image image;
 
         protected override void Start()
@@ -16,7 +24,7 @@ namespace Shibari.UI
         }
         protected override void OnValueChanged()
         {
-            image.fillAmount = Mathf.Clamp01((float) Fields[0].GetValue());
+            image.fillAmount = Mathf.Clamp01((float)Fields[0].GetValue());
         }
     }
 }

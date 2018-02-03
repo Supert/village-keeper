@@ -4,7 +4,6 @@ using System.Reflection;
 using System;
 using UnityEngine;
 using UnityEditor;
-using Newtonsoft.Json;
 
 namespace Shibari
 {
@@ -13,9 +12,9 @@ namespace Shibari
     {
         public const string PREFS_KEY = "SHIBARI_MODEL_RECORDS";
 
-        public static Dictionary<Type, Tuple<string, Type>[]> FullModelTree { get; private set; }
+        public static Dictionary<Type, BindableValueReflection[]> FullModelTree { get; private set; }
 
-        public static Dictionary<Type, Tuple<string, Type>[]> VisibleInEditorModelTree { get; private set; }
+        public static Dictionary<Type, BindableValueReflection[]> VisibleInEditorModelTree { get; private set; }
 
         public static ModelRecord[] Records { get; private set; }
 
@@ -61,8 +60,8 @@ namespace Shibari
             }
             Records = groups.Select(g => g.First()).ToArray();
 
-            FullModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
-            VisibleInEditorModelTree = new Dictionary<Type, Tuple<string, Type>[]>();
+            FullModelTree = new Dictionary<Type, BindableValueReflection[]>();
+            VisibleInEditorModelTree = new Dictionary<Type, BindableValueReflection[]>();
 
             var executingAssembly = Assembly.GetExecutingAssembly();
             ProcessBindableDataTypes(executingAssembly.GetTypes());
@@ -87,8 +86,8 @@ namespace Shibari
         {
             foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
             {
-                var fullModel = new List<Tuple<string, Type>>();
-                var visibleModel = new List<Tuple<string, Type>>();
+                var fullModel = new List<BindableValueReflection>();
+                var visibleModel = new List<BindableValueReflection>();
                 if (type.GetConstructor(new Type[0]) == null)
                     Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
 
@@ -99,9 +98,9 @@ namespace Shibari
                     {
                         t = t.BaseType;
                     }
-                    fullModel.Add(new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]));
+                    fullModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
                     if (p.GetCustomAttribute(typeof(ShowInEditorAttribute)) != null)
-                        visibleModel.Add(new Tuple<string, Type>(p.Name, t.GetGenericArguments()[0]));
+                        visibleModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
                 }
 
                 if (fullModel.Any())
