@@ -6,33 +6,33 @@ namespace VillageKeeper.Model
     public class BalanceData : BindableData
     {
         [SerializeValue]
-        public PrimaryValue<float> ArrowForceThreshold { get; private set; }
+        public AssignableValue<float> ArrowForceThreshold { get; private set; }
         [SerializeValue]
-        public PrimaryValue<int> MonsterBonusGold { get; private set; }
+        public AssignableValue<int> MonsterBonusGold { get; private set; }
         [SerializeValue]
-        public PrimaryValue<int> MaxVillageLevel { get; private set; }
+        public AssignableValue<int> MaxVillageLevel { get; private set; }
 
         [SerializeValue]
-        protected PrimaryValue<int> MonsterMaxHealthPossible { get; private set; }
+        protected AssignableValue<int> MonsterMaxHealthPossible { get; private set; }
         [SerializeValue]
-        protected PrimaryValue<int> MonsterMinHealthPossible { get; private set; }
+        protected AssignableValue<int> MonsterMinHealthPossible { get; private set; }
         [SerializeValue]
-        protected PrimaryValue<float> MonsterBuildingCostModifier { get; private set; }
+        protected AssignableValue<float> MonsterBuildingCostModifier { get; private set; }
         [SerializeValue]
-        protected PrimaryValue<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
+        protected AssignableValue<float> MonsterPowerPointsBuildingsHealthModifier { get; private set; }
         [SerializeValue]
-        protected PrimaryValue<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
+        protected AssignableValue<float> MonsterPowerPointsVillageLevelModifier { get; private set; }
 
         [SerializeValue]
-        protected PrimaryValue<int> FoodPerFarm { get; set; }
+        protected AssignableValue<int> FoodPerFarm { get; set; }
         [SerializeValue]
-        protected PrimaryValue<int> FoodPerWindMillMultiplier { get; set; }
+        protected AssignableValue<int> FoodPerWindMillMultiplier { get; set; }
         [SerializeValue]
-        protected PrimaryValue<int[]> CastleUpgradeCosts { get; set; }
+        protected AssignableValue<int[]> CastleUpgradeCosts { get; set; }
         [SerializeValue]
-        protected PrimaryValue<float[]> BuildingMaxHealths { get; set; }
+        protected AssignableValue<float[]> BuildingMaxHealths { get; set; }
         [SerializeValue]
-        protected PrimaryValue<int[]> BuildingCosts { get; set; }
+        protected AssignableValue<int[]> BuildingCosts { get; set; }
 
         public float GetMonsterPowerPoints()
         {

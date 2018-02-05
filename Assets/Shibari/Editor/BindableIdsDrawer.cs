@@ -23,7 +23,7 @@ namespace Shibari.Editor
             if (selectedModel >= 0)
             {
                 fields = Shibari.Model.VisibleInEditorModelTree[Shibari.Model.Records.FirstOrDefault(id => id.key == models[selectedModel]).type.Type]
-                    .Where(t => bindableIds.allowedValueType.IsAssignableFrom(t.ValueType) && (!bindableIds.isSetterRequired || t.Type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISettable<>))))
+                    .Where(t => bindableIds.allowedValueType.IsAssignableFrom(t.ValueType) && (!bindableIds.isSetterRequired || Shibari.Model.IsCalculatedValue(t.Type)))
                     .ToArray();
             }
             int selectedField = fields.TakeWhile(f => f.Name != fieldId.stringValue).Count();

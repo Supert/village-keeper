@@ -6,9 +6,9 @@ namespace VillageKeeper.Model
 {
     public class GameData : BindableData
     {
-        public PrimaryValue<int> CurrentHelpTipIndex { get; private set; }
+        public AssignableValue<int> CurrentHelpTipIndex { get; private set; }
         
-        public SecondaryValue<int> RoundFinishedBonusGold { get; } = new SecondaryValue<int>(
+        public CalculatedValue<int> RoundFinishedBonusGold { get; } = new CalculatedValue<int>(
             () =>
             {
                 if (Common.FsmState == FSM.States.RoundFinished)
@@ -24,25 +24,25 @@ namespace VillageKeeper.Model
             Common.FsmState);
 
         [ShowInEditor]
-        public PrimaryValue<float> ClampedMonsterHealth { get; private set; }
+        public AssignableValue<float> ClampedMonsterHealth { get; private set; }
         [ShowInEditor]
-        public PrimaryValue<float> ClampedArrowForce { get; private set; }
+        public AssignableValue<float> ClampedArrowForce { get; private set; }
 
-        public PrimaryValue<BuildingTypes> SelectedBuildingType { get; internal set; }
+        public AssignableValue<BuildingTypes> SelectedBuildingType { get; internal set; }
 
         [ShowInEditor]
-        public SecondaryValue<int> NextBreadToGoldMultiplier { get; } = new SecondaryValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel + 1), Saved.VillageLevel);
+        public CalculatedValue<int> NextBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel + 1), Saved.VillageLevel);
         [ShowInEditor]
-        public SecondaryValue<int> CurrentBreadToGoldMultiplier { get; } = new SecondaryValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel), Saved.VillageLevel);
+        public CalculatedValue<int> CurrentBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel), Saved.VillageLevel);
         [ShowInEditor]
-        public SecondaryValue<int> CastleUpgradeCost { get; }
+        public CalculatedValue<int> CastleUpgradeCost { get; }
 
-        public SecondaryValue<bool> IsArrowForceOverThreshold { get; }
+        public CalculatedValue<bool> IsArrowForceOverThreshold { get; }
 
         public GameData()
         {
-            IsArrowForceOverThreshold = new SecondaryValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
-            CastleUpgradeCost = new SecondaryValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
+            IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
+            CastleUpgradeCost = new CalculatedValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
         }
     }
 }

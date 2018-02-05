@@ -9,26 +9,10 @@ namespace Shibari.UI
     {
         private Slider slider;
 
-        protected override void Awake()
-        {
-            slider = GetComponent<Slider>();
-            slider.onValueChanged.AddListener((f) =>
-            {
-                if (f != (float)Fields[0].GetValue())
-                    (Fields[0] as PrimaryValueInfo).SetValue(f);
-            });
-            base.Awake();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-        }
-
         private BindableValueRestraint[] bindableValueRestraints = new BindableValueRestraint[1]
-        {
+{
             new BindableValueRestraint(typeof(float), true)
-        };
+};
 
         public override BindableValueRestraint[] BindableValueRestraints
         {
@@ -36,6 +20,17 @@ namespace Shibari.UI
             {
                 return bindableValueRestraints;
             }
+        }
+
+        protected override void Awake()
+        {
+            slider = GetComponent<Slider>();
+            slider.onValueChanged.AddListener((f) =>
+            {
+                if (f != (float)Fields[0].GetValue())
+                    (Fields[0] as AssignableValueInfo).SetValue(f);
+            });
+            base.Awake();
         }
 
         protected override void OnValueChanged()

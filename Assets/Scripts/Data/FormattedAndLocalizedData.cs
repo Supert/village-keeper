@@ -5,30 +5,30 @@ namespace VillageKeeper.Model
     public class FormattedAndLocalizedData : BindableData
     {
         [ShowInEditor]
-        public SecondaryValue<string> MonstersKilled { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> MonstersKilled { get; } = new CalculatedValue<string>(
             () => string.Format(Data.Localization.MonstersSlainedFormat, Data.Saved.MonstersDefeated),
             Data.Localization.MonstersSlainedFormat,
             Data.Saved.MonstersDefeated);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentBuildingName { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentBuildingName { get; } = new CalculatedValue<string>(
             () => Data.Localization.BuildingNames.Get()[(int)Data.Game.SelectedBuildingType.Get()],
             Data.Localization.BuildingNames,
             Data.Game.SelectedBuildingType);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentBuildingPrice { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentBuildingPrice { get; } = new CalculatedValue<string>(
             () => Data.Balance.GetBuildingGoldCost(Data.Game.SelectedBuildingType).ToString(),
             Data.Game.SelectedBuildingType);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentBuildingDescription { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentBuildingDescription { get; } = new CalculatedValue<string>(
             () => Data.Localization.BuildingDescriptions.Get()[(int)Data.Game.SelectedBuildingType.Get()],
             Data.Localization.BuildingDescriptions,
             Data.Game.SelectedBuildingType);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentPauseMenuTitle { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentPauseMenuTitle { get; } = new CalculatedValue<string>(
             () =>
             {
                 if (Data.Common.FsmState.Get() == FSM.States.Pause)
@@ -42,7 +42,7 @@ namespace VillageKeeper.Model
             Data.Localization.RoundFinished);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentTip { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentTip { get; } = new CalculatedValue<string>(
             () =>
             {
                 return Data.Localization.CurrentTips.Get()?[Data.Game.CurrentHelpTipIndex] ?? "";
@@ -51,7 +51,7 @@ namespace VillageKeeper.Model
             Data.Localization.CurrentTips);
 
         [ShowInEditor]
-        public SecondaryValue<string> CurrentTipCounter { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CurrentTipCounter { get; } = new CalculatedValue<string>(
             () =>
             {
                 int totalTips = 0;
@@ -68,7 +68,7 @@ namespace VillageKeeper.Model
             Data.Game.CurrentHelpTipIndex);
 
         [ShowInEditor]
-        public SecondaryValue<string> CollectedGold { get; } = new SecondaryValue<string>(
+        public CalculatedValue<string> CollectedGold { get; } = new CalculatedValue<string>(
             () => string.Format(Data.Localization.CollectedGoldFormat, Data.Game.RoundFinishedBonusGold),
             Data.Game.RoundFinishedBonusGold);
     }

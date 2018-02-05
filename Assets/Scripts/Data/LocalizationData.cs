@@ -5,43 +5,43 @@ namespace VillageKeeper.Model
 {
     public class LocalizationData : BindableData
     {
-        public SecondaryValue<string[]> CurrentTips { get; }
+        public CalculatedValue<string[]> CurrentTips { get; }
 
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<string> Help { get; private set; }
+        public AssignableValue<string> Help { get; private set; }
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<string> UpgradeCastleButtonText { get; private set; }
+        public AssignableValue<string> UpgradeCastleButtonText { get; private set; }
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<string> BuildingPickerMemo { get; private set; }
+        public AssignableValue<string> BuildingPickerMemo { get; private set; }
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<string> Shop { get; private set; }
+        public AssignableValue<string> Shop { get; private set; }
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<string> GameName { get; private set; }
+        public AssignableValue<string> GameName { get; private set; }
 
         [SerializeValue]
-        public PrimaryValue<string> CollectedGoldFormat { get; private set; }
+        public AssignableValue<string> CollectedGoldFormat { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> TipCounterFormat { get; private set; }
+        public AssignableValue<string> TipCounterFormat { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> Pause { get; private set; }
+        public AssignableValue<string> Pause { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> RoundFinished { get; private set; }
+        public AssignableValue<string> RoundFinished { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> MonstersSlainedFormat { get; private set; }
+        public AssignableValue<string> MonstersSlainedFormat { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> TipFormat { get; private set; }
+        public AssignableValue<string> TipFormat { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string[]> BattleHelpTips { get; private set; }
+        public AssignableValue<string[]> BattleHelpTips { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string[]> BuildHelpTips { get; private set; }
+        public AssignableValue<string[]> BuildHelpTips { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string[]> BuildingDescriptions { get; private set; }
+        public AssignableValue<string[]> BuildingDescriptions { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string[]> BuildingNames { get; private set; }
+        public AssignableValue<string[]> BuildingNames { get; private set; }
 
         public LocalizationData()
         {
-            CurrentTips = new SecondaryValue<string[]>(() =>
+            CurrentTips = new CalculatedValue<string[]>(() =>
             {
                 if (Data.Common.FsmState == States.BattleHelp)
                 {

@@ -6,29 +6,29 @@ namespace VillageKeeper.Model
     public class SavedData : BindableData
     {
         [SerializeValue]
-        public PrimaryValue<SerializableBuilding[]> Buildings { get; private set; }
+        public AssignableValue<SerializableBuilding[]> Buildings { get; private set; }
 
         [SerializeValue]
-        public PrimaryValue<int> VillageLevel { get; private set; }
+        public AssignableValue<int> VillageLevel { get; private set; }
         [SerializeValue, ShowInEditor]
-        public PrimaryValue<int> Gold { get; private set; }
+        public AssignableValue<int> Gold { get; private set; }
 
         [SerializeValue]
-        public PrimaryValue<bool> HasPremium { get; private set; }
+        public AssignableValue<bool> HasPremium { get; private set; }
 
         [SerializeValue]
-        public PrimaryValue<bool> WasBuildTipShown { get; private set; }
+        public AssignableValue<bool> WasBuildTipShown { get; private set; }
         [SerializeValue]
-        public PrimaryValue<bool> WasBattleTipShown { get; private set; }
+        public AssignableValue<bool> WasBattleTipShown { get; private set; }
 
 
         [SerializeValue]
-        public PrimaryValue<int> MonstersDefeated { get; private set; }
+        public AssignableValue<int> MonstersDefeated { get; private set; }
 
         [SerializeValue]
-        public PrimaryValue<bool> IsSoundEffectsEnabled { get; private set; }
+        public AssignableValue<bool> IsSoundEffectsEnabled { get; private set; }
         [SerializeValue]
-        public PrimaryValue<bool> IsMusicEnabled { get; private set; }
+        public AssignableValue<bool> IsMusicEnabled { get; private set; }
 
         public void SaveData()
         {

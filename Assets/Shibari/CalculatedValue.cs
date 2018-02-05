@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Shibari
 {
-    public class SecondaryValue<TValue> : BindableValue<TValue>
+    public class CalculatedValue<TValue> : BindableValue<TValue>
     {
         protected TValue Value { get; private set; }
 
         private Func<TValue> calculateValueFunction;
 
-        public SecondaryValue(Func<TValue> calculateValueFunction, IEnumerable<IBindable> subscribeTo)
+        public CalculatedValue(Func<TValue> calculateValueFunction, IEnumerable<IBindable> subscribeTo)
         {
             foreach (var bindable in subscribeTo)
             {
@@ -33,7 +33,7 @@ namespace Shibari
             }
         }
 
-        public SecondaryValue(Func<TValue> calculateValueFunction, params IBindable[] subscribeTo) : this(calculateValueFunction, subscribeTo.AsEnumerable())
+        public CalculatedValue(Func<TValue> calculateValueFunction, params IBindable[] subscribeTo) : this(calculateValueFunction, subscribeTo.AsEnumerable())
         {
 
         }

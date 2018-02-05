@@ -74,12 +74,12 @@ namespace Shibari
         {
             return type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                     .Where(p => !p.GetMethod.IsPrivate)
-                    .Where(p => IsBindableValue(p));
+                    .Where(p => IsBindableValue(p.PropertyType));
         }
 
-        public static IEnumerable<PropertyInfo> GetPrimaryValues(Type type)
+        public static IEnumerable<PropertyInfo> GetAssignableValues(Type type)
         {
-            return GetBindableValues(type).Where(p => CheckTypeTreeByPredicate(type, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>)));
+            return GetBindableValues(type).Where(p => CheckTypeTreeByPredicate(type, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>)));
         }
 
         private static void ProcessBindableDataTypes(Type[] types)
@@ -137,26 +137,31 @@ namespace Shibari
             Add(dataId, data);
         }
 
-        public static bool IsBindableValue(PropertyInfo property)
+        public static bool IsBindableValue(Type propertyType)
         {
-            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>));
+            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>));
         }
 
-        public static bool IsPrimaryValue(PropertyInfo property)
+        public static bool IsAssignableValue(Type propertyType)
         {
-            return CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>));
+            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>));
         }
 
-        public static bool IsSerializableValue(Type type, string propertyName)
+        public static bool IsCalculatedValue(Type propertyType)
         {
-            var property = type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(CalculatedValue<>));
+        }
+
+        public static bool IsSerializableValue(Type modelType, string propertyName)
+        {
+            var property = modelType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             return IsSerializableValue(property);
         }
 
         public static bool IsSerializableValue(PropertyInfo property)
         {
             return property.GetCustomAttribute<SerializeValueAttribute>() != null
-                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(PrimaryValue<>));
+                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>));
         }
 
         private static bool CheckTypeTreeByPredicate(Type type, Func<Type, bool> predicate)

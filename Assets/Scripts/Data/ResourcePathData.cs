@@ -5,28 +5,28 @@ namespace VillageKeeper.Model
     public class ResourcePathData : BindableData
     {
         [SerializeValue]
-        public PrimaryValue<string> CastleBackground { get; private set; }
+        public AssignableValue<string> CastleBackground { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> MountainsBackground { get; private set; }
+        public AssignableValue<string> MountainsBackground { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> VillageBackground { get; private set; }
+        public AssignableValue<string> VillageBackground { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> Cliff { get; private set; }
+        public AssignableValue<string> Cliff { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> CastleUpgradeIcon { get; private set; }
+        public AssignableValue<string> CastleUpgradeIcon { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> ArrowBar { get; private set; }
+        public AssignableValue<string> ArrowBar { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> BuildingPrefabs { get; private set; }
+        public AssignableValue<string> BuildingPrefabs { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> BuildingIcons { get; private set; }
+        public AssignableValue<string> BuildingIcons { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> FarmCrops { get; private set; }
+        public AssignableValue<string> FarmCrops { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> BuildingTile { get; private set; }
+        public AssignableValue<string> BuildingTile { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> GhostPrefab { get; private set; }
+        public AssignableValue<string> GhostPrefab { get; private set; }
         [SerializeValue]
-        public PrimaryValue<string> MenuFurniture { get; internal set; }
+        public AssignableValue<string> MenuFurniture { get; internal set; }
     }
 }

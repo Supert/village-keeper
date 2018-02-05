@@ -22,7 +22,7 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(ResourcePaths.BuildingIcons, Data.Game.SelectedBuildingType);
         [ShowInEditor]
-        public SecondaryValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(ResourcePaths.BuildingPrefabs, Data.Game.SelectedBuildingType);
+        public CalculatedValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(ResourcePaths.BuildingPrefabs, Data.Game.SelectedBuildingType);
         [ShowInEditor]
         public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(ResourcePaths.FarmCrops, Common.Special);
         [ShowInEditor]
@@ -33,6 +33,6 @@ namespace VillageKeeper.Model
         public ResourceValue<Ghost> GhostPrefab { get; } = new ResourceValue<Ghost>(ResourcePaths.GhostPrefab);
 
         [SerializeValue]
-        public PrimaryValue<string> AdUnitId { get; private set; }
+        public AssignableValue<string> AdUnitId { get; private set; }
     }
 }

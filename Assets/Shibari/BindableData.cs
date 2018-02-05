@@ -8,7 +8,7 @@ namespace Shibari
     public abstract class BindableData
     {
         public Dictionary<string, BindableValueInfo> Values { get; protected set; }
-        public Dictionary<string, PrimaryValueInfo> PrimaryValues { get; protected set; }
+        public Dictionary<string, AssignableValueInfo> AssignableValues { get; protected set; }
 
         private static readonly BindableDataJsonConverter converter = new BindableDataJsonConverter();
 
@@ -34,16 +34,16 @@ namespace Shibari
         public void Deserialize(string serialized)
         {
             BindableData deserialized = GetDeserializedData(serialized, GetType());
-            foreach (var property in deserialized.PrimaryValues)
+            foreach (var property in deserialized.AssignableValues)
             {
-                PrimaryValues[property.Key].SetValue(property.Value.GetValue());
+                AssignableValues[property.Key].SetValue(property.Value.GetValue());
             }
         }
 
         public void Initialize()
         {
             Values = new Dictionary<string, BindableValueInfo>();
-            PrimaryValues = new Dictionary<string, PrimaryValueInfo>();
+            AssignableValues = new Dictionary<string, AssignableValueInfo>();
 
             var properties = Model.GetBindableValues(GetType());
             
@@ -52,7 +52,7 @@ namespace Shibari
                 Type type = p.PropertyType;
                 while (type != typeof(object))
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(PrimaryValue<>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AssignableValue<>))
                     {
                         object value = Activator.CreateInstance(p.PropertyType);
                         p.SetValue(this, value);
@@ -65,8 +65,8 @@ namespace Shibari
             foreach (var p in properties)
             {
                 Values[p.Name] = new BindableValueInfo(p, this);
-                if (Model.IsPrimaryValue(p))
-                    PrimaryValues[p.Name] = new PrimaryValueInfo(p, this);
+                if (Model.IsAssignableValue(p.PropertyType))
+                    AssignableValues[p.Name] = new AssignableValueInfo(p, this);
             }
         }
     }

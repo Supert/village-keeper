@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Shibari
 {
-    public class PrimaryValueInfo : BindableValueInfo
+    public class AssignableValueInfo : BindableValueInfo
     {
         private MethodInfo setMethod;
 
-        public PrimaryValueInfo(PropertyInfo property, BindableData owner) : base(property, owner)
+        public AssignableValueInfo(PropertyInfo property, BindableData owner) : base(property, owner)
         {
             setMethod = BindableValue.GetType().GetMethod("Set", new Type[1] { ValueType });
         }

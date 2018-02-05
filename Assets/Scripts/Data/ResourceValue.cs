@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace VillageKeeper.Model
 {
-    public class ResourceValue<TValue> : SecondaryValue<TValue> where TValue : UnityEngine.Object
+    public class ResourceValue<TValue> : CalculatedValue<TValue> where TValue : UnityEngine.Object
     {
         public ResourceValue(Func<string> formatProvider, IEnumerable<IBindable> formatValues)
             : base(() => ResourceMock.Get<TValue>(string.Format(formatProvider(), formatValues.ToArray())), formatValues.AsEnumerable())

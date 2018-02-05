@@ -36,9 +36,9 @@ namespace Shibari
             JObject jsonObject = JObject.Load(reader);
             foreach (var serialized in jsonObject.Properties())
             {
-                if (instance.PrimaryValues.ContainsKey(serialized.Name))
+                if (instance.AssignableValues.ContainsKey(serialized.Name))
                 {
-                    PrimaryValueInfo reflected = instance.PrimaryValues[serialized.Name];
+                    AssignableValueInfo reflected = instance.AssignableValues[serialized.Name];
                     if (Model.IsSerializableValue(reflected.Property))
                     {
                         if (serialized.Value.Type == JTokenType.Array)
