@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Shibari.UI
 {
-
     public abstract class BindableView : MonoBehaviour
     {
         public abstract BindableValueRestraint[] BindableValueRestraints { get; }
@@ -14,7 +13,7 @@ namespace Shibari.UI
 
         public BindableIds[] BindableValuesIds { get { return bindableValuesIds; } set { bindableValuesIds = value; } }
 
-        protected BindableValueInfo[] Fields { get; private set; }
+        protected BindableValueInfo[] BindedValues { get; private set; }
 
         public void Initialize()
         {
@@ -43,12 +42,12 @@ namespace Shibari.UI
         protected virtual void Start()
         {
             onValueChangedDelegate = Delegate.CreateDelegate(typeof(Action), this, "OnValueChanged");
-            Fields = new BindableValueInfo[bindableValuesIds.Length];
+            BindedValues = new BindableValueInfo[bindableValuesIds.Length];
 
             for (int i = 0; i < bindableValuesIds.Length; i++)
             {
-                Fields[i] = GetField(bindableValuesIds[i]);
-                Fields[i].EventInfo.AddEventHandler(Fields[i].BindableValue, onValueChangedDelegate);
+                BindedValues[i] = GetField(bindableValuesIds[i]);
+                BindedValues[i].EventInfo.AddEventHandler(BindedValues[i].BindableValue, onValueChangedDelegate);
             }
 
             OnValueChanged();
@@ -64,9 +63,9 @@ namespace Shibari.UI
 
         protected void OnDestroy()
         {
-            if (Fields != null)
+            if (BindedValues != null)
             {
-                foreach (var field in Fields)
+                foreach (var field in BindedValues)
                 {
                     field.EventInfo.RemoveEventHandler(field.BindableValue, onValueChangedDelegate);
                 }

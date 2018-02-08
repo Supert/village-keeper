@@ -10,7 +10,7 @@ namespace Shibari.UI
     {
         private BindableValueRestraint[] bindableValueTypes = new BindableValueRestraint[1] 
         {
-            new BindableValueRestraint(typeof(String))
+            new BindableValueRestraint(typeof(object))
         };
 
         public override BindableValueRestraint[] BindableValueRestraints { get { return bindableValueTypes; } }
@@ -24,7 +24,7 @@ namespace Shibari.UI
 
         protected override void OnValueChanged()
         {
-            text.text = Fields[0].GetValue() as string;
+            text.text = BindedValues[0].GetValue().ToString();
         }
     }
 }
