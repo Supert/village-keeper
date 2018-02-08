@@ -6,8 +6,8 @@ namespace VillageKeeper.Model
 {
     public class GameData : BindableData
     {
-        public AssignableValue<int> CurrentHelpTipIndex { get; private set; }
-        
+        public AssignableValue<int> CurrentHelpTipIndex { get; } = new AssignableValue<int>();
+
         public CalculatedValue<int> RoundFinishedBonusGold { get; } = new CalculatedValue<int>(
             () =>
             {
@@ -24,11 +24,14 @@ namespace VillageKeeper.Model
             Common.FsmState);
 
         [ShowInEditor]
-        public AssignableValue<float> ClampedMonsterHealth { get; private set; }
+        public AssignableValue<float> ClampedMonsterHealth { get; } = new AssignableValue<float>();
         [ShowInEditor]
-        public AssignableValue<float> ClampedArrowForce { get; private set; }
+        public AssignableValue<float> ClampedArrowForce { get; } = new AssignableValue<float>();
 
-        public AssignableValue<BuildingTypes> SelectedBuildingType { get; internal set; }
+        public AssignableValue<BuildingTypes> SelectedBuildingType { get; } = new AssignableValue<BuildingTypes>();
+
+        [ShowInEditor]
+        public CalculatedValue<int> SelectedBuildingGoldCost { get; }
 
         [ShowInEditor]
         public CalculatedValue<int> NextBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel + 1), Saved.VillageLevel);
@@ -43,6 +46,9 @@ namespace VillageKeeper.Model
         {
             IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
             CastleUpgradeCost = new CalculatedValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
+            SelectedBuildingGoldCost = new CalculatedValue<int>(
+                () => Balance.GetBuildingGoldCost(SelectedBuildingType),
+                SelectedBuildingType);
         }
     }
 }

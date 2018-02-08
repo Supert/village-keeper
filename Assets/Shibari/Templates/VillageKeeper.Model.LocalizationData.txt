@@ -1,4 +1,7 @@
 {
+  "MultipleSlainedMonstersFormat": "",
+  "FirstSlainedMonster": "",
+  "NoSlainedMonsters": "",
   "BuildingNames": [],
   "BuildingDescriptions": [],
   "BuildHelpTips": [],

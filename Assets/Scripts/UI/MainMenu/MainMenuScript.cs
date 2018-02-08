@@ -10,7 +10,7 @@ namespace VillageKeeper.UI
 
         void SetScores()
         {
-            var monstersDefeated = Data.Saved.MonstersDefeated;
+            var monstersDefeated = Data.Saved.SlainedMonstersCount;
             if (monstersDefeated == 0)
                 monstersDefeatedText.text = "No monsters defeated yet";
             else
@@ -31,7 +31,7 @@ namespace VillageKeeper.UI
         {
             SetScores();
 
-            Data.Saved.MonstersDefeated.OnValueChanged += SetScores;
+            Data.Saved.SlainedMonstersCount.OnValueChanged += SetScores;
         }
     }
 }

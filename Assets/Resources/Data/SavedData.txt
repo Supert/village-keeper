@@ -1,7 +1,7 @@
 {
   "IsMusicEnabled": true,
   "IsSoundEffectsEnabled": true,
-  "MonstersDefeated": 0,
+  "MonstersSlainedCount": 0,
   "WasBattleTipShown": false,
   "WasBuildTipShown": false,
   "HasPremium": false,

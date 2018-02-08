@@ -12,11 +12,11 @@ namespace VillageKeeper.Model
             Winter,
         }
 
-        public AssignableValue<Specials> Special { get; private set; }
+        public AssignableValue<Specials> Special { get; } = new AssignableValue<Specials>();
 
-        public AssignableValue<float> Wind { get; private set; }
+        public AssignableValue<float> Wind { get; } = new AssignableValue<float>();
 
-        public AssignableValue<States> FsmState { get; private set; }
+        public AssignableValue<States> FsmState { get; } = new AssignableValue<States>();
 
         public void Init()
         {

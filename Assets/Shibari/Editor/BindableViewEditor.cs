@@ -13,7 +13,6 @@ namespace Shibari.Editor
             serializedObject.Update();
             BindableView actualObject = serializedObject.targetObject as System.Object as BindableView;
             actualObject.Initialize();
-            var controller = target as BindableView;
             SerializedProperty tps = serializedObject.FindProperty("bindableValuesIds");
             EditorGUI.BeginChangeCheck();
             for (int i = 0; i < tps.arraySize; i++)

@@ -5,18 +5,18 @@ namespace VillageKeeper.Model
     public class AudioData : BindableData
     {
         [SerializeValue]
-        public AssignableValue<string[]> ArrowShots { get; private set; }
+        public AssignableValue<string[]> ArrowShots { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BackgroundPeace { get; private set; }
+        public AssignableValue<string[]> BackgroundPeace { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BackgroundBattle { get; private set; }
+        public AssignableValue<string[]> BackgroundBattle { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BuildingHit { get; private set; }
+        public AssignableValue<string[]> BuildingHit { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> Click { get; private set; }
+        public AssignableValue<string[]> Click { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> MonsterSounds { get; private set; }
+        public AssignableValue<string[]> MonsterSounds { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> MonsterHit { get; private set; }
+        public AssignableValue<string[]> MonsterHit { get; } = new AssignableValue<string[]>();
     }
 }

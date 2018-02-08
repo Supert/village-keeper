@@ -33,6 +33,6 @@ namespace VillageKeeper.Model
         public ResourceValue<Ghost> GhostPrefab { get; } = new ResourceValue<Ghost>(ResourcePaths.GhostPrefab);
 
         [SerializeValue]
-        public AssignableValue<string> AdUnitId { get; private set; }
+        public AssignableValue<string> AdUnitId { get; } = new AssignableValue<string>();
     }
 }

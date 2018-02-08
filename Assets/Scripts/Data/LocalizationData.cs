@@ -1,4 +1,5 @@
-﻿using Shibari;
+﻿using System;
+using Shibari;
 using VillageKeeper.FSM;
 
 namespace VillageKeeper.Model
@@ -8,36 +9,42 @@ namespace VillageKeeper.Model
         public CalculatedValue<string[]> CurrentTips { get; }
 
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> Help { get; private set; }
+        public AssignableValue<string> Help { get; } = new AssignableValue<string>();
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> UpgradeCastleButtonText { get; private set; }
+        public AssignableValue<string> UpgradeCastleButtonText { get; } = new AssignableValue<string>();
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> BuildingPickerMemo { get; private set; }
+        public AssignableValue<string> BuildingPickerMemo { get; } = new AssignableValue<string>();
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> Shop { get; private set; }
+        public AssignableValue<string> Shop { get; } = new AssignableValue<string>();
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> GameName { get; private set; }
+        public AssignableValue<string> GameName { get; } = new AssignableValue<string>();
+        [SerializeValue, ShowInEditor]
+        public AssignableValue<string> RoundFinishedTitle { get; } = new AssignableValue<string>();
 
         [SerializeValue]
-        public AssignableValue<string> CollectedGoldFormat { get; private set; }
+        public AssignableValue<string> RoundFinishedBodyFormat { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> TipCounterFormat { get; private set; }
+        public AssignableValue<string> CollectedGoldFormat { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> Pause { get; private set; }
+        public AssignableValue<string> TipCounterFormat { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> RoundFinished { get; private set; }
+        public AssignableValue<string> Pause { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> MonstersSlainedFormat { get; private set; }
+        public AssignableValue<string> TipFormat { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> TipFormat { get; private set; }
+        public AssignableValue<string[]> BattleHelpTips { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BattleHelpTips { get; private set; }
+        public AssignableValue<string[]> BuildHelpTips { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BuildHelpTips { get; private set; }
+        public AssignableValue<string[]> BuildingDescriptions { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BuildingDescriptions { get; private set; }
+        public AssignableValue<string[]> BuildingNames { get; } = new AssignableValue<string[]>();
         [SerializeValue]
-        public AssignableValue<string[]> BuildingNames { get; private set; }
+        public AssignableValue<string> NoSlainedMonsters { get; } = new AssignableValue<string>();
+        [SerializeValue]
+        public AssignableValue<string> FirstSlainedMonster { get; } = new AssignableValue<string>();
+        [SerializeValue]
+        public AssignableValue<string> MultipleSlainedMonstersFormat { get; } = new AssignableValue<string>();
 
         public LocalizationData()
         {

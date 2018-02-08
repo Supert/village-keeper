@@ -5,12 +5,6 @@ namespace VillageKeeper.Model
     public class FormattedAndLocalizedData : BindableData
     {
         [ShowInEditor]
-        public CalculatedValue<string> MonstersKilled { get; } = new CalculatedValue<string>(
-            () => string.Format(Data.Localization.MonstersSlainedFormat, Data.Saved.MonstersDefeated),
-            Data.Localization.MonstersSlainedFormat,
-            Data.Saved.MonstersDefeated);
-
-        [ShowInEditor]
         public CalculatedValue<string> CurrentBuildingName { get; } = new CalculatedValue<string>(
             () => Data.Localization.BuildingNames.Get()[(int)Data.Game.SelectedBuildingType.Get()],
             Data.Localization.BuildingNames,
@@ -34,12 +28,12 @@ namespace VillageKeeper.Model
                 if (Data.Common.FsmState.Get() == FSM.States.Pause)
                     return Data.Localization.Pause;
                 if (Data.Common.FsmState.Get() == FSM.States.RoundFinished)
-                    return Data.Localization.RoundFinished;
+                    return Data.Localization.RoundFinishedTitle;
                 return "";
             },
             Data.Common.FsmState,
             Data.Localization.Pause,
-            Data.Localization.RoundFinished);
+            Data.Localization.RoundFinishedTitle);
 
         [ShowInEditor]
         public CalculatedValue<string> CurrentTip { get; } = new CalculatedValue<string>(
@@ -71,5 +65,22 @@ namespace VillageKeeper.Model
         public CalculatedValue<string> CollectedGold { get; } = new CalculatedValue<string>(
             () => string.Format(Data.Localization.CollectedGoldFormat, Data.Game.RoundFinishedBonusGold),
             Data.Game.RoundFinishedBonusGold);
+
+        [ShowInEditor]
+        public CalculatedValue<string> SlainedMonsters { get; } = new CalculatedValue<string>(
+            () =>
+            {
+                var slainedMonstersCount = Data.Saved.SlainedMonstersCount;
+                if (slainedMonstersCount == 0)
+                    return Data.Localization.NoSlainedMonsters;
+                else
+                {
+                    if (slainedMonstersCount == 1)
+                        return Data.Localization.FirstSlainedMonster;
+                    else
+                        return string.Format(Data.Localization.MultipleSlainedMonstersFormat, slainedMonstersCount);
+                }
+            },
+            Data.Saved.SlainedMonstersCount);
     }
 }

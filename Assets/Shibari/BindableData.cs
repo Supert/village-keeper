@@ -49,21 +49,6 @@ namespace Shibari
             
             foreach (var p in properties)
             {
-                Type type = p.PropertyType;
-                while (type != typeof(object))
-                {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(AssignableValue<>))
-                    {
-                        object value = Activator.CreateInstance(p.PropertyType);
-                        p.SetValue(this, value);
-                        break;
-                    }
-                    type = type.BaseType;
-                }
-            }
-            
-            foreach (var p in properties)
-            {
                 Values[p.Name] = new BindableValueInfo(p, this);
                 if (Model.IsAssignableValue(p.PropertyType))
                     AssignableValues[p.Name] = new AssignableValueInfo(p, this);

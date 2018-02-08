@@ -5,28 +5,28 @@ namespace VillageKeeper.Model
     public class ResourcePathData : BindableData
     {
         [SerializeValue]
-        public AssignableValue<string> CastleBackground { get; private set; }
+        public AssignableValue<string> CastleBackground { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> MountainsBackground { get; private set; }
+        public AssignableValue<string> MountainsBackground { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> VillageBackground { get; private set; }
+        public AssignableValue<string> VillageBackground { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> Cliff { get; private set; }
+        public AssignableValue<string> Cliff { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> CastleUpgradeIcon { get; private set; }
+        public AssignableValue<string> CastleUpgradeIcon { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> ArrowBar { get; private set; }
+        public AssignableValue<string> ArrowBar { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> BuildingPrefabs { get; private set; }
+        public AssignableValue<string> BuildingPrefabs { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> BuildingIcons { get; private set; }
+        public AssignableValue<string> BuildingIcons { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> FarmCrops { get; private set; }
+        public AssignableValue<string> FarmCrops { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> BuildingTile { get; private set; }
+        public AssignableValue<string> BuildingTile { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> GhostPrefab { get; private set; }
+        public AssignableValue<string> GhostPrefab { get; } = new AssignableValue<string>();
         [SerializeValue]
-        public AssignableValue<string> MenuFurniture { get; internal set; }
+        public AssignableValue<string> MenuFurniture { get; } = new AssignableValue<string>();
     }
 }
