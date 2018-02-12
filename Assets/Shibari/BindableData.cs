@@ -16,26 +16,30 @@ namespace Shibari
         private static readonly BindableDataJsonConverter converter = new BindableDataJsonConverter();
 
         #region public static methods
-        public static IEnumerable<string> GetBindableValuesPaths(Type type, string prefix, bool isSetterRequired, bool isVisibleInEditorRequired)
+        public static IEnumerable<string> GetBindableValuesPaths(Type type, string prefix, bool isSetterRequired, bool isVisibleInEditorRequired, Type valueType = null)
         {
-            IEnumerable<string> result = GetBindableDatas(type)
+            List<string> result = GetBindableDatas(type)
                 .Where(property => IsEditorVisibilityAcceptable(property, isVisibleInEditorRequired))
-                .SelectMany(property => GetBindableValuesPaths(property.PropertyType, prefix + property.Name + "/", isSetterRequired, isVisibleInEditorRequired));
+                .SelectMany(property => GetBindableValuesPaths(property.PropertyType, prefix + property.Name + "/", isSetterRequired, isVisibleInEditorRequired, valueType)).ToList();
             if (isSetterRequired)
             {
                 result = result
                         .Concat(GetAssignableValues(type)
-                            .Where(property => IsEditorVisibilityAcceptable(property, isVisibleInEditorRequired))
-                            .Select(property => prefix + property.Name));
+                            .Where(property => 
+                                IsEditorVisibilityAcceptable(property, isVisibleInEditorRequired) 
+                                && (valueType == null || valueType.IsAssignableFrom(GetBindableValueValueType(property.PropertyType))))
+                            .Select(property => prefix + property.Name)).ToList();
             }
             else
             {
                 result = result
                     .Concat(GetBindableValues(type)
-                        .Where(property => IsEditorVisibilityAcceptable(property, isVisibleInEditorRequired))
-                        .Select(property => prefix + property.Name));
+                        .Where(property => 
+                            IsEditorVisibilityAcceptable(property, isVisibleInEditorRequired)
+                            && (valueType == null || valueType.IsAssignableFrom(GetBindableValueValueType(property.PropertyType))))
+                        .Select(property => prefix + property.Name)).ToList();
             }
-            return result;
+            return result.ToList();
         }
 
         public static IEnumerable<PropertyInfo> GetBindableDatas(Type type)
@@ -91,7 +95,8 @@ namespace Shibari
 
         public static bool IsBindableData(Type type)
         {
-            return typeof(BindableData).IsAssignableFrom(type);
+            var result = typeof(BindableData).IsAssignableFrom(type);
+            return result;
         }
 
         public static BindableData GetDeserializedData(string serialized, Type type)
