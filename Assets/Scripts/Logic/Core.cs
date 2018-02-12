@@ -13,6 +13,8 @@ namespace VillageKeeper
     {
         public static Core Instance { get; private set; }
 
+        public static Data Data { get { return (Data) Shibari.Model.RootNode; } }
+        
         public StateMachine FSM { get; private set; }
 
         public System.Random Random { get; private set; }
@@ -66,12 +68,8 @@ namespace VillageKeeper
             MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
-
-            Shibari.Model.BeginInitialization();
             
-            Data.Init();
-
-            Shibari.Model.FinalizeInitialization();
+            Data.Initialize();
 
             AudioManager = GetComponent<AudioManager>();
             AudioManager.Init();

@@ -32,14 +32,14 @@ namespace VillageKeeper.Audio
 
         public void PlaySoundEffect(AudioSource audioSource, string audioField)
         {
-            if (!Data.Saved.IsSoundEffectsEnabled)
+            if (!Core.Data.Saved.IsSoundEffectsEnabled)
                 return;
             Play(audioSource, audioField);
         }
 
         public void PlayMusic(string audioField)
         {
-            if (!Data.Saved.IsMusicEnabled)
+            if (!Core.Data.Saved.IsMusicEnabled)
                 return;
             if (backgroundAS.clip != null && audioField == audioClips.FirstOrDefault(kvp => kvp.Value.Contains(backgroundAS.clip)).Key)
                 return;
@@ -95,12 +95,12 @@ namespace VillageKeeper.Audio
 
         private void OnBattleEnter()
         {
-            if (Data.Saved.IsMusicEnabled)
+            if (Core.Data.Saved.IsMusicEnabled)
             {
                 PlayMusic(AudioClipNames.BackgroundBattle.ToString());
                 backgroundAS.volume = 0.3f;
             }
-            if (Data.Saved.IsSoundEffectsEnabled)
+            if (Core.Data.Saved.IsSoundEffectsEnabled)
                 StartCoroutine(MonsterRandomSoundsCoroutine(1f));
         }
 
@@ -119,7 +119,7 @@ namespace VillageKeeper.Audio
             buildingAS = GetNewAudioSource("Building");
 
             audioClips = new Dictionary<string, List<AudioClip>>();
-            foreach (var field in Data.Audio.Values)
+            foreach (var field in Core.Data.Audio.Values)
             {
                 audioClips[field.Key] = new List<AudioClip>();
                 foreach (var path in (field.Value.GetValue() as string[]))
@@ -130,9 +130,9 @@ namespace VillageKeeper.Audio
             backgroundAS.volume = 1f;
             backgroundAS.loop = true;
 
-            Data.Saved.IsMusicEnabled.OnValueChanged += () =>
+            Core.Data.Saved.IsMusicEnabled.OnValueChanged += () =>
             {
-                if (Data.Saved.IsMusicEnabled)
+                if (Core.Data.Saved.IsMusicEnabled)
                 {
                     backgroundAS.Play();
                 }

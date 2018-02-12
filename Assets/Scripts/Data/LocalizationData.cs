@@ -19,7 +19,7 @@ namespace VillageKeeper.Model
         [SerializeValue, ShowInEditor]
         public AssignableValue<string> GameName { get; } = new AssignableValue<string>();
         [SerializeValue, ShowInEditor]
-        public AssignableValue<string> RoundFinishedTitle { get; } = new AssignableValue<string>();
+        public AssignableValue<string> EndRoundTitle { get; } = new AssignableValue<string>();
 
         [SerializeValue]
         public AssignableValue<string> RoundFinishedBodyFormat { get; } = new AssignableValue<string>();
@@ -50,20 +50,20 @@ namespace VillageKeeper.Model
         {
             CurrentTips = new CalculatedValue<string[]>(() =>
             {
-                if (Data.Common.FsmState == States.BattleHelp)
+                if (Core.Data.Common.FsmState == States.BattleHelp)
                 {
-                    Data.Game.CurrentHelpTipIndex.Set(0);
+                    Core.Data.Game.CurrentHelpTipIndex.Set(0);
                     return BattleHelpTips;
                 }
-                if (Data.Common.FsmState == States.BuildHelp)
+                if (Core.Data.Common.FsmState == States.BuildHelp)
                 {
-                    Data.Game.CurrentHelpTipIndex.Set(0);
+                    Core.Data.Game.CurrentHelpTipIndex.Set(0);
                     return BuildHelpTips;
                 }
 
                 return CurrentTips;
             },
-            Data.Common.FsmState);
+            Core.Data.Common.FsmState);
         }
     }
 

@@ -56,7 +56,7 @@ namespace VillageKeeper.UI
 
             if (oldStrength != Strength)
             {
-                Data.Common.Wind.Set(Strength);
+                Core.Data.Common.Wind.Set(Strength);
             }
         }
     }

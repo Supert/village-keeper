@@ -38,7 +38,7 @@ namespace VillageKeeper.Game
             private set
             {
                 health = value;
-                Data.Game.ClampedMonsterHealth.Set(health / (float)maxHealth);
+                Core.Data.Game.ClampedMonsterHealth.Set(health / (float)maxHealth);
                 if (health == 0)
                     Kill();
             }
@@ -215,7 +215,7 @@ namespace VillageKeeper.Game
         public void Kill()
         {
             sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
-            var ghost = Instantiate(Data.Resources.GhostPrefab.Get());
+            var ghost = Instantiate(Core.Data.Resources.GhostPrefab.Get());
             ghost.transform.localPosition = transform.localPosition;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
@@ -281,9 +281,9 @@ namespace VillageKeeper.Game
 
         private void SetMaxHealthAndAgressiveness()
         {
-            float pointsPool = Data.Balance.GetMonsterPowerPoints();
-            float minHealthPossible = Data.Balance.GetMonsterMinHealth();
-            float maxHealthPossible = Data.Balance.GetMonsterMaxHealth();
+            float pointsPool = Core.Data.Balance.GetMonsterPowerPoints();
+            float minHealthPossible = Core.Data.Balance.GetMonsterMinHealth();
+            float maxHealthPossible = Core.Data.Balance.GetMonsterMaxHealth();
 
             if (pointsPool < minHealthPossible)
             {

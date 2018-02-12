@@ -18,8 +18,10 @@ namespace VillageKeeper.Model
 
         public AssignableValue<States> FsmState { get; } = new AssignableValue<States>();
 
-        public void Init()
+        public override void Initialize()
         {
+            base.Initialize();
+
             Special.Set(GetTodaySpecial());
         }
 

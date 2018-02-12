@@ -11,17 +11,17 @@ namespace VillageKeeper.Model
         public CalculatedValue<int> RoundFinishedBonusGold { get; } = new CalculatedValue<int>(
             () =>
             {
-                if (Common.FsmState == FSM.States.RoundFinished)
+                if (Core.Data.Common.FsmState == FSM.States.RoundFinished)
                 {
-                    int villageLevel = Saved.VillageLevel;
-                    SerializableBuilding[] buildings = Saved.Buildings;
+                    int villageLevel = Core.Data.Saved.VillageLevel;
+                    SerializableBuilding[] buildings = Core.Data.Saved.Buildings;
                     int farms = buildings?.Count(c => c.Type == BuildingTypes.Farm) ?? 0;
                     int windmills = buildings?.Count(c => c.Type == BuildingTypes.Windmill) ?? 0;
-                    return Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills);
+                    return Core.Data.Balance.CalculateRoundFinishedBonusGold(villageLevel, farms, windmills);
                 }
                 return 0;
             },
-            Common.FsmState);
+            Core.Data.Common.FsmState);
 
         [ShowInEditor]
         public AssignableValue<float> ClampedMonsterHealth { get; } = new AssignableValue<float>();
@@ -34,9 +34,9 @@ namespace VillageKeeper.Model
         public CalculatedValue<int> SelectedBuildingGoldCost { get; }
 
         [ShowInEditor]
-        public CalculatedValue<int> NextBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel + 1), Saved.VillageLevel);
+        public CalculatedValue<int> NextBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel + 1), Core.Data.Saved.VillageLevel);
         [ShowInEditor]
-        public CalculatedValue<int> CurrentBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Balance.GetBreadToGoldMultiplier(Saved.VillageLevel), Saved.VillageLevel);
+        public CalculatedValue<int> CurrentBreadToGoldMultiplier { get; } = new CalculatedValue<int>(() => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel), Core.Data.Saved.VillageLevel);
         [ShowInEditor]
         public CalculatedValue<int> CastleUpgradeCost { get; }
 
@@ -44,10 +44,10 @@ namespace VillageKeeper.Model
 
         public GameData()
         {
-            IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Balance.ArrowForceThreshold, Balance.ArrowForceThreshold);
-            CastleUpgradeCost = new CalculatedValue<int>(() => Balance.GetCastleUpgradeCost(Saved.VillageLevel), Saved.VillageLevel);
+            IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Core.Data.Balance.ArrowForceThreshold, Core.Data.Balance.ArrowForceThreshold);
+            CastleUpgradeCost = new CalculatedValue<int>(() => Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel), Core.Data.Saved.VillageLevel);
             SelectedBuildingGoldCost = new CalculatedValue<int>(
-                () => Balance.GetBuildingGoldCost(SelectedBuildingType),
+                () => Core.Data.Balance.GetBuildingGoldCost(SelectedBuildingType),
                 SelectedBuildingType);
         }
     }

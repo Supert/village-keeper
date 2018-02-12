@@ -12,26 +12,26 @@ namespace VillageKeeper.UI
 
         void SetUpgradeButton()
         {
-            upgradeButton.interactable = Data.Saved.Gold.Get() >= Data.Balance.GetCastleUpgradeCost(Data.Saved.VillageLevel.Get());
+            upgradeButton.interactable = Core.Data.Saved.Gold.Get() >= Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel.Get());
         }
 
         public void Show()
         {
-            int villageLevel = Data.Saved.VillageLevel.Get();
-            castleUpgradeWindow.SetActive(villageLevel < Data.Balance.MaxVillageLevel.Get());
+            int villageLevel = Core.Data.Saved.VillageLevel.Get();
+            castleUpgradeWindow.SetActive(villageLevel < Core.Data.Balance.MaxVillageLevel.Get());
             SetUpgradeButton();
         }
 
         void Start()
         {
-            Data.Saved.Gold.OnValueChanged += () => SetUpgradeButton();
-            Data.Saved.VillageLevel.OnValueChanged += () => Show();
+            Core.Data.Saved.Gold.OnValueChanged += () => SetUpgradeButton();
+            Core.Data.Saved.VillageLevel.OnValueChanged += () => Show();
             upgradeButton.onClick.AddListener(() =>
             {
-                if (Data.Saved.Gold.Get() >= Data.Balance.GetCastleUpgradeCost(Data.Saved.VillageLevel.Get()))
+                if (Core.Data.Saved.Gold.Get() >= Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel.Get()))
                 {
-                    Data.Saved.Gold.Set(Data.Saved.Gold.Get() - Data.Balance.GetCastleUpgradeCost(Data.Saved.VillageLevel.Get()));
-                    Data.Saved.VillageLevel.Set(Data.Saved.VillageLevel.Get() + 1);
+                    Core.Data.Saved.Gold.Set(Core.Data.Saved.Gold.Get() - Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel.Get()));
+                    Core.Data.Saved.VillageLevel.Set(Core.Data.Saved.VillageLevel.Get() + 1);
                     Core.Instance.AudioManager.PlayClick();
                 }
             });

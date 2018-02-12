@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    buildingsGrid[i, j] = Instantiate(Data.Resources.BuildingTile.Get()).GetComponent<BuildingTileScript>();
+                    buildingsGrid[i, j] = Instantiate(Core.Data.Resources.BuildingTile.Get()).GetComponent<BuildingTileScript>();
                     buildingsGrid[i, j].gridX = i;
                     buildingsGrid[i, j].gridY = j;
                     buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
@@ -132,9 +132,9 @@ namespace VillageKeeper.Game
 
         public void BuyBuilding(Building building, Vector2 gridPosition)
         {
-            if (IsCellFree(gridPosition) && Data.Saved.Gold >= building.GoldCost)
+            if (IsCellFree(gridPosition) && Core.Data.Saved.Gold >= building.GoldCost)
             {
-                Data.Saved.Gold.Set(Data.Saved.Gold - building.GoldCost);
+                Core.Data.Saved.Gold.Set(Core.Data.Saved.Gold - building.GoldCost);
                 PlaceBuilding(building, gridPosition);
                 SaveBuildings();
             }
@@ -152,12 +152,12 @@ namespace VillageKeeper.Game
         {
             var list = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray();
 
-            Data.Saved.Buildings.Set(list);
+            Core.Data.Saved.Buildings.Set(list);
         }
 
         public void LoadBuildings()
         {
-            SerializableBuilding[] list = Data.Saved.Buildings;
+            SerializableBuilding[] list = Core.Data.Saved.Buildings;
 
             if (list == null)
                 return;

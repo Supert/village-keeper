@@ -37,7 +37,7 @@ namespace VillageKeeper.Model
         public float GetMonsterPowerPoints()
         {
             float buildingsHealth = Core.Instance.BuildingsArea.buildings.Sum(b => b.MaxHealth);
-            return buildingsHealth * MonsterPowerPointsBuildingsHealthModifier * (1 + Data.Saved.VillageLevel * MonsterPowerPointsVillageLevelModifier);
+            return buildingsHealth * MonsterPowerPointsBuildingsHealthModifier * (1 + Core.Data.Saved.VillageLevel * MonsterPowerPointsVillageLevelModifier);
         }
 
         public float GetMonsterMinHealth()

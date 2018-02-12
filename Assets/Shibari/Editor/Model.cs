@@ -48,23 +48,24 @@ namespace Shibari.Editor
 
         public static void RefreshModel()
         {
-            Shibari.Model.LoadRecords();
+            Shibari.Model.Initialize();
         }
 
         public static void RefreshTemplates()
         {
-            foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES))
-            {
-                FileInfo file = new FileInfo($"{path}");
-                file.Delete();
-            }
-            foreach (var model in Shibari.Model.FullModelTree.Keys)
-            {
-                FileInfo file = new FileInfo($"{SERIALIZATION_TEMPLATES}{model.FullName}.txt");
-                file.Directory.Create();
-                File.WriteAllText(file.FullName, Shibari.Model.GenerateSerializationTemplate(model));
-            }
-            AssetDatabase.Refresh();
+            throw new System.NotImplementedException();
+            //foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES))
+            //{
+            //    FileInfo file = new FileInfo($"{path}");
+            //    file.Delete();
+            //}
+            //foreach (var model in Shibari.Model.FullModelTree.Keys)
+            //{
+            //    FileInfo file = new FileInfo($"{SERIALIZATION_TEMPLATES}{model.FullName}.txt");
+            //    file.Directory.Create();
+            //    File.WriteAllText(file.FullName, Shibari.Model.GenerateSerializationTemplate(model));
+            //}
+            //AssetDatabase.Refresh();
         }
     }
 }

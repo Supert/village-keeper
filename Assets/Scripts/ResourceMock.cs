@@ -14,7 +14,7 @@ namespace VillageKeeper
 
         public static Building GetBuilding(BuildingTypes type)
         {
-            var path = string.Format(Data.ResourcePaths.BuildingPrefabs, Enum.GetName(typeof(BuildingTypes), type));
+            var path = string.Format(Core.Data.ResourcePaths.BuildingPrefabs, Enum.GetName(typeof(BuildingTypes), type));
             Building bs = UnityEngine.Object.Instantiate(Get<Building>(path));
             return bs;
         }

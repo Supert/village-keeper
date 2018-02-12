@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using TypeReferences;
 
 namespace Shibari
 {
     public class ShibariSettings : MonoBehaviour
     {
-        public List<ModelRecord> values;
+        [ClassExtends(typeof(BindableData), AllowAbstract = false, Grouping = ClassGrouping.ByNamespaceFlat)]
+        public ClassTypeReference RootNodeType; 
     }
 }

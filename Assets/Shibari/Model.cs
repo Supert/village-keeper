@@ -10,172 +10,85 @@ namespace Shibari
     [InitializeOnLoad]
     public static class Model
     {
-        public const string PREFS_KEY = "SHIBARI_MODEL_RECORDS";
-
-        public static Dictionary<Type, BindableValueReflection[]> FullModelTree { get; private set; }
-
-        public static Dictionary<Type, BindableValueReflection[]> VisibleInEditorModelTree { get; private set; }
-
-        public static ModelRecord[] Records { get; private set; }
-
-        private static Dictionary<string, BindableData> registered = new Dictionary<string, BindableData>();
+        public static BindableData RootNode { get; private set; }
+        public static Type RootNodeType { get; private set; }
 
         static Model()
         {
-            LoadRecords();
+            Initialize();
         }
 
-        public static void BeginInitialization()
-        {
-            foreach (var record in Records)
-            {
-                object o = Activator.CreateInstance(record.type.Type);
-                Register(record.key, (BindableData)o);
-            }
-        }
-
-        public static void FinalizeInitialization()
-        {
-            foreach (var data in registered.Values)
-                foreach (var value in data.Values)
-                    value.Value.InvokeOnValueChanged();
-        }
-
-        public static void LoadRecords()
+        public static void Initialize()
         {
             ShibariSettings settings = Resources.Load<ShibariSettings>("ShibariSettings");
-
-            if (settings == null)
-                Debug.LogError("Could not find container prefab for Shibari Settings.");
-
-            if (settings.values == null)
-                settings.values = new List<ModelRecord>();
-
-            var groups = settings.values.Where(r => r != null).GroupBy(r => r.key);
-            foreach (var group in groups)
+            RootNodeType = settings.RootNodeType.Type;
+            if (RootNodeType == null)
             {
-                var record = group.First();
-                if (group.Take(2).Count() == 2)
-                    Debug.LogErrorFormat("Found multiple datas with id {0}, ignoring duplicates.", record.key);
+                Debug.LogError("Please, set root node type in Shibari/Settings menu.");
+                return;
             }
-            Records = groups.Select(g => g.First()).ToArray();
-
-            FullModelTree = new Dictionary<Type, BindableValueReflection[]>();
-            VisibleInEditorModelTree = new Dictionary<Type, BindableValueReflection[]>();
-
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            ProcessBindableDataTypes(executingAssembly.GetTypes());
-
-            foreach (var assembly in executingAssembly.GetReferencedAssemblies())
-                ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
-        }
-
-        public static IEnumerable<PropertyInfo> GetBindableValues(Type type)
-        {
-            return type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(p => !p.GetMethod.IsPrivate)
-                    .Where(p => IsBindableValue(p.PropertyType));
-        }
-
-        public static IEnumerable<PropertyInfo> GetAssignableValues(Type type)
-        {
-            return GetBindableValues(type).Where(p => CheckTypeTreeByPredicate(type, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>)));
-        }
-
-        private static void ProcessBindableDataTypes(Type[] types)
-        {
-            foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
+            else if (RootNodeType.GetConstructor(new Type[0]) == null)
             {
-                var fullModel = new List<BindableValueReflection>();
-                var visibleModel = new List<BindableValueReflection>();
-                if (type.GetConstructor(new Type[0]) == null)
-                    Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
-
-                foreach (var p in GetBindableValues(type))
-                {
-                    Type t = p.PropertyType;
-                    while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
-                    {
-                        t = t.BaseType;
-                    }
-                    fullModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
-                    if (p.GetCustomAttribute(typeof(ShowInEditorAttribute)) != null)
-                        visibleModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
-                }
-
-                if (fullModel.Any())
-                    FullModelTree[type] = fullModel.ToArray();
-                if (visibleModel.Any())
-                    VisibleInEditorModelTree[type] = visibleModel.ToArray();
+                Debug.LogError($"Root node type {RootNodeType} should implement default public constructor");
             }
+            
+            //RootNode = (BindableData) Activator.CreateInstance(RootNodeType);
         }
 
-        public static void Add(string id, BindableData data)
-        {
-            if (registered.ContainsKey(id))
-                throw new ArgumentException($"Data with id {id} is already registered", "id");
-            registered[id] = data;
-        }
+        //public static void LoadRecords()
+        //{
 
-        public static T Get<T>(string id) where T : BindableData
-        {
-            if (!registered.ContainsKey(id))
-                throw new ArgumentException($"Data with id {id} is not registered.", "id");
+        //    if (settings == null)
+        //        Debug.LogError("Could not find container prefab for Shibari Settings.");
 
-            return (T)registered[id];
-        }
+        //    if (settings.values == null)
+        //        settings.values = new List<ModelRecord>();
 
-        public static void Remove(string id)
-        {
-            registered.Remove(id);
-        }
+        //    var groups = settings.values.Where(r => r != null).GroupBy(r => r.key);
+        //    foreach (var group in groups)
+        //    {
+        //        var record = group.First();
+        //        if (group.Take(2).Count() == 2)
+        //            Debug.LogErrorFormat("Found multiple datas with id {0}, ignoring duplicates.", record.key);
+        //    }
 
-        public static void Register(string dataId, BindableData data)
-        {
-            data.Initialize();
+        //    FullModelTree = new Dictionary<Type, BindableValueReflection[]>();
+        //    VisibleInEditorModelTree = new Dictionary<Type, BindableValueReflection[]>();
 
-            Add(dataId, data);
-        }
+        //    var executingAssembly = Assembly.GetExecutingAssembly();
+        //    ProcessBindableDataTypes(executingAssembly.GetTypes());
 
-        public static bool IsBindableValue(Type propertyType)
-        {
-            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>));
-        }
+        //    foreach (var assembly in executingAssembly.GetReferencedAssemblies())
+        //        ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
+        //}
 
-        public static bool IsAssignableValue(Type propertyType)
-        {
-            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>));
-        }
+        //private static void ProcessBindableDataTypes(Type[] types)
+        //{
+        //    foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
+        //    {
+        //        var fullModel = new List<BindableValueReflection>();
+        //        var visibleModel = new List<BindableValueReflection>();
+        //        if (type.GetConstructor(new Type[0]) == null)
+        //            Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
 
-        public static bool IsCalculatedValue(Type propertyType)
-        {
-            return CheckTypeTreeByPredicate(propertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(CalculatedValue<>));
-        }
+        //        foreach (var p in BindableData.GetBindableValues(type))
+        //        {
+        //            Type t = p.PropertyType;
+        //            while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
+        //            {
+        //                t = t.BaseType;
+        //            }
+        //            fullModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
+        //            if (p.GetCustomAttribute(typeof(ShowInEditorAttribute)) != null)
+        //                visibleModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
+        //        }
 
-        public static bool IsSerializableValue(Type modelType, string propertyName)
-        {
-            var property = modelType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            return IsSerializableValue(property);
-        }
-
-        public static bool IsSerializableValue(PropertyInfo property)
-        {
-            return property.GetCustomAttribute<SerializeValueAttribute>() != null
-                && CheckTypeTreeByPredicate(property.PropertyType, (t) => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(AssignableValue<>));
-        }
-
-        private static bool CheckTypeTreeByPredicate(Type type, Func<Type, bool> predicate)
-        {
-            while (type != typeof(object))
-            {
-                if (predicate(type))
-                {
-                    return true;
-                }
-                type = type.BaseType;
-            }
-            return false;
-        }
+        //        if (fullModel.Any())
+        //            FullModelTree[type] = fullModel.ToArray();
+        //        if (visibleModel.Any())
+        //            VisibleInEditorModelTree[type] = visibleModel.ToArray();
+        //    }
+        //}
 
         public static string GenerateSerializationTemplate(Type t)
         {

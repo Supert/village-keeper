@@ -56,7 +56,7 @@ namespace VillageKeeper.FSM
 
             states[Current].Exit();
             Current = result;
-            Data.Common.FsmState.Set(Current);
+            Core.Data.Common.FsmState.Set(Current);
             states[Current].Enter();
         }
     }

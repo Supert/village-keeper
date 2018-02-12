@@ -18,7 +18,7 @@ namespace VillageKeeper.UI
         
         void PrepareBuilding()
         {
-            BuildingTypes type = Data.Game.SelectedBuildingType;
+            BuildingTypes type = Core.Data.Game.SelectedBuildingType;
             var bs = ResourceMock.GetBuilding(type);
             bs.gameObject.SetActive(false);
             if (!preparedBuildings.ContainsKey(type))
@@ -32,19 +32,19 @@ namespace VillageKeeper.UI
             previousButton.onClick.AddListener(() =>
             {
                 var n = Enum.GetNames(typeof(BuildingTypes)).Length;
-                Data.Game.SelectedBuildingType.Set((BuildingTypes)(((int) Data.Game.SelectedBuildingType.Get() - 1 + n) % n));
+                Core.Data.Game.SelectedBuildingType.Set((BuildingTypes)(((int)Core.Data.Game.SelectedBuildingType.Get() - 1 + n) % n));
                 Core.Instance.AudioManager.PlayClick();
             });
             nextButton.onClick.AddListener(() =>
             {
                 var n = Enum.GetNames(typeof(BuildingTypes)).Length;
-                Data.Game.SelectedBuildingType.Set((BuildingTypes)(((int)Data.Game.SelectedBuildingType.Get() + 1 + n) % n));
+                Core.Data.Game.SelectedBuildingType.Set((BuildingTypes)(((int)Core.Data.Game.SelectedBuildingType.Get() + 1 + n) % n));
                 Core.Instance.AudioManager.PlayClick();
             });
 
-            Data.Game.SelectedBuildingType.OnValueChanged += PrepareBuilding;
+            Core.Data.Game.SelectedBuildingType.OnValueChanged += PrepareBuilding;
 
-            Data.Game.SelectedBuildingType.Set(BuildingTypes.Farm);
+            Core.Data.Game.SelectedBuildingType.Set(BuildingTypes.Farm);
         }
 
         void Update()
@@ -52,9 +52,9 @@ namespace VillageKeeper.UI
             if (Core.Instance.FSM.Current == FSM.States.Build
                 && Input.GetMouseButtonDown(0)
                 && RectTransformUtility.RectangleContainsScreenPoint(iconImage.rectTransform, Input.mousePosition, Camera.main)
-                && Data.Saved.Gold >= Data.Balance.GetBuildingGoldCost(Data.Game.SelectedBuildingType))
+                && Core.Data.Saved.Gold >= Core.Data.Balance.GetBuildingGoldCost(Core.Data.Game.SelectedBuildingType))
             {
-                BuildingTypes type = Data.Game.SelectedBuildingType;
+                BuildingTypes type = Core.Data.Game.SelectedBuildingType;
                 var preparedBuilding = preparedBuildings[type];
                 preparedBuilding.transform.localPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 preparedBuilding.gameObject.SetActive(true);

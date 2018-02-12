@@ -39,7 +39,7 @@ namespace Shibari
                 if (instance.AssignableValues.ContainsKey(serialized.Name))
                 {
                     AssignableValueInfo reflected = instance.AssignableValues[serialized.Name];
-                    if (Model.IsSerializableValue(reflected.Property))
+                    if (BindableData.IsSerializableValue(reflected.Property))
                     {
                         if (serialized.Value.Type == JTokenType.Array)
                         {
@@ -85,7 +85,7 @@ namespace Shibari
             JObject jsonObject = new JObject();
             BindableData data = (BindableData)value;
 
-            foreach (var property in data.Values.Where(p => Model.IsSerializableValue(p.Value.Property)))
+            foreach (var property in data.Values.Where(p => BindableData.IsSerializableValue(p.Value.Property)))
             {
                 object v = property.Value.GetValue();
                 if (v == null)
@@ -115,9 +115,9 @@ namespace Shibari
 
             JObject jsonObject = new JObject();
             
-            foreach (var property in Model.FullModelTree[type].Where(p => Model.IsSerializableValue(type, p.Name)))
+            foreach (var property in BindableData.GetSerializableValues(type))
             {
-                Type valueType = property.ValueType;
+                Type valueType = BindableData.GetBindableValueValueType(property.PropertyType);
 
                 if (valueType.IsValueType)
                 {

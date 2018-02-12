@@ -55,10 +55,11 @@ namespace Shibari.UI
 
         protected BindableValueInfo GetField(BindableIds ids)
         {
-            if (Model.Get<BindableData>(ids.dataId).Values.ContainsKey(ids.fieldId))
-                return Model.Get<BindableData>(ids.dataId).Values[ids.fieldId];
-            Debug.Log($"Field with id {ids.fieldId} is not found in data {ids.dataId}.");
-            return null;
+            throw new NotImplementedException();
+            //if (Model.Get<BindableData>(ids.dataId).Values.ContainsKey(ids.fieldId))
+            //    return Model.Get<BindableData>(ids.dataId).Values[ids.fieldId];
+            //Debug.Log($"Field with id {ids.fieldId} is not found in data {ids.dataId}.");
+            //return null;
         }
 
         protected void OnDestroy()

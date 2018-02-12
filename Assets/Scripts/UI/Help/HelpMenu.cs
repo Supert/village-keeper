@@ -14,13 +14,13 @@ namespace VillageKeeper.UI
         {
             nextButton.onClick.AddListener(() =>
             {
-                Data.Game.CurrentHelpTipIndex.Set(Data.Game.CurrentHelpTipIndex.Get() + 1);
+                Core.Data.Game.CurrentHelpTipIndex.Set(Core.Data.Game.CurrentHelpTipIndex.Get() + 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
             previousButton.onClick.AddListener(() =>
             {
-                Data.Game.CurrentHelpTipIndex.Set(Data.Game.CurrentHelpTipIndex.Get() - 1);
+                Core.Data.Game.CurrentHelpTipIndex.Set(Core.Data.Game.CurrentHelpTipIndex.Get() - 1);
                 Core.Instance.AudioManager.PlayClick();
             });
 
@@ -30,7 +30,7 @@ namespace VillageKeeper.UI
 
         private void Show()
         {
-            Data.Game.CurrentHelpTipIndex.Set(0);
+            Core.Data.Game.CurrentHelpTipIndex.Set(0);
         }
     }
 }

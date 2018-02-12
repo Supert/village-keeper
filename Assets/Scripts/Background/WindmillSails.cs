@@ -8,7 +8,7 @@ namespace VillageKeeper.UI
         void Update()
         {
             if (Core.Instance.FSM.Current == FSM.States.Battle || Core.Instance.FSM.Current == FSM.States.Build)
-                transform.Rotate(0, 0, -Data.Common.Wind * Time.deltaTime * 10f);
+                transform.Rotate(0, 0, -Core.Data.Common.Wind * Time.deltaTime * 10f);
         }
     }
 }
