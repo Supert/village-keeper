@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Shibari.UI
 {
+
     public abstract class BindableView : MonoBehaviour
     {
         public abstract BindableValueRestraint[] BindableValueRestraints { get; }
@@ -55,11 +56,7 @@ namespace Shibari.UI
 
         protected BindableValueInfo GetField(BindableIds ids)
         {
-            throw new NotImplementedException();
-            //if (Model.Get<BindableData>(ids.dataId).Values.ContainsKey(ids.fieldId))
-            //    return Model.Get<BindableData>(ids.dataId).Values[ids.fieldId];
-            //Debug.Log($"Field with id {ids.fieldId} is not found in data {ids.dataId}.");
-            //return null;
+            return Model.RootNode.GetBindableValueByPath(ids.pathInModel.Split('/'));
         }
 
         protected void OnDestroy()

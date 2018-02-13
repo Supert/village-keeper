@@ -15,10 +15,10 @@ namespace Shibari
 
         static Model()
         {
-            Initialize();
+            DeserializeRootNodeType();
         }
 
-        public static void Initialize()
+        public static void DeserializeRootNodeType()
         {
             ShibariSettings settings = Resources.Load<ShibariSettings>("ShibariSettings");
             RootNodeType = settings.RootNodeType.Type;
@@ -31,8 +31,13 @@ namespace Shibari
             {
                 Debug.LogError($"Root node type {RootNodeType} should implement default public constructor");
             }
-            
-            //RootNode = (BindableData) Activator.CreateInstance(RootNodeType);
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Initialize()
+        {
+            RootNode = (BindableData)Activator.CreateInstance(RootNodeType);
+            RootNode.Initialize();
         }
 
         //public static void LoadRecords()

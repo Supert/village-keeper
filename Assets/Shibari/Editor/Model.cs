@@ -48,7 +48,7 @@ namespace Shibari.Editor
 
         public static void RefreshModel()
         {
-            Shibari.Model.Initialize();
+            Shibari.Model.DeserializeRootNodeType();
         }
 
         public static void RefreshTemplates()

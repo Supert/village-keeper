@@ -69,8 +69,6 @@ namespace VillageKeeper
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
             
-            Data.Initialize();
-
             AudioManager = GetComponent<AudioManager>();
             AudioManager.Init();
 

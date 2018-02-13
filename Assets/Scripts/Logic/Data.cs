@@ -7,34 +7,44 @@ namespace VillageKeeper.Model
     public class Data : BindableData
     {
         [ShowInEditor]
-        public FormattedAndLocalizedData FormattedAndLocalized { get; } = new FormattedAndLocalizedData();
+        public FormattedAndLocalizedData FormattedAndLocalized { get; private set; }
 
         [ShowInEditor]
-        public LocalizationData Localization { get; } = new LocalizationData();
+        public LocalizationData Localization { get; private set; }
 
         [ShowInEditor]
-        public ResourceData Resources { get; } = new ResourceData();
+        public ResourceData Resources { get; private set; }
 
         [ShowInEditor]
-        public ResourcePathData ResourcePaths { get; } = new ResourcePathData();
+        public ResourcePathData ResourcePaths { get; private set; }
 
         [ShowInEditor]
-        public SavedData Saved { get; } = new SavedData();
+        public SavedData Saved { get; private set; }
 
         [ShowInEditor]
-        public CommonData Common { get; } = new CommonData();
+        public CommonData Common { get; private set; }
 
         [ShowInEditor]
-        public GameData Game { get; } = new GameData();
+        public GameData Game { get; private set; }
 
         [ShowInEditor]
-        public BalanceData Balance { get; } = new BalanceData();
+        public BalanceData Balance { get; private set; }
 
         [ShowInEditor]
-        public AudioData Audio { get; } = new AudioData();
+        public AudioData Audio { get; private set; }
 
         public override void Initialize()
         {
+            Common = new CommonData();
+            Localization = new LocalizationData();
+            Balance = new BalanceData();
+            Saved = new SavedData();
+            Game = new GameData();
+            FormattedAndLocalized = new FormattedAndLocalizedData();
+            ResourcePaths = new ResourcePathData();
+            Resources = new ResourceData();
+            Audio = new AudioData();
+
             base.Initialize();
 
             Saved.Deserialize(Load<TextAsset>("Data/SavedData").text);
