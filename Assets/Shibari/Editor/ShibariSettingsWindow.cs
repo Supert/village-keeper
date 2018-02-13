@@ -13,7 +13,16 @@ namespace Shibari.Editor
 
         void OnGUI()
         {
-            var editor = UnityEditor.Editor.CreateEditor(AssetDatabase.LoadAssetAtPath<ShibariSettings>(Model.SETTINGS_PATH));
+            var prefab = AssetDatabase.LoadAssetAtPath<ShibariSettings>(Model.SETTINGS_PATH);
+
+            if (prefab == null)
+            {
+                var settingsPrefab = new UnityEngine.GameObject();
+                prefab = settingsPrefab.AddComponent<ShibariSettings>();
+                AssetDatabase.CreateAsset(settingsPrefab, Model.SETTINGS_PATH);
+            }
+
+            var editor = UnityEditor.Editor.CreateEditor(prefab);
 
             if (editor != null)
             {
