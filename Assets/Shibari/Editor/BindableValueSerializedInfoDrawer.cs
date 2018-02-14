@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace Shibari.Editor
 {
-
-    [CustomPropertyDrawer(typeof(BindableIds))]
-    public class BindableIdsDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(BindableValueSerializedInfo))]
+    public class BindableValueSerializedInfoDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -15,7 +14,7 @@ namespace Shibari.Editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var bindableIds = PropertyDrawerUtility.GetActualObjectForSerializedProperty<BindableIds>(fieldInfo, property);
+            var bindableIds = PropertyDrawerUtility.GetActualObjectForSerializedProperty<BindableValueSerializedInfo>(fieldInfo, property);
             var path = property.FindPropertyRelative("pathInModel"); 
 
             path.stringValue = MultiLevelDropDownUtility.DrawControl(

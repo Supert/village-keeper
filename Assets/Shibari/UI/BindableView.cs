@@ -10,20 +10,20 @@ namespace Shibari.UI
         public abstract BindableValueRestraint[] BindableValueRestraints { get; }
 
         [SerializeField]
-        private BindableIds[] bindableValuesIds = new BindableIds[0];
+        private BindableValueSerializedInfo[] bindableValuesIds = new BindableValueSerializedInfo[0];
 
-        public BindableIds[] BindableValuesIds { get { return bindableValuesIds; } set { bindableValuesIds = value; } }
+        public BindableValueSerializedInfo[] BindableValuesIds { get { return bindableValuesIds; } set { bindableValuesIds = value; } }
 
         protected BindableValueInfo[] BindedValues { get; private set; }
 
         public void Initialize()
         {
             if (BindableValuesIds == null || bindableValuesIds.Length != BindableValueRestraints.Length)
-                bindableValuesIds = BindableValueRestraints.Select(bvt => new BindableIds() { allowedValueType = bvt.Type }).ToArray();
+                bindableValuesIds = BindableValueRestraints.Select(bvt => new BindableValueSerializedInfo() { allowedValueType = bvt.Type }).ToArray();
             for (int i = 0; i < bindableValuesIds.Length; i++)
             {
                 if (bindableValuesIds[i] == null)
-                    bindableValuesIds[i] = new BindableIds();
+                    bindableValuesIds[i] = new BindableValueSerializedInfo();
                 if (bindableValuesIds[i].isSetterRequired != BindableValueRestraints[i].IsSetterRequired)
                     bindableValuesIds[i].isSetterRequired = BindableValueRestraints[i].IsSetterRequired;
                 if (bindableValuesIds[i].allowedValueType == null || bindableValuesIds[i].allowedValueType != BindableValueRestraints[i].Type)
@@ -54,7 +54,7 @@ namespace Shibari.UI
             OnValueChanged();
         }
 
-        protected BindableValueInfo GetField(BindableIds ids)
+        protected BindableValueInfo GetField(BindableValueSerializedInfo ids)
         {
             return Model.RootNode.GetBindableValueByPath(ids.pathInModel.Split('/'));
         }

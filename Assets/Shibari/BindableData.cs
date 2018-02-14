@@ -12,6 +12,7 @@ namespace Shibari
         public ReadOnlyDictionary<string, BindableValueInfo> Values { get; private set; }
         public ReadOnlyDictionary<string, AssignableValueInfo> AssignableValues { get; private set; }
         public ReadOnlyDictionary<string, MethodInfo> BindableHandlers { get; private set; }
+
         public ReadOnlyDictionary<string, BindableData> Childs { get; private set; }
 
         private static readonly BindableDataJsonConverter converter = new BindableDataJsonConverter();
@@ -20,7 +21,7 @@ namespace Shibari
         public static IEnumerable<string> GetBindableHandlersPaths(Type type, string prefix)
         {
             IEnumerable<string> result = GetBindableDatas(type)
-                .SelectMany(property => GetBindableHandlersPaths(type, prefix));
+                .SelectMany(property => GetBindableHandlersPaths(property.PropertyType, prefix + property.Name + "/"));
 
             return result.Concat(GetBindableHandlers(type).Select(m => $"{prefix}{GetNameAndParamsFromMethodInfo(m)}"));
         }

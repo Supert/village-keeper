@@ -3,7 +3,7 @@
 namespace Shibari
 {
     [Serializable]
-    public class BindableIds
+    public class BindableValueSerializedInfo
     {
         public Type allowedValueType;
         public bool isSetterRequired;
