@@ -82,5 +82,14 @@ namespace VillageKeeper.Model
                 }
             },
             Core.Data.Saved.SlainedMonstersCount);
+
+        [ShowInEditor]
+        public CalculatedValue<string> RoundFinished { get; } = new CalculatedValue<string>(
+            () =>
+            {
+                return string.Format(Core.Data.Localization.RoundFinishedBodyFormat, Core.Data.Game.RoundFinishedBonusGold);
+            },
+            Core.Data.Game.RoundFinishedBonusGold,
+            Core.Data.Localization.RoundFinishedBodyFormat);
     }
 }

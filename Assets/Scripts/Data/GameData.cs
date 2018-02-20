@@ -40,15 +40,34 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public CalculatedValue<int> CastleUpgradeCost { get; }
 
+        [ShowInEditor]
+        public CalculatedValue<bool> ShowPreviousTipButton { get; }
+
+        [ShowInEditor]
+        public CalculatedValue<bool> ShowNextTipButton { get; }
+
         public CalculatedValue<bool> IsArrowForceOverThreshold { get; }
 
         public GameData()
         {
             IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Core.Data.Balance.ArrowForceThreshold, Core.Data.Balance.ArrowForceThreshold);
             CastleUpgradeCost = new CalculatedValue<int>(() => Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel), Core.Data.Saved.VillageLevel);
-            SelectedBuildingGoldCost = new CalculatedValue<int>(
-                () => Core.Data.Balance.GetBuildingGoldCost(SelectedBuildingType),
-                SelectedBuildingType);
+            SelectedBuildingGoldCost = new CalculatedValue<int>(() => Core.Data.Balance.GetBuildingGoldCost(SelectedBuildingType), SelectedBuildingType);
+            ShowPreviousTipButton = new CalculatedValue<bool>(() => CurrentHelpTipIndex > 0);
+            ShowNextTipButton = new CalculatedValue<bool>(() => CurrentHelpTipIndex < (Core.Data.Localization.CurrentTips.Get()?.Length ?? 0), Core.Data.Localization.CurrentTips, CurrentHelpTipIndex);
+        }
+
+        [ShowInEditor]
+        protected void NextHelpTip()
+        {
+            UnityEngine.Debug.Log("INVOKE");
+            CurrentHelpTipIndex.Set(CurrentHelpTipIndex + 1);
+        }
+
+        [ShowInEditor]
+        protected void PreviousHelpTip()
+        {
+            CurrentHelpTipIndex.Set(CurrentHelpTipIndex - 1);
         }
     }
 }

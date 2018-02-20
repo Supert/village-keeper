@@ -4,6 +4,7 @@ using static UnityEngine.Resources;
 
 namespace VillageKeeper.Model
 {
+
     public class Data : BindableData
     {
         [ShowInEditor]
@@ -33,6 +34,9 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public AudioData Audio { get; private set; }
 
+        [ShowInEditor]
+        public ShopData Shop { get; private set; }
+
         public override void Initialize()
         {
             Common = new CommonData();
@@ -44,6 +48,7 @@ namespace VillageKeeper.Model
             ResourcePaths = new ResourcePathData();
             Resources = new ResourceData();
             Audio = new AudioData();
+            Shop = new ShopData();
 
             base.Initialize();
 

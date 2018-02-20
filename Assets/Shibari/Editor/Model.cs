@@ -53,19 +53,20 @@ namespace Shibari.Editor
 
         public static void RefreshTemplates()
         {
-            throw new System.NotImplementedException();
-            //foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES))
-            //{
-            //    FileInfo file = new FileInfo($"{path}");
-            //    file.Delete();
-            //}
-            //foreach (var model in Shibari.Model.FullModelTree.Keys)
-            //{
-            //    FileInfo file = new FileInfo($"{SERIALIZATION_TEMPLATES}{model.FullName}.txt");
-            //    file.Directory.Create();
-            //    File.WriteAllText(file.FullName, Shibari.Model.GenerateSerializationTemplate(model));
-            //}
-            //AssetDatabase.Refresh();
+            var types = Shibari.Model.GetBindableDataTypes();
+            foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES).Where(p => !types.Any(t => p == $"{SERIALIZATION_TEMPLATES}{t.FullName}.json")))
+            {
+                FileInfo file = new FileInfo($"{path}");
+                file.Delete();
+            }
+            foreach (var model in Shibari.Model.GetBindableDataTypes())
+            {
+                StreamWriter stream = File.CreateText($"{SERIALIZATION_TEMPLATES}{model.FullName}.json");
+                stream.Flush();
+                stream.Write(Shibari.Model.GenerateSerializationTemplate(model));
+                stream.Close();
+            }
+            AssetDatabase.Refresh();
         }
     }
 }

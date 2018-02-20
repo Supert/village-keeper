@@ -1,4 +1,5 @@
 {  
+  "RoundFinishedBodyFormat": "You've collected {0}",
   "MultipleSlainedMonstersFormat": "You've slained {0} monsters!",
   "FirstSlainedMonster": "You've slained your first monster!",
   "NoSlainedMonsters": "You slained no monsters yet",

@@ -20,7 +20,7 @@ namespace Shibari
 
         public override string ToString()
         {
-            return Get().ToString();
+            return Get()?.ToString() ?? "{null}";
         }
     }
 }

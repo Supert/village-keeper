@@ -40,60 +40,14 @@ namespace Shibari
             RootNode.Initialize();
         }
 
-        //public static void LoadRecords()
-        //{
+        public static IEnumerable<Type> GetBindableDataTypes()
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            IEnumerable<Type> result = GetBindableDataTypesInAssembly(executingAssembly);
 
-        //    if (settings == null)
-        //        Debug.LogError("Could not find container prefab for Shibari Settings.");
-
-        //    if (settings.values == null)
-        //        settings.values = new List<ModelRecord>();
-
-        //    var groups = settings.values.Where(r => r != null).GroupBy(r => r.key);
-        //    foreach (var group in groups)
-        //    {
-        //        var record = group.First();
-        //        if (group.Take(2).Count() == 2)
-        //            Debug.LogErrorFormat("Found multiple datas with id {0}, ignoring duplicates.", record.key);
-        //    }
-
-        //    FullModelTree = new Dictionary<Type, BindableValueReflection[]>();
-        //    VisibleInEditorModelTree = new Dictionary<Type, BindableValueReflection[]>();
-
-        //    var executingAssembly = Assembly.GetExecutingAssembly();
-        //    ProcessBindableDataTypes(executingAssembly.GetTypes());
-
-        //    foreach (var assembly in executingAssembly.GetReferencedAssemblies())
-        //        ProcessBindableDataTypes(Assembly.Load(assembly).GetTypes());
-        //}
-
-        //private static void ProcessBindableDataTypes(Type[] types)
-        //{
-        //    foreach (var type in types.Where(t => !t.IsAbstract).Where(t => typeof(BindableData).IsAssignableFrom(t)))
-        //    {
-        //        var fullModel = new List<BindableValueReflection>();
-        //        var visibleModel = new List<BindableValueReflection>();
-        //        if (type.GetConstructor(new Type[0]) == null)
-        //            Debug.LogErrorFormat("Type {0} has to implement parameterless constructor.", type.FullName);
-
-        //        foreach (var p in BindableData.GetBindableValues(type))
-        //        {
-        //            Type t = p.PropertyType;
-        //            while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
-        //            {
-        //                t = t.BaseType;
-        //            }
-        //            fullModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
-        //            if (p.GetCustomAttribute(typeof(ShowInEditorAttribute)) != null)
-        //                visibleModel.Add(new BindableValueReflection(p.Name, p.PropertyType, t.GetGenericArguments()[0]));
-        //        }
-
-        //        if (fullModel.Any())
-        //            FullModelTree[type] = fullModel.ToArray();
-        //        if (visibleModel.Any())
-        //            VisibleInEditorModelTree[type] = visibleModel.ToArray();
-        //    }
-        //}
+            result = result.Concat(executingAssembly.GetReferencedAssemblies().SelectMany(assembly => GetBindableDataTypesInAssembly(Assembly.Load(assembly))));
+            return result;
+        }
 
         public static string GenerateSerializationTemplate(Type t)
         {
@@ -106,6 +60,13 @@ namespace Shibari
         public static string GenerateSerializationTemplate<T>() where T : BindableData
         {
             return GenerateSerializationTemplate(typeof(T));
+        }
+        
+        private static IEnumerable<Type> GetBindableDataTypesInAssembly(Assembly assembly)
+        {
+            return assembly.GetTypes()
+                .Where(t => !t.IsAbstract)
+                .Where(t => typeof(BindableData).IsAssignableFrom(t));
         }
     }
 }
