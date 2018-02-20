@@ -35,7 +35,7 @@ namespace VillageKeeper.Game
             }
         }
 
-        void Start()
+        void Awake()
         {
             animator = GetComponent<Animator>() as Animator;
             rect = GetComponent<RectTransform>() as RectTransform;

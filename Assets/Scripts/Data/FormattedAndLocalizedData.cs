@@ -81,7 +81,8 @@ namespace VillageKeeper.Model
                         return string.Format(Core.Data.Localization.MultipleSlainedMonstersFormat, slainedMonstersCount);
                 }
             },
-            Core.Data.Saved.SlainedMonstersCount);
+            Core.Data.Saved.SlainedMonstersCount,
+            Core.Data.Common.FsmState);
 
         [ShowInEditor]
         public CalculatedValue<string> RoundFinished { get; } = new CalculatedValue<string>(

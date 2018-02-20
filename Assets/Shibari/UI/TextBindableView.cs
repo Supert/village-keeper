@@ -20,6 +20,7 @@ namespace Shibari.UI
         protected override void Awake()
         {
             text = GetComponent<Text>();
+            base.Awake();
         }
 
         protected override void OnValueChanged()

@@ -41,10 +41,10 @@ namespace VillageKeeper.Model
         public CalculatedValue<int> CastleUpgradeCost { get; }
 
         [ShowInEditor]
-        public CalculatedValue<bool> ShowPreviousTipButton { get; }
+        public CalculatedValue<bool> IsPreviousTipButtonInteractable { get; }
 
         [ShowInEditor]
-        public CalculatedValue<bool> ShowNextTipButton { get; }
+        public CalculatedValue<bool> IsNextTipButtonInteractable { get; }
 
         public CalculatedValue<bool> IsArrowForceOverThreshold { get; }
 
@@ -53,14 +53,13 @@ namespace VillageKeeper.Model
             IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Core.Data.Balance.ArrowForceThreshold, Core.Data.Balance.ArrowForceThreshold);
             CastleUpgradeCost = new CalculatedValue<int>(() => Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel), Core.Data.Saved.VillageLevel);
             SelectedBuildingGoldCost = new CalculatedValue<int>(() => Core.Data.Balance.GetBuildingGoldCost(SelectedBuildingType), SelectedBuildingType);
-            ShowPreviousTipButton = new CalculatedValue<bool>(() => CurrentHelpTipIndex > 0);
-            ShowNextTipButton = new CalculatedValue<bool>(() => CurrentHelpTipIndex < (Core.Data.Localization.CurrentTips.Get()?.Length ?? 0), Core.Data.Localization.CurrentTips, CurrentHelpTipIndex);
+            IsPreviousTipButtonInteractable = new CalculatedValue<bool>(() => CurrentHelpTipIndex > 0, CurrentHelpTipIndex);
+            IsNextTipButtonInteractable = new CalculatedValue<bool>(() => CurrentHelpTipIndex + 1 < (Core.Data.Localization.CurrentTips.Get()?.Length ?? 0), Core.Data.Localization.CurrentTips, CurrentHelpTipIndex);
         }
 
         [ShowInEditor]
         protected void NextHelpTip()
         {
-            UnityEngine.Debug.Log("INVOKE");
             CurrentHelpTipIndex.Set(CurrentHelpTipIndex + 1);
         }
 

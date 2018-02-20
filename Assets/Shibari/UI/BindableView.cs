@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Shibari.UI
 {
-
     public abstract class BindableView : MonoBehaviour
     {
         public abstract BindableValueRestraint[] BindableValueRestraints { get; }
