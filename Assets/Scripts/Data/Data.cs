@@ -52,12 +52,12 @@ namespace VillageKeeper.Model
 
             base.Initialize();
 
-            Saved.Deserialize(Load<TextAsset>("Data/SavedData").text);
             ResourcePaths.Deserialize(Load<TextAsset>("Data/ResourcePathData").text);
             Localization.Deserialize(Load<TextAsset>("Data/LocalizationData").text);
-            Balance.Deserialize(Load<TextAsset>("Data/BalanceData").text);
             Audio.Deserialize(Load<TextAsset>("Data/AudioData").text);
             Resources.Deserialize(Load<TextAsset>("Data/ResourceData").text);
+            Balance.Deserialize(Load<TextAsset>("Data/BalanceData").text);
+            Saved.Deserialize(Load<TextAsset>("Data/SavedData").text);
         }
     }
 }

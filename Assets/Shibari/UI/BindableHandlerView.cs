@@ -10,7 +10,7 @@ namespace Shibari.UI
         [SerializeField]
         private PathToHandler pathToHandler = new PathToHandler();
 
-        protected void Invoke()
+        protected virtual void Invoke()
         {
             Model.RootNode.InvokeHandlerByPath(pathToHandler.value.Split('/'), this, additionalData);
         }

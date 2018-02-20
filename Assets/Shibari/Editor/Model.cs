@@ -53,17 +53,17 @@ namespace Shibari.Editor
 
         public static void RefreshTemplates()
         {
-            var types = Shibari.Model.GetBindableDataTypes();
+            var types = Shibari.Model.GetBindableDataTypes().Where(t => BindableData.GetSerializableValues(t).Any());
             foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES).Where(p => !types.Any(t => p == $"{SERIALIZATION_TEMPLATES}{t.FullName}.json")))
             {
                 FileInfo file = new FileInfo($"{path}");
                 file.Delete();
             }
-            foreach (var model in Shibari.Model.GetBindableDataTypes())
+            foreach (var type in types)
             {
-                StreamWriter stream = File.CreateText($"{SERIALIZATION_TEMPLATES}{model.FullName}.json");
+                StreamWriter stream = File.CreateText($"{SERIALIZATION_TEMPLATES}{type.FullName}.json");
                 stream.Flush();
-                stream.Write(Shibari.Model.GenerateSerializationTemplate(model));
+                stream.Write(Shibari.Model.GenerateSerializationTemplate(type));
                 stream.Close();
             }
             AssetDatabase.Refresh();
