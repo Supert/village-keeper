@@ -2,9 +2,7 @@ using GoogleMobileAds.Api;
 using UnityEngine;
 using VillageKeeper.FSM;
 using VillageKeeper.Game;
-using VillageKeeper.UI;
 using VillageKeeper.Audio;
-using Shibari;
 using VillageKeeper.Model;
 
 namespace VillageKeeper
@@ -26,8 +24,6 @@ namespace VillageKeeper
         public Archer Archer { get; private set; }
 
         public ControlsScript Controls { get; private set; }
-
-        public MainMenuScript MainMenu { get; private set; }
 
         public BuildingsAreaScript BuildingsArea { get; private set; }
 
@@ -65,7 +61,6 @@ namespace VillageKeeper
             Monster = FindObjectOfType(typeof(Monster)) as Monster;
             Archer = FindObjectOfType(typeof(Archer)) as Archer;
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
-            MainMenu = FindObjectOfType(typeof(MainMenuScript)) as MainMenuScript;
 
             BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
             

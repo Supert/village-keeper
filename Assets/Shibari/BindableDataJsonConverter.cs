@@ -8,11 +8,6 @@ using UnityEngine;
 
 namespace Shibari
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class SerializeValueAttribute : Attribute
-    {
-
-    }
 
     internal class BindableDataJsonConverter : JsonConverter
     {
