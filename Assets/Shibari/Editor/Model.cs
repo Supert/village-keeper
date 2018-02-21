@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using System;
 
 namespace Shibari.Editor
 {
@@ -53,7 +54,7 @@ namespace Shibari.Editor
 
         public static void RefreshTemplates()
         {
-            var types = Shibari.Model.GetBindableDataTypes().Where(t => BindableData.GetSerializableValues(t).Any());
+            var types = Shibari.Model.GetBindableDataTypes().Where(t => BindableData.HasSerializeableValuesInChilds(t));
             foreach (var path in Directory.GetFiles(SERIALIZATION_TEMPLATES).Where(p => !types.Any(t => p == $"{SERIALIZATION_TEMPLATES}{t.FullName}.json")))
             {
                 FileInfo file = new FileInfo($"{path}");

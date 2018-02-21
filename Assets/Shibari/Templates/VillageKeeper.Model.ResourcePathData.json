@@ -1,14 +1,14 @@
 {
-  "MenuFurniture": "",
-  "GhostPrefab": "",
-  "BuildingTile": "",
-  "FarmCrops": "",
-  "BuildingIcons": "",
-  "BuildingPrefabs": "",
-  "ArrowBar": "",
-  "CastleUpgradeIcon": "",
-  "Cliff": "",
-  "VillageBackground": "",
+  "CastleBackground": "",
   "MountainsBackground": "",
-  "CastleBackground": ""
+  "VillageBackground": "",
+  "Cliff": "",
+  "CastleUpgradeIcon": "",
+  "ArrowBar": "",
+  "BuildingPrefabs": "",
+  "BuildingIcons": "",
+  "FarmCrops": "",
+  "BuildingTile": "",
+  "GhostPrefab": "",
+  "MenuFurniture": ""
 }

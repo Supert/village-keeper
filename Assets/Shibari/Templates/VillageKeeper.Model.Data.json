@@ -1,0 +1,74 @@
+{
+  "Localization": {
+    "Help": "",
+    "UpgradeCastleButtonText": "",
+    "BuildingPickerMemo": "",
+    "Shop": "",
+    "GameName": "",
+    "EndRoundTitle": "",
+    "RoundFinishedBodyFormat": "",
+    "CollectedGoldFormat": "",
+    "TipCounterFormat": "",
+    "Pause": "",
+    "TipFormat": "",
+    "BattleHelpTips": [],
+    "BuildHelpTips": [],
+    "BuildingDescriptions": [],
+    "BuildingNames": [],
+    "NoSlainedMonsters": "",
+    "FirstSlainedMonster": "",
+    "MultipleSlainedMonstersFormat": ""
+  },
+  "Resources": {
+    "AdUnitId": ""
+  },
+  "ResourcePaths": {
+    "CastleBackground": "",
+    "MountainsBackground": "",
+    "VillageBackground": "",
+    "Cliff": "",
+    "CastleUpgradeIcon": "",
+    "ArrowBar": "",
+    "BuildingPrefabs": "",
+    "BuildingIcons": "",
+    "FarmCrops": "",
+    "BuildingTile": "",
+    "GhostPrefab": "",
+    "MenuFurniture": ""
+  },
+  "Saved": {
+    "Buildings": [],
+    "VillageLevel": 0,
+    "Gold": 0,
+    "HasPremium": false,
+    "WasBuildTipShown": false,
+    "WasBattleTipShown": false,
+    "SlainedMonstersCount": 0,
+    "IsSoundEffectsEnabled": false,
+    "IsMusicEnabled": false
+  },
+  "Balance": {
+    "ArrowForceThreshold": 0.0,
+    "MonsterBonusGold": 0,
+    "MaxVillageLevel": 0,
+    "MonsterMaxHealthPossible": 0,
+    "MonsterMinHealthPossible": 0,
+    "MonsterBuildingCostModifier": 0.0,
+    "MonsterPowerPointsBuildingsHealthModifier": 0.0,
+    "MonsterPowerPointsVillageLevelModifier": 0.0,
+    "FoodPerFarm": 0,
+    "FoodPerWindMillMultiplier": 0,
+    "CastleUpgradeCosts": [],
+    "BuildingMaxHealths": [],
+    "BuildingCosts": []
+  },
+  "Audio": {
+    "ArrowShots": [],
+    "BackgroundPeace": [],
+    "BackgroundBattle": [],
+    "BuildingHit": [],
+    "Click": [],
+    "MonsterSounds": [],
+    "MonsterHit": []
+  }
+}

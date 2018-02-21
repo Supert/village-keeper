@@ -1,9 +1,9 @@
 {
-  "MonsterHit": [],
-  "MonsterSounds": [],
-  "Click": [],
-  "BuildingHit": [],
-  "BackgroundBattle": [],
+  "ArrowShots": [],
   "BackgroundPeace": [],
-  "ArrowShots": []
+  "BackgroundBattle": [],
+  "BuildingHit": [],
+  "Click": [],
+  "MonsterSounds": [],
+  "MonsterHit": []
 }

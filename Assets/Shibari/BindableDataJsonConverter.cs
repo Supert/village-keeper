@@ -108,27 +108,39 @@ namespace Shibari
             if (!typeof(BindableData).IsAssignableFrom(type))
                 throw new ArgumentException("Type should be child of BindableData", "type");
 
-            JObject jsonObject = new JObject();
+            JObject jsonObject = GenerateJsonObject(type);
             
+            return jsonObject.ToString(Formatting.Indented);
+        }
+
+        private static JObject GenerateJsonObject(Type type)
+        {
+            JObject jsonObject = new JObject();
+
             foreach (var property in BindableData.GetSerializableValues(type))
             {
                 Type valueType = BindableData.GetBindableValueValueType(property.PropertyType);
 
                 if (valueType.IsValueType)
                 {
-                    jsonObject.AddFirst(new JProperty(property.Name, Activator.CreateInstance(valueType)));
+                    jsonObject.Add(new JProperty(property.Name, Activator.CreateInstance(valueType)));
                 }
                 else if (valueType == typeof(string) || valueType.GetInterface(nameof(IEnumerable)) == null)
                 {
-                    jsonObject.AddFirst(new JProperty(property.Name, new JValue("")));
+                    jsonObject.Add(new JProperty(property.Name, new JValue("")));
                 }
                 else
                 {
-                    jsonObject.AddFirst(new JProperty(property.Name, new JArray()));
+                    jsonObject.Add(new JProperty(property.Name, new JArray()));
                 }
             }
 
-            return jsonObject.ToString(Formatting.Indented);
+            foreach (var property in BindableData.GetBindableDatas(type).Where(t => BindableData.HasSerializeableValuesInChilds(t.PropertyType)))
+            {
+                jsonObject.Add(new JProperty(property.Name, GenerateJsonObject(property.PropertyType)));
+            }
+
+            return jsonObject;
         }
     }
 }

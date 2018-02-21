@@ -165,7 +165,7 @@ namespace Shibari
             return (BindableData)JsonConvert.DeserializeObject(serialized, type, converter);
         }
 
-        internal static Type GetBindableValueValueType(Type propertyType)
+        public static Type GetBindableValueValueType(Type propertyType)
         {
             Type t = propertyType;
             while (!(t.IsGenericType && t.GetGenericTypeDefinition() == typeof(BindableValue<>)))
@@ -190,6 +190,11 @@ namespace Shibari
             string parameters = string.Join(", ", methodInfo.GetParameters().Select(p => p.ParameterType.Name));
             return $"{methodInfo.Name}({parameters})";
         }
+
+        public static bool HasSerializeableValuesInChilds(Type t)
+        {
+            return GetSerializableValues(t).Any() || GetBindableDatas(t).Any(b => HasSerializeableValuesInChilds(b.PropertyType));
+        }
         #endregion
 
         #region public instance methods
@@ -201,10 +206,18 @@ namespace Shibari
         public void Deserialize(string serialized)
         {
             BindableData deserialized = GetDeserializedData(serialized, GetType());
-            foreach (var property in deserialized.AssignableValues)
+            Deserialize(deserialized);
+        }
+
+        private void Deserialize(BindableData deserialized)
+        {
+            foreach (var property in deserialized.AssignableValues.Where(kvp => IsSerializableValue(kvp.Value.Property)))
             {
                 AssignableValues[property.Key].SetValue(property.Value.GetValue());
             }
+
+            foreach (var child in deserialized.Childs)
+                Childs[child.Key].Deserialize(child.Value);
         }
 
         public virtual void Initialize()
