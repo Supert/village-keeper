@@ -1,12 +1,37 @@
 ﻿using Shibari;
 using UnityEngine;
 using VillageKeeper.Game;
-using static VillageKeeper.Model.Data;
 
 namespace VillageKeeper.Model
 {
     public class ResourceData : BindableData
     {
+        [ShowInEditor]
+        public CalculatedValue<Shibari.UI.SelectableSprites> MusicButtonSprites { get; } = new CalculatedValue<Shibari.UI.SelectableSprites>(
+            () =>
+            {
+                if (Core.Data.Saved.IsMusicEnabled)
+                    return ResourceMock.GetButtonSprites(Core.Data.ResourcePaths.EnabledMusicButtonSprites);
+                else
+                    return ResourceMock.GetButtonSprites(Core.Data.ResourcePaths.DisabledMusicButtonSprites);
+            },
+            Core.Data.Saved.IsMusicEnabled,
+            Core.Data.ResourcePaths.EnabledMusicButtonSprites,
+            Core.Data.ResourcePaths.DisabledMusicButtonSprites);
+
+        [ShowInEditor]
+        public CalculatedValue<Shibari.UI.SelectableSprites> SoundEffectsButtonSprites { get; } = new CalculatedValue<Shibari.UI.SelectableSprites>(
+            () =>
+            {
+                if (Core.Data.Saved.IsSoundEffectsEnabled)
+                    return ResourceMock.GetButtonSprites(Core.Data.ResourcePaths.EnabledSoundEffectsButtonSprites);
+                else
+                    return ResourceMock.GetButtonSprites(Core.Data.ResourcePaths.DisabledSoundEffectsButtonSprites);
+            },
+            Core.Data.Saved.IsSoundEffectsEnabled,
+            Core.Data.ResourcePaths.EnabledSoundEffectsButtonSprites,
+            Core.Data.ResourcePaths.DisabledSoundEffectsButtonSprites);
+
         [ShowInEditor]
         public ResourceValue<Sprite> CastleBackground { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.CastleBackground, Core.Data.Common.Special, Core.Data.Saved.VillageLevel);
         [ShowInEditor]

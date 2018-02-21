@@ -5,6 +5,14 @@ namespace VillageKeeper.Model
     public class ResourcePathData : BindableData
     {
         [SerializeValue]
+        public AssignableValue<string[]> EnabledMusicButtonSprites { get; } = new AssignableValue<string[]>();
+        [SerializeValue]
+        public AssignableValue<string[]> EnabledSoundEffectsButtonSprites { get; } = new AssignableValue<string[]>();
+        [SerializeValue]
+        public AssignableValue<string[]> DisabledMusicButtonSprites { get; } = new AssignableValue<string[]>();
+        [SerializeValue]
+        public AssignableValue<string[]> DisabledSoundEffectsButtonSprites { get; } = new AssignableValue<string[]>();
+        [SerializeValue]
         public AssignableValue<string> CastleBackground { get; } = new AssignableValue<string>();
         [SerializeValue]
         public AssignableValue<string> MountainsBackground { get; } = new AssignableValue<string>();

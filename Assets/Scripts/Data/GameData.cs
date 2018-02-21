@@ -35,12 +35,12 @@ namespace VillageKeeper.Model
 
         [ShowInEditor]
         public CalculatedValue<int> NextBreadToGoldMultiplier { get; } = new CalculatedValue<int>(
-            () => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel + 1), 
+            () => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel + 1),
             Core.Data.Saved.VillageLevel);
 
         [ShowInEditor]
         public CalculatedValue<int> CurrentBreadToGoldMultiplier { get; } = new CalculatedValue<int>(
-            () => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel), 
+            () => Core.Data.Balance.GetBreadToGoldMultiplier(Core.Data.Saved.VillageLevel),
             Core.Data.Saved.VillageLevel);
 
         [ShowInEditor]
@@ -54,10 +54,10 @@ namespace VillageKeeper.Model
             () => Core.Data.Saved.VillageLevel < Core.Data.Balance.MaxVillageLevel,
             Core.Data.Saved.VillageLevel,
             Core.Data.Balance.MaxVillageLevel);
-        
+
         [ShowInEditor]
         public CalculatedValue<int> CastleUpgradeCost { get; }
-        
+
         [ShowInEditor]
         public CalculatedValue<bool> IsPreviousTipButtonInteractable { get; }
 
@@ -96,6 +96,18 @@ namespace VillageKeeper.Model
                 Core.Data.Saved.Gold.Set(Core.Data.Saved.Gold.Get() - Core.Data.Balance.GetCastleUpgradeCost(Core.Data.Saved.VillageLevel.Get()));
                 Core.Data.Saved.VillageLevel.Set(Core.Data.Saved.VillageLevel.Get() + 1);
             }
+        }
+
+        [ShowInEditor]
+        protected void OnSoundEffectsButtonClicked()
+        {
+            Core.Data.Saved.IsSoundEffectsEnabled.Set(!Core.Data.Saved.IsSoundEffectsEnabled.Get());
+        }
+
+        [ShowInEditor]
+        protected void OnMusicButtonClicked()
+        {
+            Core.Data.Saved.IsMusicEnabled.Set(!Core.Data.Saved.IsMusicEnabled.Get());
         }
     }
 }

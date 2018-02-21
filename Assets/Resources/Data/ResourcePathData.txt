@@ -1,4 +1,8 @@
 {
+  "EnabledMusicButtonSprites": ["UI/MainMenu/SoundSettings/EnabledMusicButton", "", "UI/MainMenu/SoundSettings/EnabledMusicButtonPressed", ""],
+  "EnabledSoundEffectsButtonSprites": ["UI/MainMenu/SoundSettings/EnabledSoundEffectsButton", "", "UI/MainMenu/SoundSettings/EnabledSoundEffectsButtonPressed", ""],
+  "DisabledMusicButtonSprites": ["UI/MainMenu/SoundSettings/DisabledMusicButton", "", "UI/MainMenu/SoundSettings/DisabledMusicButtonPressed", ""],
+  "DisabledSoundEffectsButtonSprites": ["UI/MainMenu/SoundSettings/DisabledSoundEffectsButton", "", "UI/MainMenu/SoundSettings/DisabledSoundEffectsButtonPressed", ""],
   "MenuFurniture": "UI/MainMenu/Furniture/HasPremium_{0}",
   "GhostPrefab": "Prefabs/Characters/Monsters/Ghost/Ghost",
   "BuildingTile": "Prefabs/BuildingTile",
