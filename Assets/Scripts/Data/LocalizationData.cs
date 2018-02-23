@@ -52,12 +52,10 @@ namespace VillageKeeper.Model
             {
                 if (Core.Data.Common.FsmState == States.BattleHelp)
                 {
-                    Core.Data.Game.CurrentHelpTipIndex.Set(0);
                     return BattleHelpTips;
                 }
                 if (Core.Data.Common.FsmState == States.BuildHelp)
                 {
-                    Core.Data.Game.CurrentHelpTipIndex.Set(0);
                     return BuildHelpTips;
                 }
 

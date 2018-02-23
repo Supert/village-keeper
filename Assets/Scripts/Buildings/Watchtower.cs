@@ -39,9 +39,8 @@ namespace VillageKeeper.Game
             isLoaded = true;
         }
 
-        protected override void Update()
+        protected virtual void Update()
         {
-            base.Update();
             if (Core.Instance.FSM.Current == FSM.States.Battle
                 && isLoaded
                 && Vector2.Distance(transform.position, Core.Instance.Monster.transform.localPosition) < Core.Instance.BuildingsArea.CellWorldSize.x * 4)

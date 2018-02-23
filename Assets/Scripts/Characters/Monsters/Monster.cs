@@ -248,7 +248,7 @@ namespace VillageKeeper.Game
 
         private void ChooseNewBehaviour()
         {
-            IsAgressive = UnityEngine.Random.value < agressiveness;
+            IsAgressive = Core.Instance.Random.NextDouble() < agressiveness;
         }
 
         private void SetWaypoints(List<PathFinderNode> waypoints)

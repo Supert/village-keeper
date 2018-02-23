@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace VillageKeeper.UI
 {
-    public class OffScreenMenuScript : StateVisibleView
+    public class OffScreenMenu : StateVisibleView
     {
         [SerializeField]
         protected RectTransform.Edge edge;

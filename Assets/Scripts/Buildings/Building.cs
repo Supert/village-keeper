@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
@@ -38,33 +37,6 @@ namespace VillageKeeper.Game
         {
             Core.Instance.BuildingsArea.RemoveBuilding(this);
             Destroy(gameObject);
-        }
-
-        protected virtual void Update()
-        {
-            if (Tile == null)
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    var lp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    lp.z = -9f;
-                    transform.localPosition = lp;
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    var buildingsArea = Core.Instance.BuildingsArea;
-                    var closestCell = buildingsArea.GetClosestGridPosition(transform.localPosition);
-                    var closestCellPosition = buildingsArea.GetWorldPositionByGridPosition(closestCell);
-                    var distance = (Vector2)transform.localPosition - closestCellPosition;
-                    if (Mathf.Abs(distance.x) <= buildingsArea.CellWorldSize.x / 2 && Mathf.Abs(distance.y) <= buildingsArea.CellWorldSize.y / 2 && Core.Data.Saved.Gold >= GoldCost)
-                    {
-                        buildingsArea.BuyBuilding(this, closestCell);
-                    }
-                    if (Tile == null)
-                        gameObject.SetActive(false);
-
-                }
-            }
         }
     }
 }

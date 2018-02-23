@@ -45,9 +45,9 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ResourceValue<Sprite> ArrowBar { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.ArrowBar, Core.Data.Game.IsArrowForceOverThreshold);
         [ShowInEditor]
-        public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingIcons, Core.Data.Game.SelectedBuildingType);
+        public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingIcons, Core.Data.Game.BuildingPicker.SelectedBuildingType);
         [ShowInEditor]
-        public CalculatedValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(Core.Data.ResourcePaths.BuildingPrefabs, Core.Data.Game.SelectedBuildingType);
+        public CalculatedValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(Core.Data.ResourcePaths.BuildingPrefabs, Core.Data.Game.BuildingPicker.SelectedBuildingType);
         [ShowInEditor]
         public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.FarmCrops, Core.Data.Common.Special);
         [ShowInEditor]
