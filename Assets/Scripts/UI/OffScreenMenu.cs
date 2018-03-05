@@ -12,11 +12,13 @@ namespace VillageKeeper.UI
 
         private Vector2 targetPosition;
 
+        private RectTransform parent;
         private RectTransform rect;
 
         protected virtual void Awake()
         {
-            rect = GetComponent<RectTransform>() as RectTransform;
+            rect = GetComponent<RectTransform>();
+            parent = rect.parent as RectTransform;
             targetPosition = rect.anchoredPosition;
         }
 
@@ -84,37 +86,33 @@ namespace VillageKeeper.UI
                 rect.anchoredPosition = targetPosition;
             rect.anchoredPosition = Vector2.Lerp(rect.anchoredPosition, targetPosition, progress);
         }
-
+        
         private float GetCurrentInset(RectTransform.Edge edge, RectTransform rect)
         {
-            int index = (edge != RectTransform.Edge.Top && edge != RectTransform.Edge.Bottom) ? 0 : 1;
-            bool flag = false;
-            float size = 0f;
+            int cornerIndex = (edge == RectTransform.Edge.Top || edge == RectTransform.Edge.Right) ? 2 : 0;
+
+            Vector3[] corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+
+            Vector3[] parentCorners = new Vector3[4];
+            parent.GetWorldCorners(parentCorners);
+
+            Vector2 localChildCorner = parent.InverseTransformPoint(corners[cornerIndex]);
+            Vector2 localParentCorner = parent.InverseTransformPoint(parentCorners[cornerIndex]);
 
             switch (edge)
             {
                 case RectTransform.Edge.Left:
-                    size = rect.rect.width;
-                    flag = false;
-                    break;
+                    return localChildCorner.x - localParentCorner.x;
                 case RectTransform.Edge.Right:
-                    size = rect.rect.width;
-                    flag = true;
-                    break;
+                    return localParentCorner.x - localChildCorner.x;
                 case RectTransform.Edge.Top:
-                    size = rect.rect.height;
-                    flag = true;
-                    break;
+                    return localParentCorner.y - localChildCorner.y;
                 case RectTransform.Edge.Bottom:
-                    size = rect.rect.height;
-                    flag = false;
-                    break;
+                    return localChildCorner.y - localParentCorner.y;
+                default:
+                    throw new Exception("Unity team added fifth edge. Why.");
             }
-            
-            if (flag)
-                return -rect.anchoredPosition[index] - size * (1f - rect.pivot[index]);
-            else
-                return rect.anchoredPosition[index] - size * rect.pivot[index];
         }
     }
 }

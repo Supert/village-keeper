@@ -2,60 +2,67 @@
 using System.Collections.Generic;
 using System.Linq;
 using VillageKeeper.Model;
+using DeenGames.Utils.AStarPathFinder;
+using DeenGames.Utils;
+using System;
 
 namespace VillageKeeper.Game
 {
     public class BuildingsAreaScript : MonoBehaviour
     {
         private RectTransform rect;
-        public int numberOfColumns;
-        public int numberOfRows;
-        private BuildingTileScript[,] buildingsGrid;
-        public List<Building> buildings = new List<Building>();
+
+        [SerializeField]
+        private int numberOfColumns;
+        [SerializeField]
+        private int numberOfRows;
+
+        private BuildingTile[,] buildingsGrid;
+        private byte[,] pathGrid;
+        public IEnumerable<Building> Buildings { get { return buildingsGrid.Cast<BuildingTile>().Where(c => c.Building != null).Select(c => c.Building); } }
 
         void Awake()
         {
             rect = GetComponent<RectTransform>() as RectTransform;
-            buildingsGrid = new BuildingTileScript[numberOfColumns, numberOfRows];
+            buildingsGrid = new BuildingTile[numberOfColumns, numberOfRows];
+
+            pathGrid = new byte[Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(0)) / Math.Log(2)))),
+                Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(1)) / Math.Log(2))))];
         }
 
-        void Start()
+        private void Start()
         {
-            var buildingTilesHolder = new GameObject("Building Tiles Holder");
-            buildingTilesHolder.transform.localPosition = new Vector3(0, 0, 1f);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, LoadBuildings);
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, SaveBuildings);
+
             for (int i = 0; i < numberOfColumns; i++)
             {
                 for (int j = 0; j < numberOfRows; j++)
                 {
-                    buildingsGrid[i, j] = Instantiate(Core.Data.Resources.BuildingTile.Get()).GetComponent<BuildingTileScript>();
-                    buildingsGrid[i, j].gridX = i;
-                    buildingsGrid[i, j].gridY = j;
+                    buildingsGrid[i, j] = Instantiate(Core.Data.Resources.BuildingTile.Get(), transform).GetComponent<BuildingTile>();
+                    buildingsGrid[i, j].gameObject.SetActive(true);
+                    buildingsGrid[i, j].GridX = i;
+                    buildingsGrid[i, j].GridY = j;
                     buildingsGrid[i, j].gameObject.name = "Building Tile (" + i + "," + j + ")";
-                    buildingsGrid[i, j].transform.parent = buildingTilesHolder.transform;
-                    var lp = (Vector3)GetWorldPositionByGridPosition(new Vector2(i, j));
-                    lp.z = lp.y;
-                    buildingsGrid[i, j].transform.localPosition = lp;
+                    var p = (Vector3)GetWorldPositionByGridPosition(new Vector2(i, j));
+                    p.z = p.y;
+                    buildingsGrid[i, j].transform.position = p;
                 }
             }
-            Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, LoadBuildings);
-            Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, SaveBuildings);
         }
 
-        public Vector2 CellWorldSize
+        public BuildingTile GetClosestTile(Vector3 position)
         {
-            get
-            {
-                return rect.TransformPoint(CellLocalSize) - rect.TransformPoint(Vector2.zero);
-            }
+            Vector2 gridPosition = GetClosestGridPositionIgnoringGridLimits(position);
+
+            if (gridPosition.x < 0 || gridPosition.y < 0 || gridPosition.x >= buildingsGrid.GetLength(0) || gridPosition.y >= buildingsGrid.GetLength(1))
+                return null;
+            return buildingsGrid[Convert.ToInt32(gridPosition.x), Convert.ToInt32(gridPosition.y)];
         }
 
-        public Vector2 CellLocalSize
-        {
-            get
-            {
-                return new Vector2(rect.rect.width / numberOfColumns, rect.rect.height / numberOfRows);
-            }
-        }
+        public Vector2 CellWorldSize { get { return rect.TransformPoint(CellLocalSize) - rect.TransformPoint(Vector2.zero); } }
+
+        public Vector2 CellLocalSize { get { return new Vector2(rect.rect.width / numberOfColumns, rect.rect.height / numberOfRows); } }
 
         public Vector2 GetClosestGridPositionIgnoringGridLimits(Vector2 worldPosition)
         {
@@ -74,11 +81,18 @@ namespace VillageKeeper.Game
             return result;
         }
 
+        public Vector2 GetWorldPositionByAreaPosition(Vector2 position)
+        {
+            throw new NotImplementedException();
+            //var positionInLocal = new Vector2(CellLocalSize.x * (x + 0.5f), CellLocalSize.y * (y + 0.5f));
+            //var positionInLocalWithOffset = positionInLocal - (rect.rect.size / 2);
+            //return rect.TransformPoint(positionInLocalWithOffset);
+        }
+
         public Vector2 GetWorldPositionByGridPosition(int x, int y)
         {
             var positionInLocal = new Vector2(CellLocalSize.x * (x + 0.5f), CellLocalSize.y * (y + 0.5f));
-            var positionInLocalWithOffset = positionInLocal - (rect.rect.size / 2);
-            return rect.TransformPoint(positionInLocalWithOffset);
+            return rect.TransformPoint(positionInLocal);
         }
 
         public Vector2 GetWorldPositionByGridPosition(Vector2 cellIndex)
@@ -86,56 +100,67 @@ namespace VillageKeeper.Game
             return GetWorldPositionByGridPosition((int)cellIndex.x, (int)cellIndex.y);
         }
 
-        public bool IsCellFree(Vector2 cellIndex)
+        public bool IsCellFree(int gridX, int gridY)
         {
-            return IsCellsFree(cellIndex, cellIndex);
+            return buildingsGrid[gridX, gridY].Building != null;
         }
 
-        public bool IsCellsFree(Vector2 leftBottomCellIndex, Vector2 rightTopCellIndex)
+        public bool IsCellsFree(int leftBottomX, int leftBottomY, int rightTopX, int rightTopY)
         {
-            var list = new List<Vector2>();
-            for (int i = (int)leftBottomCellIndex.x; i <= (int)rightTopCellIndex.x; i++)
-                for (int j = (int)leftBottomCellIndex.y; j <= (int)rightTopCellIndex.y; j++)
-                    list.Add(new Vector2(i, j));
-            return IsCellsFree(list);
+            for (int i = leftBottomX; i <= rightTopX; i++)
+                for (int j = leftBottomY; j <= rightTopY; j++)
+                    if (!IsCellFree(i, j))
+                        return false;
+            return true;
         }
 
-        public bool IsCellsFree(List<Vector2> cellsIndexes)
+        public bool IsCellsFree(List<Tuple<int, int>> cellsIndexes)
         {
-            return !cellsIndexes.Any(c => buildingsGrid[(int)c.x, (int)c.y].Building != null);
+            return !cellsIndexes.Any(c => !IsCellFree(c.Item1, c.Item2));
         }
 
-        public void DamageCell(Vector2 gridPosition)
+        public void DamageCell(int gridX, int gridY)
         {
-            if (IsCellFree(gridPosition))
+            if (IsCellFree(gridX, gridY))
                 return;
 
-            buildingsGrid[(int)gridPosition.x, (int)gridPosition.y].Building.Damage();
+            buildingsGrid[gridX, gridY].Building.Damage();
         }
 
-        public void PlaceBuilding(Building building, int x, int y)
+        private void PlaceBuilding(Building building, int gridX, int gridY)
         {
-            PlaceBuilding(building, new Vector2(x, y));
-        }
-
-        public void PlaceBuilding(Building building, Vector2 gridPosition)
-        {
-            if (IsCellFree(gridPosition))
+            if (IsCellFree(gridX, gridY))
             {
-                building.Tile = buildingsGrid[(int)gridPosition.x, (int)gridPosition.y];
-                building.Tile.Building = building;
-                building.transform.parent = building.Tile.transform;
-                building.transform.localPosition = (new Vector3(0, 0, -0.1f));
-                buildings.Add(building);
+                PlaceBuilding(building, buildingsGrid[gridX, gridY]);
             }
         }
 
-        public void BuyBuilding(Building building, Vector2 gridPosition)
+        private void PlaceBuilding(Building building, BuildingTile tile)
         {
-            if (IsCellFree(gridPosition) && Core.Data.Saved.Gold >= building.GoldCost)
+
+            building.Tile = tile;
+            building.Tile.Building = building;
+            building.transform.SetParent(building.Tile.transform, false);
+            building.transform.localPosition = (new Vector3(0, 0, -0.1f));
+        }
+
+        public void BuyBuilding(Building building, BuildingTile tile)
+        {
+            if (tile.Building == null && Core.Data.Saved.Gold >= building.GoldCost)
             {
                 Core.Data.Saved.Gold.Set(Core.Data.Saved.Gold - building.GoldCost);
-                PlaceBuilding(building, gridPosition);
+                PlaceBuilding(building, tile);
+                SaveBuildings();
+            }
+        }
+
+        private void BuyBuilding(Building building, int gridX, int gridY)
+        {
+
+            if (IsCellFree(gridX, gridY) && Core.Data.Saved.Gold >= building.GoldCost)
+            {
+                Core.Data.Saved.Gold.Set(Core.Data.Saved.Gold - building.GoldCost);
+                PlaceBuilding(building, gridX, gridY);
                 SaveBuildings();
             }
         }
@@ -144,13 +169,12 @@ namespace VillageKeeper.Game
         {
             building.Tile.Building = null;
             building.Tile = null;
-            buildings.Remove(building);
             Destroy(building.gameObject);
         }
 
         public void SaveBuildings()
         {
-            var list = buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.gridX, b.Tile.gridY)).ToArray();
+            var list = Buildings.Select(b => new SerializableBuilding(b.Type, b.Tile.GridX, b.Tile.GridY)).ToArray();
 
             Core.Data.Saved.Buildings.Set(list);
         }
@@ -181,16 +205,96 @@ namespace VillageKeeper.Game
             }
         }
 
-        public BuildingTileScript GetCell(Vector2 gridPosition)
+        public BuildingTile GetCell(Vector2 gridPosition)
         {
             return GetCell((int)gridPosition.x, (int)gridPosition.y);
         }
 
-        public BuildingTileScript GetCell(int x, int y)
+        public BuildingTile GetCell(int x, int y)
         {
             if (x < 0 || x >= numberOfColumns || y < 0 || y >= numberOfRows)
                 return null;
             return buildingsGrid[x, y];
         }
+
+        public Building GetAdjacentBuilding(Vector2 worldPosition)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Building GetAdjacentBuilding(int gridX, int gridY)
+        {
+            var buildingsArea = Core.Instance.BuildingsArea;
+            if (!buildingsArea.IsCellFree(gridX - 1, gridY))
+                return buildingsGrid[gridX - 1, gridY].Building;
+            return null;
+        }
+
+        public List<Vector2> GetPathToRandomTarget(bool isAgressive, Vector2 worldPosition)
+        {
+            Vector2 grid = GetClosestGridPosition(worldPosition);
+            return GetPathToRandomTarget(isAgressive, Convert.ToInt32(grid.x), Convert.ToInt32(grid.y));
+        }
+
+        private List<Vector2> GetPathToRandomTarget(bool isAgressive, int gridX, int gridY)
+        {
+            List<Point> possibleTargets = new List<Point>();
+            var buildingsArea = Core.Instance.BuildingsArea;
+            for (int i = 0; i < buildingsArea.numberOfColumns; i++)
+            {
+                for (int j = 0; j < buildingsArea.numberOfRows; j++)
+                {
+                    if (buildingsArea.IsCellFree(i, j)
+                        && (i == buildingsArea.numberOfColumns - 1 || buildingsArea.IsCellFree(i + 1, j)))
+                    {
+                        pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
+                    }
+                    else
+                        pathGrid[i, j] = PathFinderHelper.BLOCKED_TILE;
+                }
+            }
+            for (int j = 0; j < buildingsArea.numberOfRows; j++)
+            {
+                string s = "";
+                for (int i = 0; i < buildingsArea.numberOfColumns; i++)
+                {
+                    s += pathGrid[i, j] == PathFinderHelper.EMPTY_TILE ? "O" : "X";
+                }
+            }
+            for (int i = buildingsArea.numberOfColumns; i < 16; i++)
+                for (int j = 0; j < buildingsArea.numberOfRows; j++)
+                    pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
+            for (int i = 1; i < buildingsArea.numberOfColumns + 1; i++)
+            {
+                for (int j = 0; j < buildingsArea.numberOfRows; j++)
+                {
+                    if (isAgressive)
+                    {
+                        if (buildingsArea.GetCell(i - 1, j) != null && buildingsArea.GetCell(i - 1, j).Building != null)
+                            possibleTargets.Add(new Point(i, j));
+                    }
+                    else
+                        possibleTargets.Add(new Point(i, j));
+                }
+            }
+            var pathFinder = new PathFinder(pathGrid)
+            {
+                Diagonals = false,
+            };
+
+            var monsterPoint = new Point(gridX, gridY);
+            var paths = new List<List<PathFinderNode>>();
+            foreach (var t in possibleTargets)
+            {
+                var path = pathFinder.FindPath(monsterPoint, t);
+                if (path != null)
+                    paths.Add(new List<PathFinderNode>(path));
+            }
+            if (paths == null || paths.Count == 0)
+                return null;
+            return paths[Core.Instance.Random.Next(0, paths.Count)].Select(w => GetWorldPositionByGridPosition(w.X, w.Y)).ToList();
+        }
+
+
     }
 }

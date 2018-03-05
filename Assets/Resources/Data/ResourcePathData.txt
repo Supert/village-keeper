@@ -1,4 +1,6 @@
 {
+  "BuildingTileDefaultSprite": "BuildingTile/Default",
+  "BuildingTileHighlightedSprite": "BuildingTile/Highlighted",
   "EnabledMusicButtonSprites": ["UI/MainMenu/SoundSettings/EnabledMusicButton", "", "UI/MainMenu/SoundSettings/EnabledMusicButtonPressed", ""],
   "EnabledSoundEffectsButtonSprites": ["UI/MainMenu/SoundSettings/EnabledSoundEffectsButton", "", "UI/MainMenu/SoundSettings/EnabledSoundEffectsButtonPressed", ""],
   "DisabledMusicButtonSprites": ["UI/MainMenu/SoundSettings/DisabledMusicButton", "", "UI/MainMenu/SoundSettings/DisabledMusicButtonPressed", ""],

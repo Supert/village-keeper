@@ -61,6 +61,8 @@ namespace VillageKeeper.Model
 
                 return CurrentTips;
             },
+            BattleHelpTips,
+            BuildHelpTips,
             Core.Data.Common.FsmState);
         }
     }

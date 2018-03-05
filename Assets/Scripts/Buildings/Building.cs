@@ -6,14 +6,14 @@ namespace VillageKeeper.Game
     public class Building : MonoBehaviour
     {
         [SerializeField]
-        protected BuildingTypes type;
+        private BuildingTypes type;
         public BuildingTypes Type { get { return type; } }
 
-        public BuildingTileScript Tile;
+        public BuildingTile Tile;
 
-        public float MaxHealth { get { return Core.Data.Balance.GetBuildingMaxHealth(type); } }
+        public float MaxHealth { get { return Core.Data.Balance.GetBuildingMaxHealth(Type); } }
 
-        public int GoldCost { get { return Core.Data.Balance.GetBuildingGoldCost(type); } }
+        public int GoldCost { get { return Core.Data.Balance.GetBuildingGoldCost(Type); } }
 
         public float Health { get; protected set; }
 

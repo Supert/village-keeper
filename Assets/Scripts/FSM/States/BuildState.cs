@@ -24,7 +24,7 @@ namespace VillageKeeper.FSM
                 return States.BuildHelp;
             if (type == StateMachineEvents.GoToBattle)
             {
-                Core.Instance.Monster.Init();
+                Core.Instance.Monster.Initialize();
                 return States.Battle;
             }
             return base.Event(type, args);

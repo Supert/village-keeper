@@ -1,19 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace VillageKeeper.Game
 {
     public class Ghost : MonoBehaviour
     {
-        private SpriteRenderer spriteRenderer;
+        private Image image;
 
         private bool isFading = false;
 
-        void Start()
+        void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
-            spriteRenderer.color = new Vector4(1, 1, 1, 0);
-            spriteRenderer.sortingLayerName = "Characters";
-            spriteRenderer.sortingOrder = 1;
+            image = GetComponent<Image>() as Image;
+            image.color = new Vector4(1, 1, 1, 0);
         }
 
         void Update()
@@ -23,14 +22,14 @@ namespace VillageKeeper.Game
                 var lp = transform.localPosition;
                 lp.y += 3f * Time.deltaTime;
                 transform.localPosition = lp;
-                if (spriteRenderer.color.a != 0)
-                    spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 3f);
+                if (image.color.a != 0)
+                    image.color = Vector4.MoveTowards(image.color, new Vector4(1, 1, 1, 0), Time.deltaTime / 3f);
                 else
                     gameObject.SetActive(false);
             }
-            else if (spriteRenderer.color.a != 1)
+            else if (image.color.a != 1)
             {
-                spriteRenderer.color = Vector4.MoveTowards(spriteRenderer.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
+                image.color = Vector4.MoveTowards(image.color, new Vector4(1, 1, 1, 1), Time.deltaTime / 0.25f);
             }
             else
             {

@@ -1,9 +1,12 @@
 {
+  "WoodenWatchtowerReloadDuration": 3,
+  "StoneWatchtowerReloadDuration": 1.5,
   "BuildingCosts":		[2, 2, 25, 10, 50, 100],
   "BuildingMaxHealths": [2, 3, 6,  3,  4,  6],
   "CastleUpgradeCosts": [600, 6000],
   "FoodPerWindMillMultiplier": 1,
   "FoodPerFarm": 1,
+  "MonsterSpeed": 120,
   "MonsterPowerPointsVillageLevelModifier": 0.25,
   "MonsterPowerPointsBuildingsHealthModifier": 0.5,
   "MonsterBuildingCostModifier": 0.0375,

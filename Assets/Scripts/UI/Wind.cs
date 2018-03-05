@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using VillageKeeper.Model;
 
 namespace VillageKeeper.UI
 {

@@ -13,6 +13,13 @@ namespace VillageKeeper.Model
         public AssignableValue<int> MaxVillageLevel { get; } = new AssignableValue<int>();
 
         [SerializeValue]
+        protected AssignableValue<float> WoodenWatchtowerReloadDuration { get; } = new AssignableValue<float>();
+        [SerializeValue]
+        protected AssignableValue<float> StoneWatchtowerReloadDuration { get; } = new AssignableValue<float>();
+
+        [SerializeValue]
+        public AssignableValue<float> MonsterSpeed { get; } = new AssignableValue<float>();
+        [SerializeValue]
         protected AssignableValue<int> MonsterMaxHealthPossible { get; } = new AssignableValue<int>();
         [SerializeValue]
         protected AssignableValue<int> MonsterMinHealthPossible { get; } = new AssignableValue<int>();
@@ -34,15 +41,24 @@ namespace VillageKeeper.Model
         [SerializeValue]
         protected AssignableValue<int[]> BuildingCosts { get; } = new AssignableValue<int[]>();
 
+        public float GetReloadDuration(BuildingTypes type)
+        {
+            if (type == BuildingTypes.WatchtowerStone)
+                return StoneWatchtowerReloadDuration;
+            if (type == BuildingTypes.WatchtowerWooden)
+                return WoodenWatchtowerReloadDuration;
+            throw new System.ArgumentException("Building has to be watchtower.");
+        }
+
         public float GetMonsterPowerPoints()
         {
-            float buildingsHealth = Core.Instance.BuildingsArea.buildings.Sum(b => b.MaxHealth);
+            float buildingsHealth = Core.Data.Saved.Buildings.Get().Sum(b => GetBuildingMaxHealth(b.Type));
             return buildingsHealth * MonsterPowerPointsBuildingsHealthModifier * (1 + Core.Data.Saved.VillageLevel * MonsterPowerPointsVillageLevelModifier);
         }
 
         public float GetMonsterMinHealth()
         {
-            float buildingsCost = Core.Instance.BuildingsArea.buildings.Sum(b => b.GoldCost);
+            float buildingsCost = Core.Data.Saved.Buildings.Get().Sum(b => GetBuildingGoldCost(b.Type));
             return buildingsCost * MonsterBuildingCostModifier + MonsterMinHealthPossible;
         }
 

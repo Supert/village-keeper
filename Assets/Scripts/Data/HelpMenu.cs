@@ -34,6 +34,7 @@ namespace VillageKeeper.Model
                     totalTips = Core.Data.Localization.BuildHelpTips.Get().Length;
                 return string.Format(Core.Data.Localization.TipCounterFormat, CurrentHelpTipIndex + 1, totalTips);
             },
+            Core.Data.Common.FsmState,
             Core.Data.Localization.BattleHelpTips,
             Core.Data.Localization.BuildHelpTips,
             Core.Data.Localization.TipCounterFormat,

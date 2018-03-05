@@ -53,5 +53,11 @@ namespace VillageKeeper.Model
             var n = Enum.GetNames(typeof(BuildingTypes)).Length;
             SelectedBuildingType.Set((BuildingTypes)(((int)SelectedBuildingType.Get() - 1 + n) % n));
         }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            Core.Data.UI.BuildingPicker.SelectedBuildingType.Set(BuildingTypes.Farm);
+        }
     }
 }

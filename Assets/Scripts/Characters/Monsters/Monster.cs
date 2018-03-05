@@ -1,13 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
-using DeenGames.Utils.AStarPathFinder;
-using DeenGames.Utils;
-using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {
-    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Collider2D))]
     public class Monster : MonoBehaviour
@@ -21,9 +19,11 @@ namespace VillageKeeper.Game
 
         private int maxHealth;
 
+        private RectTransform rectTransform;
+        private RectTransform monsterWalkableArea;
         private Animator animator;
-        private SpriteRenderer sprite;
-        private SpriteRenderer shadow;
+        private Image image;
+        private Image shadow;
         private Collider2D col;
 
         private float agressiveness;
@@ -48,11 +48,10 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return sprite.bounds.size;
+                return rectTransform.rect.size;
             }
         }
 
-        public float monsterSpeed;
         public bool IsAgressive
         {
             get;
@@ -84,8 +83,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                var buildingsArea = Core.Instance.BuildingsArea;
-                return buildingsArea.GetWorldPositionByGridPosition(new Vector2(buildingsArea.numberOfColumns, buildingsArea.numberOfRows - 1)) + GridToWorldOffset;
+                return monsterWalkableArea.rect.size;
             }
         }
 
@@ -93,8 +91,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                var x = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
-                return new Vector2(x + Size.x / 2, MaxPosition.y);
+                return MaxPosition + new Vector2(Size.x / 2, 0);
             }
         }
 
@@ -117,86 +114,31 @@ namespace VillageKeeper.Game
             }
         }
 
-        private List<PathFinderNode> waypointsInGrid = new List<PathFinderNode>();
+        private List<Vector2> waypoints = new List<Vector2>();
+        //private List<PathFinderNode> waypointsInGrid = new List<PathFinderNode>();
 
-        private Vector2? Waypoint
+        private Vector2 Waypoint
         {
             get
             {
                 var buildingsArea = Core.Instance.BuildingsArea;
-                if (waypointsInGrid.Count > 0 && (Vector2)transform.localPosition == (buildingsArea.GetWorldPositionByGridPosition(waypointsInGrid[0].X, waypointsInGrid[0].Y)) + GridToWorldOffset)
-                    waypointsInGrid.RemoveAt(0);
-                if (waypointsInGrid.Count > 0)
-                    return (Vector2?)buildingsArea.GetWorldPositionByGridPosition(waypointsInGrid[0].X, waypointsInGrid[0].Y) + GridToWorldOffset;
-                return null;
+                if (waypoints.Count > 0 && ((Vector2)transform.localPosition - waypoints[0]).sqrMagnitude < 0.01f)
+                    waypoints.RemoveAt(0);
+                if (waypoints.Count > 0)
+                    return buildingsArea.GetWorldPositionByGridPosition(waypoints[0]);
+                ChooseNewBehaviour();
+                SetWaypoints(Core.Instance.BuildingsArea.GetPathToRandomTarget(IsAgressive, transform.position));
+                return waypoints[0];
             }
         }
 
-        private List<PathFinderNode> GetPathToRandomTarget(bool isAgressive)
-        {
-            byte[,] pathGrid = new byte[16, 16];
-            List<Point> possibleTargets = new List<Point>();
-            var buildingsArea = Core.Instance.BuildingsArea;
-            for (int i = 0; i < buildingsArea.numberOfColumns; i++)
-            {
-                for (int j = 0; j < buildingsArea.numberOfRows; j++)
-                {
-                    if (buildingsArea.IsCellFree(new Vector2(i, j))
-                        && (i == buildingsArea.numberOfColumns - 1 || buildingsArea.IsCellFree(new Vector2(i + 1, j))))
-                    {
-                        pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
-                    }
-                    else
-                        pathGrid[i, j] = PathFinderHelper.BLOCKED_TILE;
-                }
-            }
-            for (int j = 0; j < buildingsArea.numberOfRows; j++)
-            {
-                string s = "";
-                for (int i = 0; i < buildingsArea.numberOfColumns; i++)
-                {
-                    s += pathGrid[i, j] == PathFinderHelper.EMPTY_TILE ? "O" : "X";
-                }
-            }
-            for (int i = buildingsArea.numberOfColumns; i < 16; i++)
-                for (int j = 0; j < buildingsArea.numberOfRows; j++)
-                    pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
-            for (int i = 1; i < buildingsArea.numberOfColumns + 1; i++)
-            {
-                for (int j = 0; j < buildingsArea.numberOfRows; j++)
-                {
-                    if (isAgressive)
-                    {
-                        if (buildingsArea.GetCell(i - 1, j) != null && buildingsArea.GetCell(i - 1, j).Building != null)
-                            possibleTargets.Add(new Point(i, j));
-                    }
-                    else
-                        possibleTargets.Add(new Point(i, j));
-                }
-            }
-            var pathFinder = new PathFinder(pathGrid)
-            {
-                Diagonals = false,
-            };
 
-            var monsterPoint = new Point((int)GridPosition.x, (int)GridPosition.y);
-            var paths = new List<List<PathFinderNode>>();
-            foreach (var t in possibleTargets)
-            {
-                var path = pathFinder.FindPath(monsterPoint, t);
-                if (path != null)
-                    paths.Add(new List<PathFinderNode>(path));
-            }
-            if (paths == null || paths.Count == 0)
-                return null;
-            return paths[Random.Range(0, paths.Count)];
-        }
 
         public bool CheckHitByPosition(Vector3 projectilePosition)
         {
             if (col.OverlapPoint(projectilePosition))
             {
-                if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= sprite.bounds.extents.y)
+                if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= Size.y)
                 {
                     TakeDamage();
                     return true;
@@ -208,13 +150,13 @@ namespace VillageKeeper.Game
         public void TakeDamage()
         {
             Health--;
-            sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
+            image.color = new Color(1f, 0.5f, 0.5f, 1f);
             Core.Instance.AudioManager.PlayMonsterHit();
         }
 
         public void Kill()
         {
-            sprite.color = new Color(1f, 0.5f, 0.5f, 1f);
+            image.color = new Color(1f, 0.5f, 0.5f, 1f);
             var ghost = Instantiate(Core.Data.Resources.GhostPrefab.Get());
             ghost.transform.localPosition = transform.localPosition;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
@@ -222,27 +164,17 @@ namespace VillageKeeper.Game
 
         void MoveTowardsColor(Color targetColor, float animationDuration)
         {
-            if (sprite.color != targetColor)
-                sprite.color = Vector4.MoveTowards(sprite.color, targetColor, Time.deltaTime / animationDuration);
+            if (image.color != targetColor)
+                image.color = Vector4.MoveTowards(image.color, targetColor, Time.deltaTime / animationDuration);
         }
 
-        private Vector2? GetAdjacentBuildingCell()
-        {
-            var buildingsArea = Core.Instance.BuildingsArea;
-            if (GridPosition.x - 1 >= buildingsArea.numberOfColumns || GridPosition.x - 1 < 0)
-                return null;
-            if (!buildingsArea.IsCellFree(GridPosition - new Vector2(1, 0)))
-                return GridPosition - new Vector2(1, 0);
-            return null;
-        }
-
-        private void Attack(Vector2 buildingCell)
+        private void Attack(Building building)
         {
             animator.SetTrigger("Attack");
             var scale = transform.localScale;
             scale.x = Mathf.Abs(scale.x);
             transform.localScale = scale;
-            Core.Instance.BuildingsArea.DamageCell(buildingCell);
+            Core.Instance.BuildingsArea.DamageCell(building.Tile.GridX, building.Tile.GridY);
             ChooseNewBehaviour();
         }
 
@@ -251,10 +183,10 @@ namespace VillageKeeper.Game
             IsAgressive = Core.Instance.Random.NextDouble() < agressiveness;
         }
 
-        private void SetWaypoints(List<PathFinderNode> waypoints)
+        private void SetWaypoints(List<Vector2> waypoints)
         {
-            waypointsInGrid = waypoints;
-            TargetPosition = Core.Instance.BuildingsArea.GetWorldPositionByGridPosition(waypoints.Last().X, waypoints.Last().Y) + GridToWorldOffset;
+            this.waypoints = waypoints;
+            TargetPosition = waypoints.Last();
             var scale = transform.localScale;
             if (((Vector2)transform.localPosition - TargetPosition).x >= 0)
             {
@@ -268,15 +200,7 @@ namespace VillageKeeper.Game
 
         private void Move()
         {
-            if (Waypoint != null && Waypoint.HasValue)
-            {
-                transform.localPosition = Vector2.MoveTowards(transform.localPosition, Waypoint.Value, monsterSpeed * Time.deltaTime);
-
-            }
-            if ((Vector2)transform.localPosition == TargetPosition)
-            {
-                ChooseNewBehaviour();
-            }
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, Waypoint, Core.Data.Balance.MonsterSpeed * Time.deltaTime);
         }
 
         private void SetMaxHealthAndAgressiveness()
@@ -307,18 +231,16 @@ namespace VillageKeeper.Game
 
         void Awake()
         {
-            sprite = GetComponent<SpriteRenderer>() as SpriteRenderer;
-            col = GetComponent<Collider2D>() as Collider2D;
-            animator = GetComponent<Animator>() as Animator;
-            shadow = transform.GetChild(transform.childCount - 1).GetComponent<SpriteRenderer>() as SpriteRenderer;
+            rectTransform = transform as RectTransform;
+            monsterWalkableArea = transform.parent as RectTransform;
+            image = GetComponent<Image>();
+            col = GetComponent<Collider2D>();
+            animator = GetComponent<Animator>();
+            shadow = transform.GetChild(transform.childCount - 1).GetComponent<Image>();
         }
 
         void Start()
         {
-            var ls = transform.localScale;
-            ls *= (Core.Instance.BuildingsArea.CellWorldSize.y * 2) / (sprite.bounds.size.y);
-            transform.localScale = ls;
-
             Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, OnBuildEnter);
             Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, OnBattleEnter);
             Core.Instance.FSM.SubscribeToExit(FSM.States.Battle, OnBattleExit);
@@ -329,15 +251,15 @@ namespace VillageKeeper.Game
             animator.speed = 0f;
         }
 
-        public void Init()
+        public void Initialize()
         {
             shadow.color = Color.white;
-            sprite.color = Color.white;
+            image.color = Color.white;
 
             SetMaxHealthAndAgressiveness();
             Health = maxHealth;
 
-            waypointsInGrid.Clear();
+            waypoints.Clear();
             transform.localPosition = TargetPosition = HiddenPosition;
 
             gameObject.SetActive(true);
@@ -366,20 +288,20 @@ namespace VillageKeeper.Game
                     {
                         if (IsAgressive)
                         {
-                            var adjacentBuildingCellCoordinates = GetAdjacentBuildingCell();
-                            if (adjacentBuildingCellCoordinates != null)
-                                Attack(adjacentBuildingCellCoordinates.Value);
+                            var adjacentBuilding = Core.Instance.BuildingsArea.GetAdjacentBuilding(transform.position);
+                            if (adjacentBuilding != null)
+                                Attack(adjacentBuilding);
                             else
                             {
-                                var waypoints = GetPathToRandomTarget(true);
+                                var waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(true, transform.position);
                                 if (waypoints == null)
-                                    waypoints = GetPathToRandomTarget(false);
+                                    waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(false, transform.position);
                                 SetWaypoints(waypoints);
                             }
                         }
                         else
                         {
-                            SetWaypoints(GetPathToRandomTarget(false));
+                            SetWaypoints(Core.Instance.BuildingsArea.GetPathToRandomTarget(false, transform.position));
                         }
                     }
                     else

@@ -14,8 +14,6 @@ namespace VillageKeeper
 
         void CheckForTouches()
         {
-            bowLoadingTouchStartingPosition = Vector2.zero;
-            bowLoadingTouchCurrentPosition = Vector2.zero;
             isLoading = false;
             foreach (var t in Input.touches)
             {

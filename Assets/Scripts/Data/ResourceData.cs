@@ -33,6 +33,12 @@ namespace VillageKeeper.Model
             Core.Data.ResourcePaths.DisabledSoundEffectsButtonSprites);
 
         [ShowInEditor]
+        public ResourceValue<Sprite> BuildingTileDefaultSprite { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingTileDefaultSprite);
+
+        [ShowInEditor]
+        public ResourceValue<Sprite> BuildingTileHighlightedSprite { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingTileHighlightedSprite);
+
+        [ShowInEditor]
         public ResourceValue<Sprite> CastleBackground { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.CastleBackground, Core.Data.Common.Special, Core.Data.Saved.VillageLevel);
         [ShowInEditor]
         public ResourceValue<Sprite> MountainsBackground { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.MountainsBackground, Core.Data.Common.Special);
@@ -45,9 +51,9 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ResourceValue<Sprite> ArrowBar { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.ArrowBar, Core.Data.Game.IsArrowForceOverThreshold);
         [ShowInEditor]
-        public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingIcons, Core.Data.Game.BuildingPicker.SelectedBuildingType);
+        public ResourceValue<Sprite> CurrentBuildingIcon { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.BuildingIcons, Core.Data.UI.BuildingPicker.SelectedBuildingType);
         [ShowInEditor]
-        public CalculatedValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(Core.Data.ResourcePaths.BuildingPrefabs, Core.Data.Game.BuildingPicker.SelectedBuildingType);
+        public CalculatedValue<Building> CurrentBuildingPrefab { get; } = new ResourceValue<Building>(Core.Data.ResourcePaths.BuildingPrefabs, Core.Data.UI.BuildingPicker.SelectedBuildingType);
         [ShowInEditor]
         public ResourceValue<Sprite> FarmCrops { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.FarmCrops, Core.Data.Common.Special);
         [ShowInEditor]

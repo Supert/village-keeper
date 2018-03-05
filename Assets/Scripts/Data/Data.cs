@@ -37,6 +37,9 @@ namespace VillageKeeper.Model
         [ShowInEditor]
         public ShopData Shop { get; private set; }
 
+        [ShowInEditor]
+        public UiData UI { get; private set; }
+
         public override void Initialize()
         {
             Common = new CommonData();
@@ -46,6 +49,7 @@ namespace VillageKeeper.Model
             Game = new GameData();
             FormattedAndLocalized = new FormattedAndLocalizedData();
             ResourcePaths = new ResourcePathData();
+            UI = new UiData();
             Resources = new ResourceData();
             Audio = new AudioData();
             Shop = new ShopData();

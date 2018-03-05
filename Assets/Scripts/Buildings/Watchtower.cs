@@ -1,48 +1,30 @@
 ﻿using UnityEngine;
-using System.Collections;
-using VillageKeeper.Model;
 
 namespace VillageKeeper.Game
 {
     public class Watchtower : Building
     {
-        private bool isLoaded = true;
+        private ProjectileSpawner projectileSpawner;
+
+        private float lastTimeShooted = 0f;
+
+        public float ReloadDuration { get { return Core.Data.Balance.GetReloadDuration(Type); } }
+        
         public void Shoot()
         {
-            if (isLoaded)
-            {
-                var targetPosition = Core.Instance.Monster.transform.localPosition;
-                var arrow = new GameObject("arrow", typeof(ArrowScript)).GetComponent<ArrowScript>();
-                var initialPosition = (Vector2)transform.position;
-                var vectorToCalcAngle = (Vector2)targetPosition + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y) - initialPosition;
-                var angle = Mathf.Atan2(vectorToCalcAngle.y, vectorToCalcAngle.x);
-                arrow.Init(initialPosition, targetPosition, angle);
-                isLoaded = false;
-                StartCoroutine(ReloadCoroutine());
-            }
+            projectileSpawner.Shoot(((Vector2) Core.Instance.Monster.transform.localPosition) + new Vector2(0, Core.Instance.BuildingsArea.CellWorldSize.y));
+            lastTimeShooted = Time.time;
         }
 
-        private IEnumerator ReloadCoroutine()
+        protected virtual void Awake()
         {
-            switch (type)
-            {
-                case BuildingTypes.WatchtowerWooden:
-                    yield return new WaitForSeconds(3f);
-                    break;
-                case BuildingTypes.WatchtowerStone:
-                    yield return new WaitForSeconds(1.5f);
-                    break;
-                default:
-                    throw new System.Exception($"Watchtower has building type {type}");
-            }
-
-            isLoaded = true;
+            projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
         }
 
         protected virtual void Update()
         {
             if (Core.Instance.FSM.Current == FSM.States.Battle
-                && isLoaded
+                && Time.time >= lastTimeShooted + ReloadDuration
                 && Vector2.Distance(transform.position, Core.Instance.Monster.transform.localPosition) < Core.Instance.BuildingsArea.CellWorldSize.x * 4)
             {
                 Shoot();
