@@ -8,7 +8,7 @@ using System;
 
 namespace VillageKeeper.Game
 {
-    public class BuildingsAreaScript : MonoBehaviour
+    public class BuildingsArea : MonoBehaviour
     {
         private RectTransform rect;
 
@@ -19,6 +19,7 @@ namespace VillageKeeper.Game
 
         private BuildingTile[,] buildingsGrid;
         private byte[,] pathGrid;
+
         public IEnumerable<Building> Buildings { get { return buildingsGrid.Cast<BuildingTile>().Where(c => c.Building != null).Select(c => c.Building); } }
 
         void Awake()
@@ -66,14 +67,14 @@ namespace VillageKeeper.Game
 
         public Vector2 GetClosestGridPositionIgnoringGridLimits(Vector2 worldPosition)
         {
-            var point = worldPosition - GetWorldPositionByGridPosition(0, 0);
-            var result = new Vector2(point.x / CellWorldSize.x, point.y / CellWorldSize.y);
-            result.x = Mathf.RoundToInt(result.x);
-            result.y = Mathf.RoundToInt(result.y);
+            var point = rect.InverseTransformPoint(worldPosition);
+            var result = new Vector2(point.x / CellLocalSize.x, point.y / CellLocalSize.y);
+            result.x = Mathf.RoundToInt(result.x - 0.5f);
+            result.y = Mathf.RoundToInt(result.y - 0.5f);
             return result;
         }
 
-        public Vector2 GetClosestGridPosition(Vector2 worldPosition)
+        private Vector2 GetClosestGridPosition(Vector2 worldPosition)
         {
             var result = GetClosestGridPositionIgnoringGridLimits(worldPosition);
             result.x = Mathf.Clamp(result.x, 0, numberOfColumns - 1);
@@ -81,12 +82,9 @@ namespace VillageKeeper.Game
             return result;
         }
 
-        public Vector2 GetWorldPositionByAreaPosition(Vector2 position)
+        public Vector2 GetWorldPositionByPositionInArea(Vector2 position)
         {
-            throw new NotImplementedException();
-            //var positionInLocal = new Vector2(CellLocalSize.x * (x + 0.5f), CellLocalSize.y * (y + 0.5f));
-            //var positionInLocalWithOffset = positionInLocal - (rect.rect.size / 2);
-            //return rect.TransformPoint(positionInLocalWithOffset);
+            return rect.TransformPoint(position);
         }
 
         public Vector2 GetWorldPositionByGridPosition(int x, int y)
@@ -219,7 +217,11 @@ namespace VillageKeeper.Game
 
         public Building GetAdjacentBuilding(Vector2 worldPosition)
         {
-            throw new NotImplementedException();
+            Vector2 gridPos = GetClosestGridPositionIgnoringGridLimits(worldPosition);
+            BuildingTile cell = GetCell(gridPos);
+            if (cell == null)
+                return null;
+            return cell.Building;
         }
 
         private Building GetAdjacentBuilding(int gridX, int gridY)
@@ -253,14 +255,7 @@ namespace VillageKeeper.Game
                         pathGrid[i, j] = PathFinderHelper.BLOCKED_TILE;
                 }
             }
-            for (int j = 0; j < buildingsArea.numberOfRows; j++)
-            {
-                string s = "";
-                for (int i = 0; i < buildingsArea.numberOfColumns; i++)
-                {
-                    s += pathGrid[i, j] == PathFinderHelper.EMPTY_TILE ? "O" : "X";
-                }
-            }
+
             for (int i = buildingsArea.numberOfColumns; i < 16; i++)
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
                     pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;

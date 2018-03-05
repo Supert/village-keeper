@@ -25,7 +25,7 @@ namespace VillageKeeper
 
         public ControlsScript Controls { get; private set; }
 
-        public BuildingsAreaScript BuildingsArea { get; private set; }
+        public BuildingsArea BuildingsArea { get; private set; }
 
         private void InitAds()
         {
@@ -62,7 +62,7 @@ namespace VillageKeeper
             Archer = FindObjectOfType(typeof(Archer)) as Archer;
             Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
 
-            BuildingsArea = FindObjectOfType<BuildingsAreaScript>();
+            BuildingsArea = FindObjectOfType<BuildingsArea>();
             
             AudioManager = GetComponent<AudioManager>();
             AudioManager.Init();
