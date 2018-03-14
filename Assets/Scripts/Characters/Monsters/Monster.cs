@@ -154,8 +154,8 @@ namespace VillageKeeper.Game
         public void Kill()
         {
             image.color = new Color(1f, 0.5f, 0.5f, 1f);
-            var ghost = Instantiate(Core.Data.Resources.GhostPrefab.Get());
-            ghost.transform.localPosition = transform.localPosition;
+            var ghost = Instantiate(Core.Data.Resources.GhostPrefab.Get(), transform, false);
+            ghost.transform.localPosition = Vector3.zero;
             Core.Instance.FSM.Event(FSM.StateMachineEvents.RoundFinished);
         }
 

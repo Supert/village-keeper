@@ -311,7 +311,5 @@ namespace VillageKeeper.Game
                 return null;
             return paths[Core.Instance.Random.Next(0, paths.Count)].Select(w => GetWorldPositionByGridPosition(w.X, w.Y)).ToList();
         }
-
-
     }
 }
