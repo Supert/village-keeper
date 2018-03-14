@@ -1,4 +1,6 @@
 {
+  "WatchtowerArrowPrefab": "WatchtowerArrow",
+  "ArcherArrowPrefab": "ArcherArrow",
   "BuildingTileDefaultSprite": "BuildingTile/Default",
   "BuildingTileHighlightedSprite": "BuildingTile/Highlighted",
   "EnabledMusicButtonSprites": ["UI/MainMenu/SoundSettings/EnabledMusicButton", "", "UI/MainMenu/SoundSettings/EnabledMusicButtonPressed", ""],

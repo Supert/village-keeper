@@ -4,44 +4,54 @@ namespace VillageKeeper.Game
 {
     public abstract class Projectile : MonoBehaviour
     {
+        private static float Gravity { get { return 60f; } }
+
         protected Vector2 TargetPosition { get; set; }
+        protected Vector2 InitialPosition { get; set; }
         protected Vector2 Velocity { get; set; }
-        
-        private void SetVelocity(Vector2 initialPosition, Vector2 targetPosition, float initialRotationInRad)
+
+        private void SetVelocity(float initialRotationInRad)
         {
-            var deltaPosition = targetPosition - initialPosition;
-            var gravity = 9.81f;
-            var angleInRads = initialRotationInRad;
+            var deltaPosition = TargetPosition - InitialPosition;
+
+            if (deltaPosition.x == 0f)
+            {
+                Destroy();
+                return;
+            }
+
+            float angleInRads = initialRotationInRad;
             //http://physics.stackexchange.com/questions/60595/solve-for-initial-velocity-of-a-projectile-given-angle-gravity-and-initial-and
-            var initialVelocity = (deltaPosition.x / Mathf.Cos(angleInRads)) * Mathf.Sqrt(gravity / (2 * (-deltaPosition.y + Mathf.Tan(angleInRads) * deltaPosition.x)));
-            Velocity = new Vector2(Mathf.Cos(angleInRads), Mathf.Sin(angleInRads)) * initialVelocity;
+            float initialVelocity = (deltaPosition.x / Mathf.Cos(angleInRads)) * Mathf.Sqrt(Gravity / (2 * (-deltaPosition.y + Mathf.Tan(angleInRads) * deltaPosition.x)));
+            Velocity = new Vector2(Mathf.Clamp(Mathf.Cos(angleInRads), -1f, 1f), Mathf.Clamp(Mathf.Sin(angleInRads), -1f, 1f)) * initialVelocity;
         }
 
-        public virtual void Initialize (Vector2 initialPosition, Vector2 targetPosition, float initialRotationInRad)
+        public virtual void Initialize(Vector2 initialPosition, Vector2 targetPosition, float initialRotationInRad)
         {
             TargetPosition = targetPosition;
+            InitialPosition = initialPosition;
+            transform.position = initialPosition;
+            var p = transform.position;
+            p.z = TargetPosition.y;
+            transform.position = p;
 
-            var lp = transform.localPosition;
-            lp.x = initialPosition.x;
-            lp.y = initialPosition.y;
-            lp.z = TargetPosition.y;
-            transform.position = lp;
-
-            SetVelocity(initialPosition, targetPosition, initialRotationInRad);
+            SetVelocity(initialRotationInRad);
         }
 
         protected virtual void Update()
         {
-            Velocity = Velocity + new Vector2(0f, -9.81f * Time.deltaTime);
-            transform.localPosition = transform.localPosition + ((Vector3)Velocity * Time.deltaTime);
+            Velocity = Velocity + new Vector2(0f, -Gravity * Time.deltaTime);
+            transform.position = transform.position + ((Vector3)Velocity * Time.deltaTime);
             float angle = Mathf.Atan2(Velocity.y, Velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 
-            if (((Vector2)transform.localPosition - TargetPosition).magnitude < 0f)
+            if ((InitialPosition.x < TargetPosition.x && transform.position.x > TargetPosition.x)
+                || (InitialPosition.x > TargetPosition.x && transform.position.x < TargetPosition.x))
             {
                 Destroy();
             }
+
             if (Core.Instance.Monster.CheckHitByPosition(transform.position))
             {
                 gameObject.SetActive(false);

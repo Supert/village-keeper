@@ -27,12 +27,15 @@ namespace VillageKeeper.Game
             rect = GetComponent<RectTransform>() as RectTransform;
             buildingsGrid = new BuildingTile[numberOfColumns, numberOfRows];
 
-            pathGrid = new byte[Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(0)) / Math.Log(2)))),
-                Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(1)) / Math.Log(2))))];
+            int pathGridDimension = Math.Max(
+                Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(0)) / Math.Log(2)))),
+                Convert.ToInt32(Math.Pow(2, Math.Ceiling(Math.Log(buildingsGrid.GetLength(1)) / Math.Log(2)))));
+            pathGrid = new byte[pathGridDimension, pathGridDimension];
         }
 
         private void Start()
         {
+            Core.Instance.FSM.SubscribeToEnter(FSM.States.Battle, InitializeBuildings);
             Core.Instance.FSM.SubscribeToEnter(FSM.States.Build, LoadBuildings);
             Core.Instance.FSM.SubscribeToEnter(FSM.States.RoundFinished, SaveBuildings);
 
@@ -50,6 +53,15 @@ namespace VillageKeeper.Game
                     buildingsGrid[i, j].transform.position = p;
                 }
             }
+        }
+
+        private void InitializeBuildings()
+        {
+            for (int i = 0; i < buildingsGrid.GetLength(0); i++)
+                for (int j = 0; j < buildingsGrid.GetLength(1); j++)
+                    if (buildingsGrid[i, j].Building != null)
+                        buildingsGrid[i, j].Building.Initialize();
+
         }
 
         public BuildingTile GetClosestTile(Vector3 position)
@@ -100,7 +112,7 @@ namespace VillageKeeper.Game
 
         public bool IsCellFree(int gridX, int gridY)
         {
-            return buildingsGrid[gridX, gridY].Building != null;
+            return buildingsGrid[gridX, gridY].Building == null;
         }
 
         public bool IsCellsFree(int leftBottomX, int leftBottomY, int rightTopX, int rightTopY)
@@ -218,7 +230,7 @@ namespace VillageKeeper.Game
         public Building GetAdjacentBuilding(Vector2 worldPosition)
         {
             Vector2 gridPos = GetClosestGridPositionIgnoringGridLimits(worldPosition);
-            BuildingTile cell = GetCell(gridPos);
+            BuildingTile cell = GetCell(gridPos - new Vector2(1f, 0f));
             if (cell == null)
                 return null;
             return cell.Building;
@@ -242,6 +254,11 @@ namespace VillageKeeper.Game
         {
             List<Point> possibleTargets = new List<Point>();
             var buildingsArea = Core.Instance.BuildingsArea;
+            
+            for (int i = buildingsArea.numberOfColumns; i < pathGrid.GetLength(0); i++)
+                for (int j = 0; j < buildingsArea.numberOfRows; j++)
+                    pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
+
             for (int i = 0; i < buildingsArea.numberOfColumns; i++)
             {
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
@@ -252,13 +269,12 @@ namespace VillageKeeper.Game
                         pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
                     }
                     else
+                    {
                         pathGrid[i, j] = PathFinderHelper.BLOCKED_TILE;
+                    }
                 }
             }
 
-            for (int i = buildingsArea.numberOfColumns; i < 16; i++)
-                for (int j = 0; j < buildingsArea.numberOfRows; j++)
-                    pathGrid[i, j] = PathFinderHelper.EMPTY_TILE;
             for (int i = 1; i < buildingsArea.numberOfColumns + 1; i++)
             {
                 for (int j = 0; j < buildingsArea.numberOfRows; j++)
@@ -272,6 +288,11 @@ namespace VillageKeeper.Game
                         possibleTargets.Add(new Point(i, j));
                 }
             }
+
+
+            if (isAgressive && !possibleTargets.Any())
+                return GetPathToRandomTarget(false, gridX, gridY);
+
             var pathFinder = new PathFinder(pathGrid)
             {
                 Diagonals = false,
@@ -279,6 +300,7 @@ namespace VillageKeeper.Game
 
             var monsterPoint = new Point(gridX, gridY);
             var paths = new List<List<PathFinderNode>>();
+
             foreach (var t in possibleTargets)
             {
                 var path = pathFinder.FindPath(monsterPoint, t);

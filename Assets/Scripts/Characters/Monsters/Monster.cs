@@ -44,13 +44,9 @@ namespace VillageKeeper.Game
             }
         }
 
-        public Vector2 Size
-        {
-            get
-            {
-                return rectTransform.rect.size;
-            }
-        }
+        public Vector2 WorldSize { get { return rectTransform.TransformVector(rectTransform.rect.size); } }
+
+        private Vector2 LocalSize { get { return rectTransform.rect.size; } }
 
         public bool IsAgressive
         {
@@ -62,20 +58,24 @@ namespace VillageKeeper.Game
         {
             get
             {
-                if (transform.localPosition.x < (MaxPosition.x / 3))
+                float normalized = (transform.position.x - MinPosition.x) / (MaxPosition.x - MinPosition.x);
+                if (normalized < 0.33f)
                     return SectorValues.Close;
-                if (transform.localPosition.x >= MaxPosition.x / 3 && transform.localPosition.x < (MaxPosition.x * 2 / 3))
+                if (normalized >= 0.33f && normalized < 0.67f)
                     return SectorValues.Middle;
                 return SectorValues.Far;
             }
         }
 
+        public Vector2 Position { get { return transform.position; } }
+
         public Vector2 MinPosition
         {
             get
             {
-                var buildingsArea = Core.Instance.BuildingsArea;
-                return buildingsArea.GetWorldPositionByGridPosition(new Vector2(0, 0)) + GridToWorldOffset;
+                Vector3[] corners = new Vector3[4];
+                monsterWalkableArea.GetWorldCorners(corners);
+                return corners[0];
             }
         }
 
@@ -83,7 +83,9 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return monsterWalkableArea.rect.size;
+                Vector3[] corners = new Vector3[4];
+                monsterWalkableArea.GetWorldCorners(corners);
+                return corners[2];
             }
         }
 
@@ -91,7 +93,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return MaxPosition + new Vector2(Size.x / 2, 0);
+                return MaxPosition + new Vector2(LocalSize.x / 2, 0);
             }
         }
 
@@ -101,7 +103,7 @@ namespace VillageKeeper.Game
         {
             get
             {
-                return new Vector2(Core.Instance.BuildingsArea.CellWorldSize.x / 2, Size.y / 3);
+                return new Vector2(Core.Instance.BuildingsArea.CellWorldSize.x / 2, LocalSize.y / 3);
             }
         }
         public Vector2 GridPosition
@@ -122,12 +124,7 @@ namespace VillageKeeper.Game
             get
             {
                 var buildingsArea = Core.Instance.BuildingsArea;
-                if (waypoints.Count > 0 && ((Vector2)transform.localPosition - waypoints[0]).sqrMagnitude < 0.01f)
-                    waypoints.RemoveAt(0);
-                if (waypoints.Count > 0)
-                    return buildingsArea.GetWorldPositionByGridPosition(waypoints[0]);
-                ChooseNewBehaviour();
-                SetWaypoints(Core.Instance.BuildingsArea.GetPathToRandomTarget(IsAgressive, transform.position));
+                Vector2 result = waypoints[0];
                 return waypoints[0];
             }
         }
@@ -138,7 +135,7 @@ namespace VillageKeeper.Game
         {
             if (col.OverlapPoint(projectilePosition))
             {
-                if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= Size.y)
+                if (Mathf.Abs(projectilePosition.z - transform.localPosition.y) <= LocalSize.y)
                 {
                     TakeDamage();
                     return true;
@@ -188,19 +185,19 @@ namespace VillageKeeper.Game
             this.waypoints = waypoints;
             TargetPosition = waypoints.Last();
             var scale = transform.localScale;
-            if (((Vector2)transform.localPosition - TargetPosition).x >= 0)
+            if (((Vector2)transform.position - TargetPosition).x >= 0)
             {
                 scale.x = Mathf.Abs(scale.x);
             }
             else
-                if (((Vector2)transform.localPosition - TargetPosition).x < 0)
+                if (((Vector2)transform.position - TargetPosition).x < 0)
                 scale.x = -Mathf.Abs(scale.x);
             transform.localScale = scale;
         }
 
         private void Move()
         {
-            transform.localPosition = Vector2.MoveTowards(transform.localPosition, Waypoint, Core.Data.Balance.MonsterSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, Waypoint, Core.Data.Balance.MonsterSpeed * Time.deltaTime);
         }
 
         private void SetMaxHealthAndAgressiveness()
@@ -260,7 +257,7 @@ namespace VillageKeeper.Game
             Health = maxHealth;
 
             waypoints.Clear();
-            transform.localPosition = TargetPosition = HiddenPosition;
+            transform.position = TargetPosition = HiddenPosition;
 
             gameObject.SetActive(true);
         }
@@ -284,24 +281,32 @@ namespace VillageKeeper.Game
 
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("GorillaWandering"))
                 {
-                    if ((Vector2)transform.localPosition == TargetPosition)
+                    if (waypoints.Count > 0 && ((Vector2)transform.position - waypoints[0]).sqrMagnitude < 0.01f)
+                    {
+                        waypoints.RemoveAt(0);
+                    }
+
+                    if ((Vector2)transform.localPosition == TargetPosition || waypoints.Count == 0)
                     {
                         if (IsAgressive)
                         {
                             var adjacentBuilding = Core.Instance.BuildingsArea.GetAdjacentBuilding(transform.position);
                             if (adjacentBuilding != null)
+                            {
                                 Attack(adjacentBuilding);
+                            }
                             else
                             {
-                                var waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(true, transform.position);
+                                var waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(IsAgressive, transform.position);
                                 if (waypoints == null)
-                                    waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(false, transform.position);
+                                    waypoints = Core.Instance.BuildingsArea.GetPathToRandomTarget(IsAgressive, transform.position);
                                 SetWaypoints(waypoints);
                             }
                         }
                         else
                         {
-                            SetWaypoints(Core.Instance.BuildingsArea.GetPathToRandomTarget(false, transform.position));
+                            ChooseNewBehaviour();
+                            SetWaypoints(Core.Instance.BuildingsArea.GetPathToRandomTarget(IsAgressive, transform.position));
                         }
                     }
                     else

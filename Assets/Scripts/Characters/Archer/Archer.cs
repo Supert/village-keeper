@@ -77,6 +77,7 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
+                throw new System.NotImplementedException();
                 Core.Data.Game.ClampedArrowForce.Set(0f);
                 var tp = targetPosition;
                 var arrow = new GameObject("arrow", typeof(Arrow)).GetComponent<Arrow>();

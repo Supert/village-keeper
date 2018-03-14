@@ -17,7 +17,7 @@ namespace VillageKeeper.Game
 
         public float Health { get; protected set; }
 
-        protected virtual void Init()
+        public virtual void Initialize()
         {
             Health = MaxHealth;
         }
@@ -27,7 +27,7 @@ namespace VillageKeeper.Game
             Core.Instance.AudioManager.PlayBuildingHit();
 
             Health--;
-            if (Health == 0)
+            if (Health <= 0)
             {
                 DestroySelf();
             }
