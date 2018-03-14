@@ -40,7 +40,7 @@ namespace VillageKeeper.Model
 
         public GameData()
         {
-            IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Core.Data.Balance.ArrowForceThreshold, Core.Data.Balance.ArrowForceThreshold);
+            IsArrowForceOverThreshold = new CalculatedValue<bool>(() => ClampedArrowForce >= Core.Data.Balance.ArrowForceThreshold, ClampedArrowForce, Core.Data.Balance.ArrowForceThreshold);
         }
 
         [ShowInEditor]

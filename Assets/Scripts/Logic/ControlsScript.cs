@@ -17,14 +17,14 @@ namespace VillageKeeper
             isLoading = false;
             foreach (var t in Input.touches)
             {
-                if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, t.position, Camera.current))
+                if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, t.position, null))
                 {
                     if (t.phase == TouchPhase.Began && Core.Data.Game.IsArrowForceOverThreshold.Get())
                     {
                         Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(t.position));
                     }
                 }
-                else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, t.position, Camera.current))
+                else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, t.position, null))
                 {
                     if (t.phase == TouchPhase.Began)
                     {
@@ -43,14 +43,14 @@ namespace VillageKeeper
         void CheckForMouse()
         {
             isLoading = false;
-            if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, Input.mousePosition, Camera.main))
+            if (RectTransformUtility.RectangleContainsScreenPoint(MonsterArea, Input.mousePosition, null))
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && Core.Data.Game.IsArrowForceOverThreshold.Get())
                 {
                     Core.Instance.Archer.Shoot(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 }
             }
-            else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, Input.mousePosition, Camera.main))
+            else if (RectTransformUtility.RectangleContainsScreenPoint(BowLoadingArea, Input.mousePosition, null))
             {
                 if (Input.GetMouseButtonDown(0))
                 {
