@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace VillageKeeper.Game
 {
-    [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Collider2D))]
     public class Monster : MonoBehaviour
@@ -230,7 +229,7 @@ namespace VillageKeeper.Game
         {
             rectTransform = transform as RectTransform;
             monsterWalkableArea = transform.parent as RectTransform;
-            image = GetComponent<Image>();
+            image = transform.Find("Image").GetComponent<Image>();
             col = GetComponent<Collider2D>();
             animator = GetComponent<Animator>();
             shadow = transform.GetChild(transform.childCount - 1).GetComponent<Image>();

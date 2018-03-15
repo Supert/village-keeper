@@ -23,8 +23,6 @@ namespace VillageKeeper
 
         public Archer Archer { get; private set; }
 
-        public ControlsScript Controls { get; private set; }
-
         public BuildingsArea BuildingsArea { get; private set; }
 
         private void InitAds()
@@ -60,7 +58,6 @@ namespace VillageKeeper
 
             Monster = FindObjectOfType(typeof(Monster)) as Monster;
             Archer = FindObjectOfType(typeof(Archer)) as Archer;
-            Controls = FindObjectOfType(typeof(ControlsScript)) as ControlsScript;
 
             BuildingsArea = FindObjectOfType<BuildingsArea>();
             

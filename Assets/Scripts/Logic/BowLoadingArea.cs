@@ -1,0 +1,43 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+namespace VillageKeeper
+{
+    public class BowLoadingArea : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    {
+        private Vector2 bowLoadingTouchStartingPosition;
+        private Vector2 bowLoadingTouchCurrentPosition;
+        private bool isLoading;
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            isLoading = true;
+            bowLoadingTouchStartingPosition = Input.mousePosition;
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            isLoading = false;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            isLoading = false;
+        }
+
+        private void Update()
+        {
+            if (isLoading)
+                bowLoadingTouchCurrentPosition = Input.mousePosition;
+
+            if (Core.Instance.FSM.Current != FSM.States.Battle)
+                return;
+
+            if (isLoading)
+                Core.Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(-(bowLoadingTouchCurrentPosition - bowLoadingTouchStartingPosition).x / 150f));
+
+            if (!isLoading && !Core.Data.Game.IsArrowForceOverThreshold.Get())
+                Core.Data.Game.ClampedArrowForce.Set(Mathf.Clamp01(Core.Data.Game.ClampedArrowForce.Get() - Time.deltaTime * 3f));
+        }
+    }
+}

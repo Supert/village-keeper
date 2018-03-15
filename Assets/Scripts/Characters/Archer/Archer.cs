@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using VillageKeeper.Model;
-using VillageKeeper.UI;
 
 namespace VillageKeeper.Game
 {
@@ -16,6 +14,7 @@ namespace VillageKeeper.Game
             AimingUp,
         }
 
+        private ProjectileSpawner projectileSpawner;
         private Animator animator;
         private RectTransform rect;
 
@@ -37,6 +36,7 @@ namespace VillageKeeper.Game
 
         void Awake()
         {
+            projectileSpawner = GetComponentInChildren<ProjectileSpawner>();
             animator = GetComponent<Animator>() as Animator;
             rect = GetComponent<RectTransform>() as RectTransform;
         }
@@ -77,12 +77,8 @@ namespace VillageKeeper.Game
         {
             if (IsLoaded)
             {
-                throw new System.NotImplementedException();
+                projectileSpawner.Shoot(targetPosition, GetAimingAngleInRads());
                 Core.Data.Game.ClampedArrowForce.Set(0f);
-                var tp = targetPosition;
-                var arrow = new GameObject("arrow", typeof(Arrow)).GetComponent<Arrow>();
-                var initialPosition = (Vector2)transform.position + (Vector2)rect.TransformVector(new Vector2(rect.rect.width / 2, rect.rect.height * 0.6f));
-                arrow.Initialize(initialPosition, tp, GetAimingAngleInRads());
                 Core.Instance.AudioManager.PlayArrowShot();
             }
         }

@@ -4,7 +4,7 @@ namespace VillageKeeper.Game
 {
     public abstract class Projectile : MonoBehaviour
     {
-        private static float Gravity { get { return 60f; } }
+        protected virtual float Gravity { get { return 60f; } }
 
         protected Vector2 TargetPosition { get; set; }
         protected Vector2 InitialPosition { get; set; }
