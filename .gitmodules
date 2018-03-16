@@ -1,0 +1,3 @@
+[submodule "Assets/Shibari"]
+	path = Assets/Shibari
+	url = git@github.com:Supert/shibari.git
