@@ -9,6 +9,7 @@ namespace VillageKeeper.FSM
         public override void Enter()
         {
             base.Enter();
+            Core.Data.Saved.Save();
             if (!Core.Data.Saved.WasBattleTipShown)
             {
                 Core.Instance.FSM.Event(StateMachineEvents.ShowHelp);

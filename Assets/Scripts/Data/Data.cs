@@ -61,7 +61,7 @@ namespace VillageKeeper.Model
             Audio.Deserialize(Load<TextAsset>("Data/AudioData").text);
             Resources.Deserialize(Load<TextAsset>("Data/ResourceData").text);
             Balance.Deserialize(Load<TextAsset>("Data/BalanceData").text);
-            Saved.Deserialize(Load<TextAsset>("Data/SavedData").text);
+            Saved.Load();
         }
     }
 }

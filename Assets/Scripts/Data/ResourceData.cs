@@ -31,7 +31,10 @@ namespace VillageKeeper.Model
             Core.Data.Saved.IsSoundEffectsEnabled,
             Core.Data.ResourcePaths.EnabledSoundEffectsButtonSprites,
             Core.Data.ResourcePaths.DisabledSoundEffectsButtonSprites);
-        
+
+        [ShowInEditor]
+        public ResourceValue<Sprite> ArcherHat { get; } = new ResourceValue<Sprite>(Core.Data.ResourcePaths.ArcherHat, Core.Data.Common.Special);
+
         [ShowInEditor]
         public ResourceValue<WatchtowerArrow> WatchtowerArrowPrefab { get; } = new ResourceValue<WatchtowerArrow>(Core.Data.ResourcePaths.WatchtowerArrowPrefab);
 

@@ -5,6 +5,9 @@ namespace VillageKeeper.Model
 {
     public class SavedData : BindableData
     {
+        private const string PLAYER_PREFS_LOCATION = "villagekeeper_serialized";
+        private const string DEFAULT_SAVED_DATA_LOCATION = "Data/DefaultSavedData";
+
         [SerializeValue]
         public AssignableValue<SerializableBuilding[]> Buildings { get; } = new AssignableValue<SerializableBuilding[]>();
 
@@ -30,8 +33,22 @@ namespace VillageKeeper.Model
         [SerializeValue]
         public AssignableValue<bool> IsMusicEnabled { get; } = new AssignableValue<bool>();
 
-        public void SaveData()
+        public void LoadDefaults()
         {
+            Deserialize(Resources.Load<TextAsset>(DEFAULT_SAVED_DATA_LOCATION).text);
+        }
+
+        public void Load()
+        {
+            if (!PlayerPrefs.HasKey(PLAYER_PREFS_LOCATION))
+                LoadDefaults();
+            else
+                Deserialize(PlayerPrefs.GetString(PLAYER_PREFS_LOCATION));
+        }
+
+        public void Save()
+        {
+            PlayerPrefs.SetString(PLAYER_PREFS_LOCATION, Serialize());
             PlayerPrefs.Save();
         }
     }

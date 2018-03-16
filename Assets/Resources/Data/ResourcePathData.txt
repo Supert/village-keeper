@@ -1,4 +1,5 @@
 {
+  "ArcherHat" : "Characters/Archer/Hats/{0}",
   "WatchtowerArrowPrefab": "WatchtowerArrow",
   "ArcherArrowPrefab": "ArcherArrow",
   "BuildingTileDefaultSprite": "BuildingTile/Default",

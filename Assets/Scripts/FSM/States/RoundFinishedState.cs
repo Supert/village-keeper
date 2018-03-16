@@ -24,6 +24,7 @@ namespace VillageKeeper.FSM
         public override void Exit()
         {
             base.Exit();
+            Core.Data.Saved.Save();
         }
     }
 }

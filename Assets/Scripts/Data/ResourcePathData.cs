@@ -5,6 +5,8 @@ namespace VillageKeeper.Model
     public class ResourcePathData : BindableData
     {
         [SerializeValue]
+        public AssignableValue<string> ArcherHat { get; } = new AssignableValue<string>();
+        [SerializeValue]
         public AssignableValue<string> WatchtowerArrowPrefab { get; } = new AssignableValue<string>();
         [SerializeValue]
         public AssignableValue<string> ArcherArrowPrefab { get; } = new AssignableValue<string>();
